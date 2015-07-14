@@ -1,0 +1,25 @@
+<!doctype html>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<title>Translation Recs</title>
+<ul>
+	{% for title in recs %}
+		<a class='card' href='{{ 'https://en.m.wikipedia.org/wiki/%s' % title }}'>
+			<li>{{ title }}</li> 
+			<div class='btn'>
+				<a href=''>Translate</a>
+			</div>
+			<div class='btn'>
+				<a href=''>Preview</a>
+			</div>
+		</a>
+	{% endfor %}
+</ul>
+
+
+<!-- {% if source %}
+  <h1>Translating from {{ source }}!</h1>
+{% endif %}
+{% if target %}
+  <h1>Translating to {{ target }}!</h1>
+{% endif %} -->
+

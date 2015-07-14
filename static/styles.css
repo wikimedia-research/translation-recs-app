@@ -1,0 +1,37 @@
+li {
+	
+	font-family: sans-serif;
+	font-size: 18px;
+	list-style: none;
+	margin: 10px;
+	padding: 14px 10px;
+	border-radius: 3px;
+}
+
+a.card {
+	display: block;
+
+	background-color: #eeeeee;
+	height: 100px;
+	width: 400px;
+
+}
+
+a {
+	text-decoration: none;
+	color: #111111;
+}
+
+a:hover {
+	background-color: #dddddd;
+}
+
+div.btn {
+	background-color: red;
+	width: 200px;
+	height: 50px;
+}
+
+div.btn:hover {
+	background-color: #ddd;
+}
