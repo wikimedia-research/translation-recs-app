@@ -27,3 +27,6 @@ python sqoop_production_tables.py l1,l2,l3
 python join_production_tables.py l1,l2,l3
 
 
+4. Generate File of Missing Articles 
+
+
