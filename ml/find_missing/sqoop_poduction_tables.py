@@ -139,7 +139,7 @@ for lang in langs:
 # augment page ids with titles
 
 for lang in langs:
-    d = {'db':db, 'lang':lang}
+    params = {'db':db, 'lang':lang}
 
     
     create_query = """
