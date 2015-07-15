@@ -1,4 +1,4 @@
-import os, system
+import os, sys
 langs  = sys.argv[1].split(',')
 
 

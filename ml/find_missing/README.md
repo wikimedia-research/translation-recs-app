@@ -21,6 +21,9 @@ Run extract_interlanguage_links.ipynb
 This creates a the file translation-recs-app/data/wikidata/WILLs.tsv in HDFS
 TODO: make this into a runable script
 
-3. Sqoop redirect, production tables into hive
+3. Sqoop redirect, production tables into hive (db prod_tables) and augment page ids with titles
 
-4. Get usable redirect and langlinks tables into hdfs
+python sqoop_production_tables.py l1,l2,l3
+python join_production_tables.py l1,l2,l3
+
+
