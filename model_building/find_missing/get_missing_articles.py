@@ -185,11 +185,11 @@ if __name__ == '__main__':
     cp = SafeConfigParser()
     cp.read(args.config)
 
-    outerdir = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s)
+    outerdir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
     if not os.path.exists(outerdir):
         os.makedirs(outerdir)
 
-    innerdir = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s, t)
+    innerdir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s, t)
     if not os.path.exists(innerdir):
         os.makedirs(innerdir)
 
@@ -211,7 +211,7 @@ if __name__ == '__main__':
     get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('missing', 'missing_items')))
     print "Got missing Items"
 
-    merged_filename = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s,t, cp.get('missing', 'merged_items'))
+    merged_filename = os.path.join(innerdir, cp.get('missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
     print "Got clusters"
 
