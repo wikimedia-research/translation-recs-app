@@ -9,7 +9,15 @@ db = sys.argv[1]
 langs  = sys.argv[2].split(',')
 
 
-# first delete all the tables that already exist
+# create the db if it does not exist
+create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s'
+params = {'db':db}
+print cmd
+cmd =  """hive -e " """ + create_db % params + """ " """
+os.system( cmd )
+
+
+# delete all the tables in db tjat will be refreshed, that already exist
 delete_query = "DROP TABLE IF EXISTS %(db)s.%(table)s; "
 
 for lang in langs:
