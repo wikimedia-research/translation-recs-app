@@ -179,7 +179,6 @@ if __name__ == '__main__':
     delim = '|'
 
     args = parser.parse_args()
-    exp_dir = args.dir
     s = args.s
     t = args.t
 
