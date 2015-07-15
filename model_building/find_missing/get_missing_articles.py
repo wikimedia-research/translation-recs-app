@@ -1,15 +1,17 @@
 from pyspark import SparkConf, SparkContext
 import argparse
-import os
 import codecs
 import networkx as nx
 from collections import Counter
 from pprint import pprint
 from ConfigParser import SafeConfigParser
-from util import get_parser
 import pandas as pd
-from util import get_parser, save_rdd
 
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+from spark_util import get_parser
 
 """
 Usage: 
