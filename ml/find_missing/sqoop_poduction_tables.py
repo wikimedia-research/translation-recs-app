@@ -1,12 +1,11 @@
 
 import os
+import sys
 db = 'prod_tables'
-wikis = ['frwiki', 'plwiki', 'eswiki', 'enwiki'] # 'dewiki', 'eswiki', 'enwiki']
-overwrite = True
 
 page_query = """
 sqoop import                                                        \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(wiki)s    \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki    \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_XXXXXX)      \
   --delete-target-dir                                               \
@@ -16,7 +15,7 @@ sqoop import                                                        \
   --hive-import                                                     \
   --hive-database %(db)s                                       \
   --create-hive-table                                               \
-  --hive-table %(wiki)s_page                                        \
+  --hive-table %(lang)swiki_page                                        \
   --query '
 SELECT
   a.page_id AS page_id,
@@ -28,7 +27,7 @@ WHERE $CONDITIONS AND page_namespace = 0
 
 redirect_query = """
 sqoop import                                                        \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(wiki)s      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_1XXXXX)      \
   --delete-target-dir                                               \
@@ -38,7 +37,7 @@ sqoop import                                                        \
   --hive-import                                                     \
   --hive-database %(db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(wiki)s_redirect                                          \
+  --hive-table %(lang)swiki_redirect                                          \
   --query '
 SELECT
   b.rd_from AS rd_from,
@@ -50,7 +49,7 @@ WHERE $CONDITIONS AND rd_namespace = 0
 
 langlinks_query = """
 sqoop import                                                      \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(wiki)s      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_2XXXXX)      \
   --delete-target-dir                                               \
@@ -60,7 +59,7 @@ sqoop import                                                      \
   --hive-import                                                     \
   --hive-database %(db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(wiki)s_langlinks                                         \
+  --hive-table %(lang)swiki_langlinks                                         \
   --query '
 SELECT
   a.ll_from AS ll_from,
@@ -74,7 +73,7 @@ WHERE $CONDITIONS
 
 revision_query = """
 sqoop import                                                      \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(wiki)s      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_2XXXXX)      \
   --delete-target-dir                                               \
@@ -84,7 +83,7 @@ sqoop import                                                      \
   --hive-import                                                     \
   --hive-database %(db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(wiki)s_revision                                         \
+  --hive-table %(lang)swiki_revision                                         \
   --query '
 SELECT
   rev_page,
@@ -99,10 +98,12 @@ WHERE $CONDITIONS
 '
 """
 
-table_queries = [revision_query] #[page_query, redirect_query, langlinks_query, revision_query]
+table_queries =  [page_query, redirect_query, langlinks_query] #revision_query
+
+langs  = sys.argv[1].split(',')
 
 os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
-for wiki in wikis:
-    d = {'db':db, 'wiki':wiki}
+for lang in langs:
+    d = {'db':db, 'lang':lang}
     for table_query in table_queries:
         os.system( table_query % d )

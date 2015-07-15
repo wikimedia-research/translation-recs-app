@@ -1,11 +1,12 @@
-import os
+import os, system
+langs  = sys.argv[1].split(',')
 
-languages = ['fr','pl', 'es', 'pl']
+
 
 os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
 
 
-for lang in languages:
+for lang in langs:
     params = {'lang': lang}
 
     
