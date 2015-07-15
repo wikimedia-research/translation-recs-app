@@ -30,7 +30,7 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
 
     # add wikidata links
     names = ["id", "language_code", "article_name"]
-    wikidata_links = sc.textFile(cp.get('general', 'id2article')).map(get_parser(names))\
+    wikidata_links = sc.textFile(cp.get('general', 'WILL')).map(get_parser(names))\
                     .filter(lambda x: x['language_code'] in wd_languages and x['id'].startswith('Q'))\
                     .map(lambda x: ('wikidata'+ delim + x['id'], x['language_code'] + delim + x['article_name']))         
     G.add_edges_from(wikidata_links.collect())
@@ -101,7 +101,7 @@ def is_subgraph_missing_target_item(g, s, t, delim):
         return {}
     
 
-def get_missing_items(sc, cp, G, s, t, r, delim, exp_dir, n = 100):
+def get_missing_items(sc, cp, G, s, t, delim):
     """
     Find all items in s missing in t
     """
@@ -109,69 +109,13 @@ def get_missing_items(sc, cp, G, s, t, r, delim, exp_dir, n = 100):
     missing_items = {}
     for i, g in enumerate(cc):
         missing_items.update(is_subgraph_missing_target_item(g, s, t, delim))
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     missing_items_df = pd.DataFrame(missing_items.items())
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
-
-    pageviews = sc.textFile(cp.get('general', 'pageviews'))\
-    .map(lambda x: x.split('\t'))\
-    .filter(lambda x: x[1] == s)\
-    .map(lambda x: (x[0], int(x[3]))).collect()
-    pageviews_df = pd.DataFrame(pageviews)
-    pageviews_df.columns = ['id', 'n']
-
-    missing_items_df = missing_items_df.merge(pageviews_df, on='id')
-    missing_items_df = missing_items_df.sort('n', ascending = False)
-    fname = os.path.join(cp.get('general', 'local_data_dir'), exp_dir, cp.get('missing', 'missing_items'))
-    missing_items_df.to_csv(fname, sep='\t', encoding='utf8', index = False, header = False) 
-=======
     
-    print("Got %d missing items" % len(missing_items))
-    # HACK: remove lists articles with colon :
-    missing_items = sc.parallelize(missing_items.iteritems())\
-                    .filter(lambda x: ':' not in x[1])\
-                    .filter(lambda x: not x[1].startswith('List'))
-=======
->>>>>>> f8f312aa183d1112b05d8a0b0d4e0430f87e5761
-
-    missing_items_df = pd.DataFrame(missing_items.items())
-    missing_items_df.columns = ['id', 'title']
-    missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
-
-    pageviews = sc.textFile(cp.get('general', 'pageviews'))\
-    .map(lambda x: x.split('\t'))\
-    .filter(lambda x: x[1] == s)\
-    .map(lambda x: (x[0], int(x[3]))).collect()
-    pageviews_df = pd.DataFrame(pageviews)
-    pageviews_df.columns = ['id', 'n']
-
-<<<<<<< HEAD
-    ranked_missing_items = missing_items.sortBy(lambda x: -x[1][1])
-
-    print("Got %d missing items after ranking" % ranked_missing_items.count())
-
-    def tuple_to_str(t):
-        item_id, (item_name, n) = t
-        line = item_id + '\t' + item_name + '\t' + str(n) 
-        return line
-
-    str_ranked_missing_items = ranked_missing_items.map(tuple_to_str)
-    base_dir = os.path.join(cp.get('general', 'local_data_dir'), exp_dir)
-    if not os.path.exists(base_dir):
-        os.makedirs(base_dir)
-    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), exp_dir)
-    save_rdd (str_ranked_missing_items,  base_dir , hadoop_base_dir, cp.get('missing', 'ranked_missing_items'))
-    
->>>>>>> 596f5a4f5162be2053b696be271051f3763d056e
-=======
-    missing_items_df = missing_items_df.merge(pageviews_df, on='id')
-    missing_items_df = missing_items_df.sort('n', ascending = False)
-    fname = os.path.join(cp.get('general', 'local_data_dir'), exp_dir, cp.get('missing', 'missing_items'))
+    fname = os.path.join(cp.get('general', 'local_data_dir'), s, t, cp.get('missing', 'missing_items'))
     missing_items_df.to_csv(fname, sep='\t', encoding='utf8', index = False, header = False) 
->>>>>>> f8f312aa183d1112b05d8a0b0d4e0430f87e5761
 
 
 def get_merged_items(g, s, t, delim):
@@ -233,55 +177,34 @@ if __name__ == '__main__':
     parser.add_argument('--r', required = True, help='recommendation language' )
     parser.add_argument('--config', required = True, help='path to recommendation file' )
 
+    delim = '|'
 
     args = parser.parse_args()
     exp_dir = args.dir
     s = args.s
     t = args.t
-    r = args.r
 
     cp = SafeConfigParser()
     cp.read(args.config)
-<<<<<<< HEAD
 
-    delim = '|'
 
-=======
-
-    delim = '|'
-
->>>>>>> 596f5a4f5162be2053b696be271051f3763d056e
-    wd_languages = set([s, t, r])
-    rd_languages = set([s, t, r, 'wikidata'])
-    ill_languages_from = set([s, t, r])
-    ill_languages_to = set([s, t, r])
+    wd_languages = set([s, t])
+    rd_languages = set([s, t, 'wikidata'])
+    ill_languages_from = set([s, t])
+    ill_languages_to = set([s, t])
 
     conf = SparkConf()
     conf.set("spark.app.name", 'finding missing articles')
-<<<<<<< HEAD
-<<<<<<< HEAD
     conf.set("spark.akka.frameSize", 30)
-=======
->>>>>>> 596f5a4f5162be2053b696be271051f3763d056e
-=======
-    conf.set("spark.akka.frameSize", 30)
->>>>>>> f8f312aa183d1112b05d8a0b0d4e0430f87e5761
     sc = SparkContext(conf=conf)
 
 
     G = create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, ill_languages_to)
     print "Got entire Graph"
-    get_missing_items(sc, cp, G, s, t, r, delim, exp_dir, n = 10000)
+    get_missing_items(sc, cp, G, s, t, delim)
     print "Got missing Items"
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 596f5a4f5162be2053b696be271051f3763d056e
-=======
->>>>>>> f8f312aa183d1112b05d8a0b0d4e0430f87e5761
-    merged_filename = os.path.join(cp.get('general', 'local_data_dir'), exp_dir, cp.get('missing', 'merged_items'))
+    merged_filename = os.path.join(cp.get('general', 'local_data_dir'), s,t, cp.get('missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
     print "Got clusters"
 
