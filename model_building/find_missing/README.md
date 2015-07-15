@@ -10,7 +10,7 @@ wget http://dumps.wikimedia.org/wikidatawiki/latest/wikidatawiki-latest-pages-ar
 hadoop fs -mkdir translation-recs-app
 hadoop fs -mkdir translation-recs-app/data
 hadoop fs -mkdir translation-recs-app/data/wikidata
-haddop fs -rm -r translation-recs-app/data/wikidata/wikidatawiki-latest-pages-articles.xml
+haddop fs -rm -r translation-recs-app/data/wikidata/wikidatawiki-latest-pages-articles.xml.bz2
 
 hadoop fs -put wikidatawiki-latest-pages-articles.xml.bz2 translation-recs-app/data/wikidata/wikidatawiki-latest-pages-articles.xml.bz2
 
@@ -29,4 +29,11 @@ python join_production_tables.py l1,l2,l3
 
 4. Generate File of Missing Articles 
 
-
+spark-submit \
+--driver-memory 5g --master yarn --deploy-mode client \
+--num-executors 2 --executor-memory 10g --executor-cores 8 \
+--queue priority \
+/home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
+--s en \
+--t fr \
+--config /home/ellery/translation-recs-app/translation-recs.ini 

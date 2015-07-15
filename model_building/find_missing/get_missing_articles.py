@@ -20,9 +20,9 @@ spark-submit \
 --driver-memory 5g --master yarn --deploy-mode client \
 --num-executors 2 --executor-memory 10g --executor-cores 8 \
 --queue priority \
-/home/ellery/translation-recs-app/ml/sfind_missing/get_missing_articles.py \
---s en \
---t fr \
+/home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
+--s simple \
+--t es \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
@@ -103,7 +103,7 @@ def is_subgraph_missing_target_item(g, s, t, delim):
         return {}
     
 
-def get_missing_items(sc, cp, G, s, t, delim):
+def get_missing_items(sc, cp, G, s, t, delim, fname):
     """
     Find all items in s missing in t
     """
@@ -115,14 +115,6 @@ def get_missing_items(sc, cp, G, s, t, delim):
     missing_items_df = pd.DataFrame(missing_items.items())
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
-    
-    dirname = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s, t)
-
-    if not os.path.exists(dirname):
-        os.makedirs(dirname)
-
-    fname =  os.path.join(dirname, cp.get('missing', 'missing_items'))
-
 
     missing_items_df.to_csv(fname, sep='\t', encoding='utf8', index = False, header = False) 
 
@@ -196,6 +188,14 @@ if __name__ == '__main__':
     cp = SafeConfigParser()
     cp.read(args.config)
 
+    outerdir = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s)
+    if not os.path.exists(outerdir):
+        os.makedirs(outerdir)
+
+    innerdir = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s, t)
+    if not os.path.exists(innerdir):
+        os.makedirs(innerdir)
+
 
     wd_languages = set([s, t])
     rd_languages = set([s, t, 'wikidata'])
@@ -210,7 +210,8 @@ if __name__ == '__main__':
 
     G = create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, ill_languages_to)
     print "Got entire Graph"
-    get_missing_items(sc, cp, G, s, t, delim)
+
+    get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('missing', 'missing_items')))
     print "Got missing Items"
 
     merged_filename = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s,t, cp.get('missing', 'merged_items'))
