@@ -172,10 +172,8 @@ if __name__ == '__main__':
 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dir', required = True, help='experiment dir' )
     parser.add_argument('--s', required = True, help='source language' )
     parser.add_argument('--t', required = True, help='target language' )
-    parser.add_argument('--r', required = True, help='recommendation language' )
     parser.add_argument('--config', required = True, help='path to recommendation file' )
 
     delim = '|'
