@@ -24,7 +24,7 @@ for lang in langs:
   for s1 in ['wiki_page', 'wiki_redirect', 'wiki_langlinks']:
     for s2 in ['', '_joined']:
       table = lang+s1+s2
-      params = {'db':db, 'lang': lang}
+      params = {'db':db, 'table': table}
       print cmd
       cmd =  """hive -e " """ + delete_query % params + """ " """
       os.system( cmd )
