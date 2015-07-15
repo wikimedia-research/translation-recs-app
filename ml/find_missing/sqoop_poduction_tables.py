@@ -10,7 +10,7 @@ langs  = sys.argv[2].split(',')
 
 
 # create the db if it does not exist
-create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s'
+create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
 params = {'db':db}
 print cmd
 cmd =  """hive -e " """ + create_db % params + """ " """
@@ -21,8 +21,8 @@ os.system( cmd )
 delete_query = "DROP TABLE IF EXISTS %(db)s.%(table)s; "
 
 for lang in langs:
-  for s1 in ['wiki_page', 'wiki_redirect', 'wiki_langlinks']
-    for s2 in ['', '_joined']
+  for s1 in ['wiki_page', 'wiki_redirect', 'wiki_langlinks']:
+    for s2 in ['', '_joined']:
       table = lang+s1+s2
       params = {'db':db, 'lang': lang}
       print cmd
