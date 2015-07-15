@@ -14,7 +14,7 @@ def get_dummy_recs(target, user = None):
     """
     Returns a list of articles to translate into the target language.
     """
-    fname = './data/test/ranked_missing_articles.tsv' 
+    fname = '../data/en/test/ranked_missing_articles.tsv' 
     df = pd.read_csv(fname, sep = '\t', encoding = 'utf8')
     return  list(df['title_s'])
 
