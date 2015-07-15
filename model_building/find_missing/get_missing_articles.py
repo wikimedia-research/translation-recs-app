@@ -116,7 +116,7 @@ def get_missing_items(sc, cp, G, s, t, delim):
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
     
-    dirname = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/' s, t)
+    dirname = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s, t)
 
     if not os.path.exists(dirname):
         os.makedirs(dirname)
