@@ -12,8 +12,8 @@ langs  = sys.argv[2].split(',')
 # create the db if it does not exist
 create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
 params = {'db':db}
-print cmd
 cmd =  """hive -e " """ + create_db % params + """ " """
+print cmd
 os.system( cmd )
 
 
