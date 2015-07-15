@@ -116,7 +116,14 @@ def get_missing_items(sc, cp, G, s, t, delim):
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
     
-    fname = os.path.join(cp.get('general', 'local_data_dir'), s, t, cp.get('missing', 'missing_items'))
+    dirname = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/' s, t)
+
+    if not os.path.exists(dirname):
+        os.makedirs(dirname)
+
+    fname =  os.path.join(dirname, cp.get('missing', 'missing_items'))
+
+
     missing_items_df.to_csv(fname, sep='\t', encoding='utf8', index = False, header = False) 
 
 
@@ -206,7 +213,7 @@ if __name__ == '__main__':
     get_missing_items(sc, cp, G, s, t, delim)
     print "Got missing Items"
 
-    merged_filename = os.path.join(cp.get('general', 'local_data_dir'), s,t, cp.get('missing', 'merged_items'))
+    merged_filename = os.path.join(cp.get('general', 'local_data_dir'), '/translation-recs-app/data/', s,t, cp.get('missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
     print "Got clusters"
 
