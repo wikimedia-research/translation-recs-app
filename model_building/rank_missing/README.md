@@ -1,6 +1,6 @@
 1. Download Source Language Dumps
 
-download_dumps.ipynb
+python ../recommendation/download_dumps.py wiki-latest-pages-meta-current.xml.bz2  en,fr,es,simple
 
 2. Extract Feautres From Dumps
 
