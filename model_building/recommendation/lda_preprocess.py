@@ -23,7 +23,7 @@ spark-submit \
 --queue priority \
 /home/ellery/translation-recs-app/model_building/recommendation/lda_preprocess.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
---lang simple \
+--lang en \
 --top 100000 
 
 

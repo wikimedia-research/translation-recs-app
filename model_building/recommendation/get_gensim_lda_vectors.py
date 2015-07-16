@@ -10,9 +10,9 @@ from ConfigParser import SafeConfigParser
 
 
 """
-python /home/ellery/wikimedia/missing_articles/src/main/python/get_gensim_lda_vectors.py \
---dir en_lda_100k \
---config /home/ellery/wikimedia/missing_articles/missing_articles.ini \
+python /home/ellery/translation-recs-app/model_building/recommendation/get_gensim_lda_vectors.py \
+--lang simple \
+--config /home/ellery/translation-recs-app/translation-recs.ini \
 --dim 400
 """
 
@@ -20,8 +20,8 @@ def main(args):
 
     cp = SafeConfigParser()
     cp.read(args.config)
-    base_dir = os.path.join(cp.get('general', 'local_data_dir'), args.dir)
-    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), args.dir)
+    base_dir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', args.lang)
+    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), 'translation-recs-app/data', args.lang)
 
 
     word2index_file = os.path.join(base_dir, cp.get('LDA', 'word2index'))
@@ -68,7 +68,7 @@ def main(args):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dir', required = True, help='experiment data directory' )
+    parser.add_argument('--lang', required = True, help='experiment data directory' )
     parser.add_argument('--config', required = True, help='path to configuration file' )
     parser.add_argument('--dim', required = True, type = int, help='vector dimansionality' )
 
