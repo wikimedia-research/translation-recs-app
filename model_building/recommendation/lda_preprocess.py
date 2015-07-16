@@ -143,7 +143,7 @@ def main(args):
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
-    tokenfile = os.path.join(hadoop_base_dir, , args.lang+'wiki-plaintexts' )
+    tokenfile = os.path.join(hadoop_base_dir, args.lang+'wiki-plaintexts' )
 
     # load articles
     tokenized_articles = load_articles(args.lang, tokenfile, cp.get('general', 'WILL'))
