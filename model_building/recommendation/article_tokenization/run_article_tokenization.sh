@@ -12,7 +12,7 @@ export LIB_DIR=$HOME/translation-recs-app/model_building/recommendation/lib
 # The part of the server logs you want to process.
 export IN_FILE=/user/ellery/translation-recs-app/data/$LANG/$WIKI-latest-pages-articles-multistream.xml
 # The output directory.
-export OUT_DIR=user/ellery/translation-recs-app/data/$LANG/$WIKI-plaintexts
+export OUT_DIR=/user/ellery/translation-recs-app/data/$LANG/$WIKI-plaintexts
 
 echo "Running hadoop job"
 hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \

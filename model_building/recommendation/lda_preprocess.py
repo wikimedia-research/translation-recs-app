@@ -17,15 +17,13 @@ from ConfigParser import SafeConfigParser
 """
 Usage: 
 
-/home/otto/spark-1.3.0-bin-hadoop2.4/bin/spark-submit \
+spark-submit \
 --driver-memory 5g --master yarn --deploy-mode client \
 --num-executors 4 --executor-memory 20g --executor-cores 8 \
 --queue priority \
-/home/ellery/wikimedia/missing_articles/src/main/spark/lda_preprocess.py \
---dir en_lda_100k \
---config /home/ellery/wikimedia/missing_articles/missing_articles.ini \
+/home/ellery/translation-recs-app/model_building/recommendation/lda_preprocess.py \
+--config /home/ellery/translation-recs-app/translation-recs.ini 
 --lang en \
---dump /user/west1/wikipedia_plaintexts/enwiki-20150304 \
 --top 100000
 
 
@@ -145,8 +143,10 @@ def main(args):
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
+    tokenfile = os.path.join(hadoop_base_dir, 'translation-recs-app/data', args.lang, args.lang+'wiki-plaintexts' )
+
     # load articles
-    tokenized_articles = load_articles(args.lang, args.dump, cp.get('general', 'id2article'))
+    tokenized_articles = load_articles(args.lang, tokenfile, cp.get('general', 'id2article'))
     # normalize
     normalized_tokenized_articles = clean_article_text(tokenized_articles, get_banned_words())
     # get word-id maping
@@ -183,10 +183,8 @@ def main(args):
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--dir', required = True, help='experiment directory')
     parser.add_argument('--config', required = True, help='full path to configuration file')
     parser.add_argument('--lang', required = True, help='language of the articles in the corpus')
-    parser.add_argument('--dump', required = True, help='name of the dumo')
     parser.add_argument('--min', default = 3, type=int,  help='minimum number of time a word must appear in the corpus')
     parser.add_argument('--top', default = 50000, type=int,  help='include top k tokens in model')
     args = parser.parse_args()
