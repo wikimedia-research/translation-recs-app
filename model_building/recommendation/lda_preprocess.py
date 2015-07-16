@@ -23,7 +23,7 @@ spark-submit \
 --queue priority \
 /home/ellery/translation-recs-app/model_building/recommendation/lda_preprocess.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
---lang en \
+--lang simple \
 --top 100000
 
 
@@ -138,15 +138,15 @@ def translate_words_to_ids(tf_articles, word_id_map):
 def main(args):
     cp = SafeConfigParser()
     cp.read(args.config)
-    base_dir = os.path.join(cp.get('general', 'local_data_dir'), args.dir)
-    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), args.dir)
+    base_dir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', args.lang)
+    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), 'translation-recs-app/data', args.lang)
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
-    tokenfile = os.path.join(hadoop_base_dir, 'translation-recs-app/data', args.lang, args.lang+'wiki-plaintexts' )
+    tokenfile = os.path.join(hadoop_base_dir, , args.lang+'wiki-plaintexts' )
 
     # load articles
-    tokenized_articles = load_articles(args.lang, tokenfile, cp.get('general', 'id2article'))
+    tokenized_articles = load_articles(args.lang, tokenfile, cp.get('general', 'WILL'))
     # normalize
     normalized_tokenized_articles = clean_article_text(tokenized_articles, get_banned_words())
     # get word-id maping
