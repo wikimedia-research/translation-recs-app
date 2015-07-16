@@ -36,3 +36,22 @@ spark-submit \
 --s en \
 --t es \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
+
+
+spark-submit \
+--driver-memory 5g --master yarn --deploy-mode client \
+--num-executors 2 --executor-memory 10g --executor-cores 8 \
+--queue priority \
+/home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
+--s en \
+--t fr \
+--config /home/ellery/translation-recs-app/translation-recs.ini
+
+spark-submit \
+--driver-memory 5g --master yarn --deploy-mode client \
+--num-executors 2 --executor-memory 10g --executor-cores 8 \
+--queue priority \
+/home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
+--s en \
+--t simple \
+--config /home/ellery/translation-recs-app/translation-recs.ini
