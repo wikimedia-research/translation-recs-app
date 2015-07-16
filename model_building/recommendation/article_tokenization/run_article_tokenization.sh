@@ -2,6 +2,7 @@
 
 # The $WIKI parameter (e.g., zuwiki-20150407) must be passed in as a command-line argument.
 export LANG=$1
+export WIKI=$2
 
 # Modify these parameters.
 # This is where the JAR file with the Mapper code resides.
@@ -9,9 +10,9 @@ export TARGET_DIR=$HOME/translation-recs-app/model_building/recommendation/artic
 # This is where additional JARs reside.
 export LIB_DIR=$HOME/translation-recs-app/model_building/recommendation/lib
 # The part of the server logs you want to process.
-export IN_FILE=/user/ellery/translation-recs-app/data/$LANG/$LANGwiki-pages-articles-multistream.xml
+export IN_FILE=/user/ellery/translation-recs-app/data/$LANG/$WIKI-pages-articles-multistream.xml
 # The output directory.
-export OUT_DIR=user/ellery/translation-recs-app/data/$LANG/$LANG-plaintexts
+export OUT_DIR=user/ellery/translation-recs-app/data/$LANG/$WIKI-plaintexts
 
 echo "Running hadoop job"
 hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
