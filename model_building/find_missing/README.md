@@ -23,8 +23,7 @@ TODO: make this into a runable script
 
 3. Sqoop redirect, production tables into hive (db prod_tables) and augment page ids with titles
 
-python sqoop_production_tables.py l1,l2,l3
-python join_production_tables.py l1,l2,l3
+python sqoop_production_tables.py rec_tables wikidata,en,simple,es,fr
 
 
 4. Generate File of Missing Articles 
@@ -35,5 +34,5 @@ spark-submit \
 --queue priority \
 /home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
 --s en \
---t fr \
+--t es \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
