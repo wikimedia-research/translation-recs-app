@@ -1,16 +1,16 @@
 from operator import add
 from pyspark import SparkConf, SparkContext
-from pyspark.mllib.feature import HashingTF
-from pyspark.mllib.feature import IDF
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-from pyspark.mllib.regression import LabeledPoint
 import string
-import gensim
 import os
 import argparse
-from util import save_rdd
 from ConfigParser import SafeConfigParser
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+from spark_util import get_parser
 
 
 
@@ -22,9 +22,9 @@ spark-submit \
 --num-executors 4 --executor-memory 20g --executor-cores 8 \
 --queue priority \
 /home/ellery/translation-recs-app/model_building/recommendation/lda_preprocess.py \
---config /home/ellery/translation-recs-app/translation-recs.ini 
+--config /home/ellery/translation-recs-app/translation-recs.ini \
 --lang simple \
---top 100000
+--top 100000 
 
 
 To run LDA, see wikimedia/missing_articles/src/main/python/get_gensim_lda.py
