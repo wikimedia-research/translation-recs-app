@@ -24,5 +24,9 @@ spark-submit \
 --lang simple \
 --top 100000 
 
+# Build LDA Model: This should happen in spark instead
 
-python get_gensim_lda_vectors.py
+python /home/ellery/translation-recs-app/model_building/recommendation/get_gensim_lda_vectors.py \
+--lang en \
+--config /home/ellery/translation-recs-app/translation-recs.ini \
+--dim 400
