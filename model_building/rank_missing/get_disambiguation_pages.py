@@ -50,7 +50,7 @@ if __name__ == '__main__':
     cp = SafeConfigParser()
     cp.read(args.config)
 
-
+    s = args.s
 
     query = """
     SELECT page_title
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     """
 
 
-    df_dis = query_db(query % {'db': '%swiki' % args.s}, {})
+    df_dis = query_db(query % {'db': '%swiki' % s}, {})
 
     df_dis.to_csv()
 
