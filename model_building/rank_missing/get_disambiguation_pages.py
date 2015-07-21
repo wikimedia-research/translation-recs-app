@@ -62,7 +62,7 @@ if __name__ == '__main__':
     """
 
 
-    df_dis = query_db(query % {'db': '%swiki' % s}, {})
+    d_pv = query_hive_ssh(query % params, '10k_pv_month')
 
     dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
     if not os.path.exists(dest):

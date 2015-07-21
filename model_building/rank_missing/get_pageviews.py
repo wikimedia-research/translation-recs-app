@@ -51,8 +51,6 @@ if __name__ == '__main__':
     AND agent_type = 'user'
     AND year = %(year)s
     AND month = %(month)s
-    AND day = 1
-    AND hour = 1
     GROUP BY page_title
     HAVING sum(view_count) > 1000;
     """
