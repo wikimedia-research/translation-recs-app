@@ -52,7 +52,7 @@ if __name__ == '__main__':
     AND year = %(year)s
     AND month = %(month)s
     GROUP BY page_title
-    HAVING sum(view_count) > 1000;
+    HAVING sum(view_count) > 100;
     """
 
     params = {
