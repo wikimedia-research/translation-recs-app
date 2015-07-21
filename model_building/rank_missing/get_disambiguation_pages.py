@@ -50,21 +50,21 @@ if __name__ == '__main__':
 
 
 
-	query = """
-	SELECT page_title
-	FROM %(db)s.page_props, %(db)s.page
-	WHERE pp_page = page_id
-	AND page_namespace = 0
-	AND page_is_redirect = 0
-	AND pp_propname = 'disambiguation'
-	"""
+    query = """
+    SELECT page_title
+    FROM %(db)s.page_props, %(db)s.page
+    WHERE pp_page = page_id
+    AND page_namespace = 0
+    AND page_is_redirect = 0
+    AND pp_propname = 'disambiguation'
+    """
 
 
-	df_dis = query_db(query % {'db': '%swiki' % args.s}, {})
+    df_dis = query_db(query % {'db': '%swiki' % args.s}, {})
 
-	df_dis.to_csv()
+    df_dis.to_csv()
 
-	dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
+    dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
     if not os.path.exists(dest):
         os.makedirs(dest)
 
