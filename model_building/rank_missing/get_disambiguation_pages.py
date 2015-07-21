@@ -64,8 +64,6 @@ if __name__ == '__main__':
 
     df_dis = query_db(query % {'db': '%swiki' % s}, {})
 
-    df_dis.to_csv()
-
     dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
     if not os.path.exists(dest):
         os.makedirs(dest)
