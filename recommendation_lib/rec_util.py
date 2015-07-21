@@ -4,6 +4,7 @@ from collections import OrderedDict
 from scipy.io import mmread
 import numpy as np
 import scipy
+from sklearn.preprocessing import normalize
 
 
 
@@ -15,7 +16,7 @@ class TopicModel:
         topic_matrix_file = os.path.join(data_dir, s, 'doc2topic.mtx')
         print (topic_matrix_file)
         with open(topic_matrix_file, 'rb') as f:
-            self.source_topic_matrix = mmread(f).tocsr()
+            self.source_topic_matrix =  normalize(mmread(f).tocsr(), norm='l2', axis=1)
 
 
 
@@ -25,6 +26,8 @@ class TranslationRecommender:
 
         self.topic_model = topic_model
         self.missing_df = pd.read_csv(os.path.join(data_dir, s, t, 'ranked_missing_items.tsv'), sep = '\t', encoding = 'utf8')
+        self.missing_df['s_title'] = self.missing_df['s_title'].astype(str)
+        self.missing_df['s_title'] = self.missing_df['s_title'].apply(lambda x: x.replace(u' ', u'_'))
         missing_set = set(self.missing_df['id'])
         self.missing_topic_matrix = reweight(topic_model, missing_set)
 
@@ -66,7 +69,11 @@ class TranslationRecommender:
         # the editor has not made any contributions
         if contribution_df.shape[0] == 0:
             return np.zeros(self.topic_model.source_topic_matrix.shape[1])
-        contribution_df['in_index'] = contribution_df['wikidata_id'].apply(lambda x: x in self.topic_model.id2index)
+
+        try:
+            contribution_df['in_index'] = contribution_df['wikidata_id'].apply(lambda x: x in self.topic_model.id2index)
+        except:
+            print ('conversion to unicode already ahppened')
         contribution_df = contribution_df[contribution_df['in_index'] == True]
 
         # none of the editors contributions exist in the source wiki
@@ -78,6 +85,7 @@ class TranslationRecommender:
         interest_matrix = self.topic_model.source_topic_matrix[item_indices].toarray()
         interest_vector = interest_matrix.T.dot(weights)
         return interest_vector / np.linalg.norm(interest_vector)
+
 
 
 def reweight( topic_model, missing_set):

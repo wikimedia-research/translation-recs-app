@@ -1,3 +1,10 @@
+
+For now, just remove disambiguation pages and add last months pageviews:
+
+
+
+
+
 1. Download Source Language Dumps
 
 python ../recommendation/download_dumps.py wiki-latest-pages-meta-current.xml.bz2  en,fr,es,simple

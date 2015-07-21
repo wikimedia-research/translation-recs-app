@@ -33,8 +33,8 @@ spark-submit \
 --num-executors 2 --executor-memory 10g --executor-cores 8 \
 --queue priority \
 /home/ellery/translation-recs-app/model_building/find_missing/get_missing_articles.py \
---s simple \
---t fr \
+--s en \
+--t simple \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 
 
