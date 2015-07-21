@@ -9,7 +9,7 @@ import argparse
 """
 Usage: 
 
-python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambiguation_pages.py \
+python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
 --s en \
 --year 2015 \
 --month 6 \
@@ -51,6 +51,8 @@ if __name__ == '__main__':
     AND agent_type = 'user'
     AND year = %(year)s
     AND month = %(month)s
+    AND day = 1
+    AND hour = 1
     GROUP BY page_title
     HAVING sum(view_count) > 1000;
     """
