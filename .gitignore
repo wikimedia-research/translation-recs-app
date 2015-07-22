@@ -26,7 +26,8 @@
 *.json
 *.tsv
 *.csv
-
+*.txt
+*.mtx
  
 # Logs and databases #
 ######################
