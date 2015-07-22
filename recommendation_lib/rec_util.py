@@ -26,14 +26,17 @@ class TranslationRecommender:
 
         self.topic_model = topic_model
         self.missing_df = pd.read_csv(os.path.join(data_dir, s, t, 'ranked_missing_items.tsv'), sep = '\t', encoding = 'utf8')
-        self.missing_df['s_title'] = self.missing_df['s_title'].astype(str)
-        self.missing_df['s_title'] = self.missing_df['s_title'].apply(lambda x: x.replace(u' ', u'_'))
+        self.missing_df['page_title'] = self.missing_df['page_title'].astype(str)
+        self.missing_df['page_title'] = self.missing_df['page_title'].apply(lambda x: x.replace(u' ', u'_'))
+        self.missing_df.index = self.missing_df['page_title']
+        del self.missing_df['page_title']
         missing_set = set(self.missing_df['id'])
         self.missing_topic_matrix = reweight(topic_model, missing_set)
 
 
     def get_global_recommendations(self, num_recs=100):
-        return list(self.missing_df[:num_recs]['s_title'].values)
+        names = list(self.missing_df[:num_recs].index.values)
+        return [{'title': name, 'pageviews': int(self.missing_df.ix[name]['page_views'])} for name in names] 
 
 
     def get_personlized_recommendations(self, interest_vector, num_recs=100, min_score=0.4):
@@ -44,12 +47,14 @@ class TranslationRecommender:
         #rec_scores = scores[non_zero_indices][ranking]
         #rec_tuples = zip(rec_ids,rec_scores )
         #recs_df = pd.Dataframe(rec_tuples, columns = ['wikidata_id', 'score'])
-        return [self.topic_model.id2sname[wdid] for wdid in rec_ids]
+
+        names = [self.topic_model.id2sname[wdid] for wdid in rec_ids]
+        return [{'title': name, 'pageviews': int(self.missing_df.ix[name]['page_views'])} for name in names]
 
 
     def get_seeded_recommendations(self, article, num_recs=100, min_score=0.4):
         if article not in self.topic_model.sname2id:
-            return None
+            return []
         # get article vector
         article_wdid = self.topic_model.sname2id[article]
         article_index = self.topic_model.id2index[article_wdid]
