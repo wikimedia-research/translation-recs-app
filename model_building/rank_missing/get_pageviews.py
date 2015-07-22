@@ -61,8 +61,8 @@ if __name__ == '__main__':
     params = {
         's': s,
         'year': year,
-        'month':  month
-        'min_views': min_views
+        'month':  month,
+        'min_views': min_views,
     }
 
     d_pv = query_hive_ssh(query % params, '10k_pv_month')
