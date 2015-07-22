@@ -11,6 +11,7 @@ Usage:
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
 --s simple \
+--min_views 100\
 --year 2015 \
 --month 6 \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
@@ -33,6 +34,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--s', required = True, help='source language' )
     parser.add_argument('--year', required = True, help='source language', type = int )
+    parser.add_argument('--min_views', required = True, help='source language', type = int )
     parser.add_argument('--month', required = True, help='source language', type = int )
     parser.add_argument('--config', required = True, help='path to recommendation file' )
     args = parser.parse_args()   
@@ -42,6 +44,7 @@ if __name__ == '__main__':
     s = args.s
     year = args.year
     month = args.month
+    min_views = args.min_views
 
     query = """
     SET mapred.job.queue.name=priority;
@@ -59,6 +62,7 @@ if __name__ == '__main__':
         's': s,
         'year': year,
         'month':  month
+        'min': min_views
     }
 
     d_pv = query_hive_ssh(query % params, '10k_pv_month')

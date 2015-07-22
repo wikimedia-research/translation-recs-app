@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-import argparse
+
 import codecs
 import networkx as nx
 from collections import Counter

@@ -1,6 +1,45 @@
 
 For now, just remove disambiguation pages and add last months pageviews:
 
+1. Find Source disambiguation pages
+
+python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambiguation_pages.py \
+--s simple \
+--config /home/ellery/translation-recs-app/translation-recs.ini 
+
+
+2. Get Source Pageviews
+
+python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
+--s simple \
+--year 2015 \
+--month 6 \
+--config /home/ellery/translation-recs-app/translation-recs.ini 
+
+
+3. remove disambig from missing file and augment with pageviews
+
+
+python /home/ellery/translation-recs-app/model_building/rank_missing/rank_missing_by_pageviews.py \
+--s en \
+--t es \
+--config /home/ellery/translation-recs-app/translation-recs.ini 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
