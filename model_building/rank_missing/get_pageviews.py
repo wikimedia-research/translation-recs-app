@@ -10,7 +10,7 @@ import argparse
 Usage: 
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
---s en \
+--s simple \
 --year 2015 \
 --month 6 \
 --config /home/ellery/translation-recs-app/translation-recs.ini 

@@ -11,7 +11,7 @@ Usage:
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/rank_missing_by_pageviews.py \
 --s en \
---t es
+--t es \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
@@ -40,7 +40,11 @@ if __name__ == '__main__':
     d_dis = pd.read_csv(dis_fname, sep = '\t', encoding = 'utf8')
     d_pv = pd.read_csv(pv_fname, sep = '\t', encoding = 'utf8')
     d_missing = pd.read_csv(missing_fname, sep = '\t', encoding = 'utf8', names = ['id', 'page_title'])
-    d_missing['page_title'] = d_missing['page_title'].apply(lambda x: x.replace(' ', '_'))
+
+    def underscore(x):
+        return unicode(x).replace(u' ', u'_')
+        
+    d_missing['page_title'] = d_missing['page_title'].apply(underscore)
     d_ranked = d_missing.merge(d_pv, how = 'inner', on = 'page_title')
     d_dis['is_dis'] = 1
     d_ranked = d_ranked.merge(d_dis, how = 'left', on = 'page_title')
