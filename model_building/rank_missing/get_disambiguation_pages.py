@@ -18,6 +18,8 @@ python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambi
 
 
 
+
+
 def query_db(query, params):
     conn = pymysql.connect(host = 'analytics-store.eqiad.wmnet', read_default_file="/etc/mysql/conf.d/analytics-research-client.cnf")
     cursor = conn.cursor(pymysql.cursors.DictCursor)
@@ -58,6 +60,9 @@ if __name__ == '__main__':
     AND page_is_redirect = 0
     AND pp_propname = 'disambiguation'
     """
+
+
+    df_dis = query_db(query % {'db': '%swiki' % s}, {})
 
     dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
     if not os.path.exists(dest):
