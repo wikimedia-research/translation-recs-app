@@ -55,14 +55,14 @@ if __name__ == '__main__':
     AND year = %(year)s
     AND month = %(month)s
     GROUP BY page_title
-    HAVING sum(view_count) > 100;
+    HAVING sum(view_count) > %(min_views)s;
     """
 
     params = {
         's': s,
         'year': year,
         'month':  month
-        'min': min_views
+        'min_views': min_views
     }
 
     d_pv = query_hive_ssh(query % params, '10k_pv_month')
