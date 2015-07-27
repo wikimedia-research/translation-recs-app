@@ -50,13 +50,12 @@ def personal_recommendations():
     s = request.args.get('s')
     t = request.args.get('t')
     article = request.args.get('article')
-    n = request.args.get('article')
-
+    n = request.args.get('n')
     try: 
         n = int(n)
     except:
         n=10
-
+        
     ret = {'articles': []}
     recommender = get_recommender(s, t)
 
