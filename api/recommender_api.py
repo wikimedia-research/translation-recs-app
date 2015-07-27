@@ -13,9 +13,6 @@ import json
 from recommendation_lib.rec_util import TopicModel, TranslationRecommender
 app = Flask(__name__)
 
-DATA_DIR = '../data'
-TRANSLATION_DIRECTIONS  = {'simple': ['es', 'fr'], }
-                            #'en': ['es', 'fr', 'simple'] }
 
 def load_recommenders(data_dir, translation_directions):
     model = {}
@@ -53,7 +50,6 @@ def personal_recommendations():
     s = request.args.get('s')
     t = request.args.get('t')
     article = request.args.get('article')
-
     n = request.args.get('article')
 
     try: 
