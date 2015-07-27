@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import pandas as pd
 
 import os,sys,inspect
@@ -30,16 +30,13 @@ def load_recommenders():
         
 model = load_recommenders()
 
-@app.route('/')
-def home():
-    return 'Contribution Recommendations'
 
-    
+
 def get_recommender(s, t):
+
     if s not in model.keys():
         print ("S DOES NOT EXIST")
         return None
-
 
     if t not in model[s]:
         print ("T DOES NOT EXIST")
@@ -47,24 +44,30 @@ def get_recommender(s, t):
 
     return  model[s][t]['translation_recommender']
 
-"""
-@app.route('/<s>/<t>')
-def personal_recommendations(s, t):
+
+
+@app.route('/')
+def personal_recommendations():
+
+    s = request.args.get('s')
+    t = request.args.get('t')
+    article = request.args.get('article')
+
+    n = request.args.get('article')
+
+    try: 
+        n = int(n)
+    except:
+        n=10
+
     ret = {'articles': []}
     recommender = get_recommender(s, t)
-    if recommender:
-        ret['articles'] = recommender.get_global_recommendations(num_recs = 10)
-    return jsonify(**ret)
-"""
-
-@app.route('/<s>/<t>/<article>')
-def personal_recommendations(s, t, article):
-
-    ret = {'articles': []}
-    recommender = get_recommender(s, t)
 
     if recommender:
-        ret['articles'] = recommender.get_seeded_recommendations(article, num_recs=10, min_score=0.1)
+        if article:
+            ret['articles'] = recommender.get_seeded_recommendations(article, num_recs=n, min_score=0.1)
+        else:
+            ret['articles'] = recommender.get_global_recommendations(num_recs = n)
 
     return jsonify(**ret)
     #render_template('translation_recs.html', recs=recs)
