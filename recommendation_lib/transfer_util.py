@@ -1,14 +1,18 @@
 import os
 
-fr = 'stat1002.eqiad.wmnet:/home/ellery/translation-recs-app/data'
-to = '/Users/ellerywulczyn/translation-recs-app/data'
+#fr = 'stat1002.eqiad.wmnet:/home/ellery/translation-recs-app/data'
+#to = '/Users/ellerywulczyn/translation-recs-app/data'
+
+fr = '/Users/ellerywulczyn/translation-recs-app/data'
+to = 'ewulczyn@recommendations.eqiad.wmflabs:/home/ewulczyn/translation-recs-app/data'
+
 
 t_dict = {'en': ['fr', 'es', 'simple'], 'simple': ['fr', 'es'],}
 
 def transfer(fr, to, fname):
     from_fname = os.path.join(fr, fname)
     to_fname = os.path.join(to, fname)
-    cmd = 'scp %s %s' % (from_fname, to_fname)
+    cmd = 'scp  %s %s' % (from_fname, to_fname)
     print (cmd)
     os.system(cmd)
 

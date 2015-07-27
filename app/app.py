@@ -1,4 +1,7 @@
 from flask import Flask, render_template, jsonify, request
+import argparse
+import json
+
 import pandas as pd
 
 import os,sys,inspect
@@ -14,22 +17,20 @@ DATA_DIR = '../data'
 TRANSLATION_DIRECTIONS  = {'simple': ['es', 'fr'], }
                             #'en': ['es', 'fr', 'simple'] }
 
-def load_recommenders():
+def load_recommenders(data_dir, translation_directions):
     model = {}
-    for s, ts in TRANSLATION_DIRECTIONS.items():
+    for s, ts in json.load(open(translation_directions)).items():
         model[s] = {}
-        tm = TopicModel(DATA_DIR, s)
+        tm = TopicModel(data_dir, s)
         model[s]['topic_model'] = tm
         for t in ts:
             model[s][t] = {}
-            tr = TranslationRecommender(DATA_DIR, s, t, tm)
+            tr = TranslationRecommender(data_dir, s, t, tm)
             model[s][t]['translation_recommender'] = tr
-    print("LOADING MODELS")
+    print("LOADED MODELS")
 
     return model
         
-model = load_recommenders()
-
 
 
 def get_recommender(s, t):
@@ -70,10 +71,16 @@ def personal_recommendations():
             ret['articles'] = recommender.get_global_recommendations(num_recs = n)
 
     return jsonify(**ret)
-    #render_template('translation_recs.html', recs=recs)
 
-   
     
 if __name__ == '__main__':
-    app.debug = True
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--debug', required = False, type = bool, default = True, help='run in debug mode' )
+    parser.add_argument('--data_dir', required = False, default = '../data', help='path to model files' )
+    parser.add_argument('--translation_directions', required = False, default = '../test_language_pairs.json', help='path to json file defining language directions' )
+    args = parser.parse_args()   
+    app.debug = args.debug
+    global model
+    model = load_recommenders(args.data_dir, args.translation_directions)
     app.run()

@@ -14,7 +14,6 @@ class TopicModel:
         self.id2index, self.index2id, self.id2sname  = get_recommendation_maps(os.path.join(data_dir,s, 'article2index.txt'))
         self.sname2id = inv_map = {v: k for k, v in self.id2sname.items()}
         topic_matrix_file = os.path.join(data_dir, s, 'doc2topic.mtx')
-        print (topic_matrix_file)
         with open(topic_matrix_file, 'rb') as f:
             self.source_topic_matrix =  normalize(mmread(f).tocsr(), norm='l2', axis=1)
 
