@@ -28,7 +28,7 @@ def create_hadoop_dirs(cp):
 
 
 def get_wikidata_dump(cp):
-    wikidata_path  = cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
+    wikidata_path  = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
     os.system('hadoop fs -rm -r -f %s' % wikidata_path)
     os.system('hadoop fs -mkdir %s' % wikidata_path)
     os.system("wget -O - http://dumps.wikimedia.org/wikidatawiki/latest/wikidatawiki-latest-pages-articles.xml.bz2 | hadoop fs -put - %s" % cp.get('DEFAULT', 'wikidata_dump'))
