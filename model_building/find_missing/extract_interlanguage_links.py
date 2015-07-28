@@ -60,7 +60,6 @@ if __name__ == '__main__':
 
     conf = SparkConf()
     conf.set("spark.app.name", 'finding missing articles')
-    conf.set("spark.akka.frameSize", 30)
     sc = SparkContext(conf=conf)
 
     dumpfile = cp.get('find_missing', 'wikidata_dump')
@@ -68,3 +67,4 @@ if __name__ == '__main__':
     WILLfile = cp.get('find_missing', 'WILL')
     os.system('hadoop fs -rm -r ' + WILLfile)
     dump.flatMap(get_WILL).saveAsTextFile ( WILLfile)
+    sc.stop()

@@ -16,9 +16,8 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---refresh_wills  \
---sqoop_tables  \
---find_missing 
+--extract_wills  \
+
 
 """
 
@@ -42,10 +41,11 @@ def get_WILLs(cp):
         'script': script
     }
     
+
     cmd = """
     spark-submit \
     --driver-memory 5g --master yarn --deploy-mode client \
-    --num-executors 2 --executor-memory 10g --executor-cores 8 \
+    --num-executors 4 --executor-memory 10g --executor-cores 4 \
     --queue priority \
     %(script)s \
     --config %(config)s 
@@ -154,7 +154,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', required = True, help='path to config file' )
     parser.add_argument('--translation_directions', required = True)
-    parser.add_argument('--refresh_wills',action='store_true', default=False)
+    parser.add_argument('--download_dump',action='store_true', default=False)
+    parser.add_argument('--extract_wills',action='store_true', default=False)
     parser.add_argument('--sqoop_tables', action='store_true', default=False)
     parser.add_argument('--find_missing', action='store_true', default=False)
 
@@ -166,9 +167,11 @@ if __name__ == '__main__':
     with open(args.translation_directions) as f:
         translation_directions = json.load(f)
 
-    if args.refresh_wills:
+    if args.download_dump:
         create_hadoop_dirs(cp)
         get_wikidata_dump(cp)
+    
+    if args.extract_wills:
         get_WILLs(cp)
 
     if args.sqoop_tables:
