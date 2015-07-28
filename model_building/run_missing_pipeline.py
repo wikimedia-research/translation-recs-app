@@ -2,8 +2,8 @@ import os
 import argparse
 import json
 from ConfigParser import SafeConfigParser
-import datetime
-
+from datetime import date
+from dateutil.relativedelta import relativedelta
 
 #config = /home/ellery/translation-recs-app/translation-recs.ini
 # rec_home = /home/ellery/translation-recs-app
@@ -16,7 +16,7 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---find_missing 
+--rank_missing 
 
 
 """
@@ -129,8 +129,8 @@ def rank_missing(config, translation_directions):
         min_views = {'en': 100, 'simple': 10, 'es': 50, 'fr': 50, 'de': 50}
 
         params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_pageviews.py')
-        today = datetime.date.today()
-        lastMonth = today - datetime.timedelta(months=1)
+        today = date.today()
+        lastMonth = today - relativedelta(months=+1)
         params['min_year'] = lastMonth.strftime("%Y")
         params['min_month'] = lastMonth.strftime("%m")
         params['min_day'] = lastMonth.strftime("%d")
@@ -161,8 +161,6 @@ if __name__ == '__main__':
     parser.add_argument('--sqoop_tables', action='store_true', default=False)
     parser.add_argument('--find_missing', action='store_true', default=False)
     parser.add_argument('--rank_missing', action='store_true', default=False)
-
-
 
     args = parser.parse_args() 
     cp = SafeConfigParser()
