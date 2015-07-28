@@ -12,8 +12,9 @@ python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambi
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
 --s simple \
---year 2015 \
---month 6 \
+--min_year 2015 \
+--min_month 6 \
+--min_day 28\
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 
 

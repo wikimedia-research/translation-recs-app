@@ -30,12 +30,17 @@ if __name__ == '__main__':
     s = args.s
     t = args.t
 
-    sdir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
+    sdir = os.path.join(cp.get('DEFAULT', 'data_path'), s)
     
-    dis_fname = os.path.join(sdir, cp.get('ranking', 'disambiguation'))   
-    pv_fname = os.path.join(sdir, cp.get('ranking', 'page_views'))  
-    missing_fname = os.path.join(sdir,t, cp.get('missing', 'missing_items'))
-    ranked_missing_fname = os.path.join(sdir,t, cp.get('missing', 'ranked_missing_items')) 
+    dis_fname = os.path.join(sdir, cp.get('rank_missing', 'disambiguation'))   
+    pv_fname = os.path.join(sdir, cp.get('rank_missing', 'page_views'))  
+    missing_fname = os.path.join(sdir,t, cp.get('rank_missing', 'missing_items'))
+
+    tdir = os.path.join(sdir, t)
+    if not os.path.exists(tdir):
+        os.makedirs(tdir)
+
+    ranked_missing_fname = os.path.join(tdir, cp.get('rank_missing', 'ranked_missing_items')) 
 
     d_dis = pd.read_csv(dis_fname, sep = '\t', encoding = 'utf8')
     d_pv = pd.read_csv(pv_fname, sep = '\t', encoding = 'utf8')

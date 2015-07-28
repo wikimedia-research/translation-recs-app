@@ -63,12 +63,11 @@ if __name__ == '__main__':
 
 
     df_dis = query_db(query % {'db': '%swiki' % s}, {})
-
-    dest = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
+    dest = os.path.join(cp.get('DEFAULT', 'data_path'), s)
     if not os.path.exists(dest):
         os.makedirs(dest)
 
-    fname = os.path.join(dest, cp.get('ranking', 'disambiguation'))
+    fname = os.path.join(dest, cp.get('rank_missing', 'disambiguation'))
 
     df_dis.to_csv(fname, sep = '\t', encoding = 'utf8', index = False)
 

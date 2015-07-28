@@ -1,5 +1,4 @@
 from pyspark import SparkConf, SparkContext
-
 import codecs
 import networkx as nx
 from collections import Counter
@@ -32,13 +31,13 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
 
     # add wikidata links
     names = ["id", "language_code", "article_name"]
-    wikidata_links = sc.textFile(cp.get('general', 'WILL')).map(get_parser(names))\
+    wikidata_links = sc.textFile(cp.get('find_missing', 'WILL')).map(get_parser(names))\
                     .filter(lambda x: x['language_code'] in wd_languages and x['id'].startswith('Q'))\
                     .map(lambda x: ('wikidata'+ delim + x['id'], x['language_code'] + delim + x['article_name']))         
     G.add_edges_from(wikidata_links.collect())
     print "Got Wikidata Links"
     # add interlanguage links
-    prod_tables = cp.get('general', 'prod_tables')
+    prod_tables = cp.get('DEFAULT', 'hive_db_path')
 
     names = ['ll_from', 'll_to', 'll_lang']
     for ill_lang in ill_languages_from:
@@ -185,11 +184,12 @@ if __name__ == '__main__':
     cp = SafeConfigParser()
     cp.read(args.config)
 
-    outerdir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s)
+
+    outerdir = os.path.join(cp.get('DEFAULT', 'data_path'), s)
     if not os.path.exists(outerdir):
         os.makedirs(outerdir)
 
-    innerdir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', s, t)
+    innerdir = os.path.join(cp.get('DEFAULT', 'data_path'), s, t)
     if not os.path.exists(innerdir):
         os.makedirs(innerdir)
 
@@ -208,10 +208,10 @@ if __name__ == '__main__':
     G = create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, ill_languages_to)
     print "Got entire Graph"
 
-    get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('missing', 'missing_items')))
+    get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('find_missing', 'missing_items')))
     print "Got missing Items"
 
-    merged_filename = os.path.join(innerdir, cp.get('missing', 'merged_items'))
+    merged_filename = os.path.join(innerdir, cp.get('find_missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
     print "Got clusters"
 
