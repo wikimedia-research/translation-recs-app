@@ -168,7 +168,7 @@ if __name__ == '__main__':
 
     if args.refresh_wills:
         create_hadoop_dirs(cp)
-        #get_wikidata_dump(cp)
+        get_wikidata_dump(cp)
         get_WILLs(cp)
 
     if args.sqoop_tables:
