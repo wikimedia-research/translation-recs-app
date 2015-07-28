@@ -23,9 +23,10 @@ with open(args.translation_directions) as f:
   directions = json.load(f)
 langs  = set()
 langs.add('wikidata')
-for k, v in directions.items():
-  langs.add(k)
-  langs.add(v)
+for s, ts in directions.items():
+  langs.add(s)
+  for t in ts:
+    langs.add(t)
 
 
 # create the db if it does not exist
