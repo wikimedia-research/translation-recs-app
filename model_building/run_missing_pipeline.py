@@ -96,6 +96,7 @@ def get_missing(config, translation_directions):
         params['s'] = s
         for t in ts:
             params['t'] = t
+            print (cmd % params)
             os.system(cmd % params )
 
 

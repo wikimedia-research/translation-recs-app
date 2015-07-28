@@ -112,6 +112,7 @@ def get_missing_items(sc, cp, G, s, t, delim, fname):
     for i, g in enumerate(cc):
         missing_items.update(is_subgraph_missing_target_item(g, s, t, delim))
 
+    print len(missing_items)
     missing_items_df = pd.DataFrame(missing_items.items())
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
