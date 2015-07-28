@@ -16,9 +16,9 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---refresh_wills True \
---sqoop_tables False \
---find_missing False
+--refresh_wills  \
+--sqoop_tables  \
+--find_missing 
 
 """
 
@@ -59,7 +59,7 @@ def sqoop_tables(config, translation_directions_file):
     params = {
         'translation_directions_file': translation_directions_file,
         'script': script,
-        'congig': cp.get('DEFAULT', 'config'),
+        'config': cp.get('DEFAULT', 'config'),
     }
 
     cmd = """
@@ -153,10 +153,10 @@ if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', required = True, help='path to config file' )
-    parser.add_argument('--translation_directions', required = True, help='path to json file defining language directions' )
-    parser.add_argument('--refresh_wills', default = True, type = bool, help='download the latest wikidatadump and extract WILLs')
-    parser.add_argument('--sqoop_tables', default = True, type = bool, help='download the latest wikidatadump and extract WILLs')
-    parser.add_argument('--find_missing', default = True, type = bool, help='download the latest wikidatadump and extract WILLs')
+    parser.add_argument('--translation_directions', required = True, action='store_true', default=False)
+    parser.add_argument('--refresh_wills', default = True, action='store_true', default=False)
+    parser.add_argument('--sqoop_tables', default = True, action='store_true', default=False)
+    parser.add_argument('--find_missing', default = True, action='store_true', default=False)
 
 
     args = parser.parse_args() 
