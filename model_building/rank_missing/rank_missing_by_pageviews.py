@@ -34,7 +34,7 @@ if __name__ == '__main__':
     
     dis_fname = os.path.join(sdir, cp.get('rank_missing', 'disambiguation'))   
     pv_fname = os.path.join(sdir, cp.get('rank_missing', 'page_views'))  
-    missing_fname = os.path.join(sdir,t, cp.get('rank_missing', 'missing_items'))
+    missing_fname = os.path.join(sdir,t, cp.get('find_missing', 'missing_items'))
 
     tdir = os.path.join(sdir, t)
     if not os.path.exists(tdir):
