@@ -64,7 +64,7 @@ def sqoop_tables(config, translation_directions_file):
 
     cmd = """
     python %(script)s \
-    --config %(config)s 
+    --config %(config)s \
     --translation_directions %(translation_directions_file)s \
     """
     print cmd % params
@@ -82,8 +82,8 @@ def get_missing(config, translation_directions):
     --num-executors 2 --executor-memory 10g --executor-cores 8 \
     --queue priority \
     %(script)s \
-    --s %(s)s 
-    --t %(t)s \
+    --s %(s)s \
+    --t %(t)s 
     """
 
     params = {
