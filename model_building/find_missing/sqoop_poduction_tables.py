@@ -1,12 +1,31 @@
 
 import os
 import sys
+from ConfigParser import SafeConfigParser
+import argparse
+import json
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--config', required = True, help='path to recommendation file' )
+parser.add_argument('--translation_directions', required = True,  help='path to json file defining language directions' )
+
+
+args = parser.parse_args()
+cp = SafeConfigParser()
+cp.read(args.config)
 
 os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
 
 
-db = sys.argv[1]
-langs  = sys.argv[2].split(',')
+db = cp.get('DEFAULT', 'hive_db')
+
+with open(args.translation_directions) as f:
+  directions = json.load(f)
+langs  = set()
+langs.add('wikidata')
+for k, v in directions.items():
+  langs.add(k)
+  langs.add(v)
 
 
 # create the db if it does not exist
@@ -17,7 +36,7 @@ print cmd
 os.system( cmd )
 
 
-# delete all the tables in db tjat will be refreshed, that already exist
+# delete all the tables in db that will be refreshed, that already exist
 delete_query = "DROP TABLE IF EXISTS %(db)s.%(table)s; "
 
 for lang in langs:
