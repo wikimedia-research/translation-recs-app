@@ -158,6 +158,8 @@ if __name__ == '__main__':
     parser.add_argument('--extract_wills',action='store_true', default=False)
     parser.add_argument('--sqoop_tables', action='store_true', default=False)
     parser.add_argument('--find_missing', action='store_true', default=False)
+    parser.add_argument('--rank_missing', action='store_true', default=False)
+
 
 
     args = parser.parse_args() 
@@ -179,5 +181,9 @@ if __name__ == '__main__':
 
     if args.find_missing:
         get_missing(cp, translation_directions)
+
+    if args.rank_missing:
+        rank_missing(cp, translation_directions)
+
 
 
