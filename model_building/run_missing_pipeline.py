@@ -16,7 +16,7 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---sqoop_tables 
+--find_missing 
 
 
 """
@@ -91,7 +91,7 @@ def get_missing(config, translation_directions):
         'script': script,
     }
 
-    for s, ts in translation_directions:
+    for s, ts in translation_directions.items():
         params['s'] = s
         for t in ts:
             params['t'] = t
