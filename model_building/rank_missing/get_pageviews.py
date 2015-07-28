@@ -44,8 +44,9 @@ if __name__ == '__main__':
     cp.read(args.config)
 
     s = args.s
-    year = args.year
-    month = args.month
+    year = args.min_year
+    month = args.min_month
+    day = args.min_day
     min_views = args.min_views
 
     query = """
@@ -54,9 +55,9 @@ if __name__ == '__main__':
     FROM wmf.pageview_hourly
     WHERE project = '%(s)s.wikipedia'
     AND agent_type = 'user'
-    AND year >= %(min_year)s
-    AND month >= %(min_month)s
-    AND day >= %(min_month)s
+    AND year >= %(year)s
+    AND month >= %(month)s
+    AND day >= %(month)s
     GROUP BY page_title
     HAVING sum(view_count) > %(min_views)s;
     """
@@ -65,6 +66,7 @@ if __name__ == '__main__':
         's': s,
         'year': year,
         'month':  month,
+        'day': day,
         'min_views': min_views,
     }
 
