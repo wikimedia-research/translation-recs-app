@@ -31,7 +31,7 @@ def get_wikidata_dump(cp):
     wikidata_path  = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
     os.system('hadoop fs -rm -r -f %s' % wikidata_path)
     os.system('hadoop fs -mkdir %s' % wikidata_path)
-    os.system("wget -O - http://dumps.wikimedia.org/wikidatawiki/latest/wikidatawiki-latest-pages-articles.xml.bz2 | hadoop fs -put - %s" % cp.get('DEFAULT', 'wikidata_dump'))
+    os.system("wget -O - http://dumps.wikimedia.org/wikidatawiki/latest/wikidatawiki-latest-pages-articles.xml.bz2 | hadoop fs -put - %s" % cp.get('find_missing', 'wikidata_dump'))
 
 
 def get_WILLs(cp):
