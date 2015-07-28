@@ -154,9 +154,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--config', required = True, help='path to config file' )
     parser.add_argument('--translation_directions', required = True, action='store_true', default=False)
-    parser.add_argument('--refresh_wills', default = True, action='store_true', default=False)
-    parser.add_argument('--sqoop_tables', default = True, action='store_true', default=False)
-    parser.add_argument('--find_missing', default = True, action='store_true', default=False)
+    parser.add_argument('--refresh_wills',action='store_true', default=False)
+    parser.add_argument('--sqoop_tables', action='store_true', default=False)
+    parser.add_argument('--find_missing', action='store_true', default=False)
 
 
     args = parser.parse_args() 
