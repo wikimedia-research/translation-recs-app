@@ -83,7 +83,8 @@ def get_missing(config, translation_directions):
     --queue priority \
     %(script)s \
     --s %(s)s \
-    --t %(t)s 
+    --t %(t)s \
+    --config %(config)s
     """
 
     params = {
