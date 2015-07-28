@@ -34,8 +34,11 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
     names = ["id", "language_code", "article_name"]
     wikidata_links = sc.textFile(cp.get('find_missing', 'WILL')).map(get_parser(names))\
                     .filter(lambda x: x['language_code'] in wd_languages and x['id'].startswith('Q'))\
-                    .map(lambda x: ('wikidata'+ delim + x['id'], x['language_code'] + delim + x['article_name']))         
+                    .map(lambda x: ('wikidata'+ delim + x['id'], x['language_code'] + delim + x['article_name']))  
+    wikidata_links.persist()
+    print ("Got %d WILLs" % wikidata_links.count())     
     G.add_edges_from(wikidata_links.collect())
+    wikidata_links.unpersist()
     print "Got Wikidata Links"
     # add interlanguage links
     prod_tables = cp.get('DEFAULT', 'hive_db_path')
@@ -46,8 +49,11 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
         .map(lambda x: x.split('\t'))\
         .filter(lambda x: x[2] in ill_languages_to and len(x[1]) > 0 and len(x[0]) > 0)\
         .map(lambda x: (ill_lang + delim + x[0], x[2] + delim + x[1]))
+        ill.persist()
+        print "Got %d ILL links" % ill.count()
         G.add_edges_from(ill.collect())
         print "Got ILL links for %s" % ill_lang
+        ill.unpersist()
 
     # add redirect links
     names = ['rd_from', 'rd_to']
@@ -55,7 +61,10 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
         rd = sc.textFile(os.path.join(prod_tables,  rd_lang + "wiki_redirect_joined"))\
         .map(lambda x: x.split('\t'))\
         .map(lambda x: (rd_lang + delim + x[0], rd_lang + delim + x[1]))
+        rd.persist()
+        print ("Got %d rd links" % rd.count())
         G.add_edges_from(rd.collect())
+        rd.unpersist()
         print "got rdd links for %s" % rd_lang
     return G
 
