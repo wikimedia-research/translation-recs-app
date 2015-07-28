@@ -16,7 +16,7 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---extract_wills  \
+--sqoop_tables 
 
 
 """
@@ -54,7 +54,7 @@ def get_WILLs(cp):
 
 
 def sqoop_tables(config, translation_directions_file):
-    script = os.path.join(cp.get('DEFAULT', 'project_path'), '/model_building/find_missing/sqoop_production_tables.py')
+    script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/sqoop_production_tables.py')
 
     params = {
         'translation_directions_file': translation_directions_file,
@@ -74,7 +74,7 @@ def sqoop_tables(config, translation_directions_file):
 
 def get_missing(config, translation_directions):
 
-    script = os.path.join(cp.get('DEFAULT', 'project_path'), '/model_building/find_missing/get_missing_articles.py')
+    script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/get_missing_articles.py')
     
     cmd = """
     spark-submit \
@@ -110,7 +110,7 @@ def rank_missing(config, translation_directions):
         --s %(s)s \
         --config %(config)s
         """
-        params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), '/model_building/rank_missing/get_disambiguation_pages.py')
+        params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_disambiguation_pages.py')
         os.system(cmd % params)
 
 
@@ -126,7 +126,7 @@ def rank_missing(config, translation_directions):
 
         min_views = {'en': 100, 'simple': 10, 'es': 50, 'fr': 50, 'de': 50}
 
-        params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), '/model_building/rank_missing/get_pageviews.py')
+        params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_pageviews.py')
         today = datetime.date.today()
         lastMonth = today - datetime.timedelta(months=1)
         params['min_year'] = lastMonth.strftime("%Y")
@@ -138,7 +138,7 @@ def rank_missing(config, translation_directions):
 
         for t in ts:
             params['t'] = t
-            params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), '/model_building/rank_missing/rank_missing_by_pageviews.py')
+            params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/rank_missing_by_pageviews.py')
             cmd = """
             python %(script)s \
             --s %(s)s \
