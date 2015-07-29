@@ -107,7 +107,7 @@ if __name__ == '__main__':
         tokenize_dumps(cp, translation_directions)
 
     if args.lda_preprocess:
-        lda_preprocess
+        lda_preprocess(cp, translation_directions)
 
     if args.lda:
         lda(cp, translation_directions)
