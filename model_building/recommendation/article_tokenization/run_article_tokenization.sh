@@ -4,7 +4,6 @@
 export LANG=$1
 export WIKI=$2
 
-# Modify these parameters.
 # This is where the JAR file with the Mapper code resides.
 export TARGET_DIR=$HOME/translation-recs-app/model_building/recommendation/article_tokenization/target
 # This is where additional JARs reside.

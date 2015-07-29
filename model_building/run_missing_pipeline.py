@@ -15,8 +15,10 @@ Usage
 
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
---translation_directions /home/ellery/translation-recs-app/language_pairs.json \
---rank_missing 
+--translation_directions /home/ellery/translation-recs-app/translation_directions.json \
+--sqoop_tables \
+--find_missing \
+--rank_missing
 
 
 """
@@ -113,6 +115,7 @@ def rank_missing(config, translation_directions):
         --config %(config)s
         """
         params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_disambiguation_pages.py')
+        print(cmd % params)
         os.system(cmd % params)
 
 

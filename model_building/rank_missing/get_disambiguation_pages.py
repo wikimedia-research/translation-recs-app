@@ -16,10 +16,6 @@ python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambi
 
 
 
-
-
-
-
 def query_db(query, params):
     conn = pymysql.connect(host = 'analytics-store.eqiad.wmnet', read_default_file="/etc/mysql/conf.d/analytics-research-client.cnf")
     cursor = conn.cursor(pymysql.cursors.DictCursor)
