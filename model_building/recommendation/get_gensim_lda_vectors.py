@@ -20,13 +20,13 @@ def main(args):
 
     cp = SafeConfigParser()
     cp.read(args.config)
-    base_dir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', args.lang)
-    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), 'translation-recs-app/data', args.lang)
+    base_dir = os.path.join(cp.get('DEFAULT', 'data_path'), args.lang)
+    hadoop_base_dir = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), args.lang)
 
 
-    word2index_file = os.path.join(base_dir, cp.get('LDA', 'word2index'))
-    blei_corpus_file = os.path.join(base_dir, cp.get('LDA', 'blei_corpus'))
-    doc2topic_file = os.path.join(base_dir, cp.get('LDA', 'doc2topic'))
+    word2index_file = os.path.join(base_dir, cp.get('recommendation', 'word2index'))
+    blei_corpus_file = os.path.join(base_dir, cp.get('recommendation', 'blei_corpus'))
+    doc2topic_file = os.path.join(base_dir, cp.get('recommendation', 'doc2topic'))
 
 
     dictionary = gensim.corpora.dictionary.Dictionary() 
