@@ -32,6 +32,8 @@ def download_dumps(cp, translation_directions):
 def tokenize_dumps(cp, translation_directions):
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/article_tokenization/run_article_tokenization.sh')
     for s in translation_directions.keys():
+        fname = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), s, s+'wiki-plaintexts')
+        os.system('hadoop fs -rm -r %s' % fname)
         os.system('sh %s %s %s' % (script, s, s+'wiki'))
 
 
