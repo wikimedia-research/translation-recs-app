@@ -138,15 +138,15 @@ def translate_words_to_ids(tf_articles, word_id_map):
 def main(args):
     cp = SafeConfigParser()
     cp.read(args.config)
-    base_dir = os.path.join(cp.get('general', 'local_data_dir'), 'translation-recs-app/data', args.lang)
-    hadoop_base_dir = os.path.join(cp.get('general', 'hadoop_data_dir'), 'translation-recs-app/data', args.lang)
+    base_dir = os.path.join(cp.get('DEFAULT', 'data_path'), args.lang)
+    hadoop_base_dir = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), args.lang)
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
     tokenfile = os.path.join(hadoop_base_dir, args.lang+'wiki-plaintexts' )
 
     # load articles
-    tokenized_articles = load_articles(args.lang, tokenfile, cp.get('general', 'WILL'))
+    tokenized_articles = load_articles(args.lang, tokenfile, cp.get('find_missing', 'WILL'))
     # normalize
     normalized_tokenized_articles = clean_article_text(tokenized_articles, get_banned_words())
     # get word-id maping
@@ -157,7 +157,7 @@ def main(args):
     id_articles = translate_words_to_ids(tf_articles, word_id_map)
 
     # save dictionary to file: word at line i has id i
-    dict_file = os.path.join(base_dir, cp.get('LDA', 'word2index'))
+    dict_file = os.path.join(base_dir, cp.get('recommendation', 'word2index'))
     with open(dict_file, 'w') as f:
         for word, word_id in sorted(local_word_id_map.items(), key=lambda x:x[1]):
             line = word + '\n'
@@ -171,8 +171,8 @@ def main(args):
     
     save_rdd(id_articles.map(tuple_to_str), base_dir , hadoop_base_dir, 'articles.pre_blei')
     pre_blei_corpus_file = os.path.join( base_dir, 'articles.pre_blei')
-    article2index_file = os.path.join( base_dir, cp.get('LDA', 'article2index'))
-    blei_corpus_file = os.path.join( base_dir, cp.get('LDA', 'blei_corpus')) 
+    article2index_file = os.path.join( base_dir, cp.get('recommendation', 'article2index'))
+    blei_corpus_file = os.path.join( base_dir, cp.get('recommendation', 'blei_corpus')) 
     print os.system( "cut  -d' ' -f2- %s > %s" % (pre_blei_corpus_file,  blei_corpus_file))
     print os.system( "cut  -d' ' -f1 %s > %s" % (pre_blei_corpus_file, article2index_file))
     os.system("rm " + pre_blei_corpus_file)

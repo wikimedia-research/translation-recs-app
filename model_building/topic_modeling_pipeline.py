@@ -16,7 +16,7 @@ Usage
 python topic_modeling_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/test_translation_directions.json \
---tokenize_dumps 
+--lda_preprocess 
 
 
 
@@ -30,6 +30,7 @@ def download_dumps(cp, translation_directions):
 
 # this file needs to be drier
 def tokenize_dumps(cp, translation_directions):
+    os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/article_tokenization/run_article_tokenization.sh')
     for s in translation_directions.keys():
         fname = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), s, s+'wiki-plaintexts')
@@ -93,7 +94,6 @@ if __name__ == '__main__':
     parser.add_argument('--tokenize_dumps',action='store_true', default=False)
     parser.add_argument('--lda_preprocess',action='store_true', default=False)
     parser.add_argument('--lda',action='store_true', default=False)
-
 
     args = parser.parse_args() 
     cp = SafeConfigParser()
