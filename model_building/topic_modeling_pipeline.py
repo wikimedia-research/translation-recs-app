@@ -23,63 +23,63 @@ python topic_modeling_pipeline.py \
 """
 
 def download_dumps(cp, translation_directions):
-	script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/download_dumps.py')
-	langs = ','.join(translation_directions.keys())
-	ftype = 'wiki-latest-pages-articles-multistream.xml.bz2'
-	os.system('%s %s %s' % (script, ftytpe, langs))
+    script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/download_dumps.py')
+    langs = ','.join(translation_directions.keys())
+    ftype = 'wiki-latest-pages-articles-multistream.xml.bz2'
+    os.system('%s %s %s' % (script, ftytpe, langs))
 
 # this file needs to be drier
 def tokenize_dumps(cp, translation_directions):
-	script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/article_tokenization/run_article_tokenization.sh')
-	for s in translation_directions.keys():
-		os.system('%s %s %s' % (script, s, s+'wiki'))
+    script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/article_tokenization/run_article_tokenization.sh')
+    for s in translation_directions.keys():
+        os.system('%s %s %s' % (script, s, s+'wiki'))
 
 
 def lda_preprocess(cp, translation_directions):
 
-	script =  os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/lda_preprocess.py')
-	params = {
+    script =  os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/lda_preprocess.py')
+    params = {
         'config': cp.get('DEFAULT', 'config'),
         'script': script
     }
 
-	cmd = """
-	spark-submit \
-	--driver-memory 5g --master yarn --deploy-mode client \
-	--num-executors 4 --executor-memory 20g --executor-cores 8 \
-	--queue priority \
-	%(script)s \
-	--config %(config)s \
-	--lang %(s)s \
-	--top %(top)s
-	"""
+    cmd = """
+    spark-submit \
+    --driver-memory 5g --master yarn --deploy-mode client \
+    --num-executors 4 --executor-memory 20g --executor-cores 8 \
+    --queue priority \
+    %(script)s \
+    --config %(config)s \
+    --lang %(s)s \
+    --top %(top)s
+    """
 
-	for s in translation_directions.keys():
-		params['s'] = s
-		params['top'] = 100000
-		os.system(cmd % params)
+    for s in translation_directions.keys():
+        params['s'] = s
+        params['top'] = 100000
+        os.system(cmd % params)
 
 def lda(cp, translation_directions):
 
-	script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/get_gensim_lda_vectors.py')
+    script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/get_gensim_lda_vectors.py')
 
-	dims  = {'en': 400, 'es': 200, 'fr': 200, 'sw': 100}
-	cmd = """
-	python %(script)s \
-	--lang %(s)s \
-	--config %(config)s \
-	--dim %(dim)s
-	"""
+    dims  = {'en': 400, 'es': 200, 'fr': 200, 'sw': 100}
+    cmd = """
+    python %(script)s \
+    --lang %(s)s \
+    --config %(config)s \
+    --dim %(dim)s
+    """
 
-	params = {
+    params = {
         'config': cp.get('DEFAULT', 'config'),
         'script': script
     }
 
     for s in translation_directions.keys():
-		params['s'] = s
-		params['dim'] = dims.get(s, 100)
-		os.system(cmd % params)
+        params['s'] = s
+        params['dim'] = dims.get(s, 100)
+        os.system(cmd % params)
 
 
 if __name__ == '__main__':
@@ -104,11 +104,11 @@ if __name__ == '__main__':
         download_dumps(cp, translation_directions)
 
     if args.tokenize_dumps:
-    	tokenize_dumps(cp, translation_directions)
+        tokenize_dumps(cp, translation_directions)
 
     if args.lda_preprocess:
-    	lda_preprocess
+        lda_preprocess
 
     if args.lda:
-    	lda(cp, translation_directions)
+        lda(cp, translation_directions)
     
