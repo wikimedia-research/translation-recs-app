@@ -26,7 +26,7 @@ def download_dumps(cp, translation_directions):
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/recommendation/download_dumps.py')
     langs = ','.join(translation_directions.keys())
     ftype = 'wiki-latest-pages-articles-multistream.xml.bz2'
-    os.system('%s %s %s' % (script, ftytpe, langs))
+    os.system('%s %s %s' % (script, ftype, langs))
 
 # this file needs to be drier
 def tokenize_dumps(cp, translation_directions):
