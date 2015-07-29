@@ -9,4 +9,4 @@ for lang in langs:
     os.system('hadoop fs -mkdir %s' % destdir)
     destfile = "%(dest)s/%(lang)s%(ftype)s" % {'ftype':ftype[:-4], 'dest': destdir, 'lang': lang}
     os.system('hadoop fs -rm -r %s' % destfile)
-    os.system("wget -O - %(url)s | bunzip2 | hadoop fs -put - %(destfil)s" % {'url': url,  'destfile': destfile})
+    os.system("wget -O - %(url)s | bunzip2 | hadoop fs -put - %(destfile)s" % {'url': url,  'destfile': destfile})
