@@ -73,9 +73,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', required = False, type = bool, default = True, help='run in debug mode' )
     parser.add_argument('--data_dir', required = False, default = '../data', help='path to model files' )
-    parser.add_argument('--translation_directions', required = False, default = '../test_language_pairs.json', help='path to json file defining language directions' )
+    parser.add_argument('--translation_directions', required = False, default = '../test_translation_directions.json', help='path to json file defining language directions' )
     args = parser.parse_args()   
     app.debug = args.debug
     global model
     model = load_recommenders(args.data_dir, args.translation_directions)
-    app.run()
+    app.run(host='0.0.0.0')

@@ -15,8 +15,11 @@ Usage
 
 python topic_modeling_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
---translation_directions /home/ellery/translation-recs-app/test_translation_directions.json \
---lda_preprocess 
+--translation_directions /home/ellery/translation-recs-app/translation_directions.json \
+--download_dumps \
+--tokenize_dumps \
+--lda_preprocess \
+--lda 
 
 
 
