@@ -3,8 +3,8 @@
         <div class="ui pointing personalize dropdown link item">
             Personalize <i class="dropdown icon"></i>
             <div class="menu">
-              <div class="item">Login to Wikipedia</div>
               <div class="item" onclick={ enableArticle }>With an Article</div>
+              <div class="disabled item">(more coming soon)</div>
             </div>
         </div>
 

@@ -8,8 +8,8 @@
         <div class="stackable row">
             <div class="three wide aligned column">
                 <h3>From</h3>
-                <select class="ui personalize dropdown" name="from">
-                    <option value="en">English</option>
+                <select class="ui personalize dropdown" name="source">
+                    <option value="test_source">English</option>
                     <option disabled>(more coming soon)</option>
                 </select>
             </div>
@@ -18,8 +18,8 @@
             </div>
             <div class="three wide aligned column">
                 <h3>To</h3>
-                <select class="ui personalize dropdown" name="to">
-                    <option value="es">español</option>
+                <select class="ui personalize dropdown" name="target">
+                    <option value="test_target">español</option>
                     <option disabled>(more coming soon)</option>
                 </select>
             </div>
@@ -28,6 +28,10 @@
         <div class="row"></div>
 
         <div class="ui centered grid container tight cards">
+
+            <p if={ !articles } class="ui warning message">
+                No articles found.  Try without a seed article, or let us know if this keeps happening.
+            </p>
 
             <div each={ articles } class="card"
                 onmouseover={ hoverIn }
@@ -52,9 +56,11 @@
     <script>
         var self = this;
 
-        var url = opts.seedArticle ?
-            '/recommend/en/es/' + opts.seedArticle + '.json' :
-            '/recommend/en/es.json';
+        var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
+
+        if (opts.seedArticle) {
+            url += '&article=' + opts.seedArticle;
+        }
 
         $.ajax({
             url: url,
@@ -80,7 +86,7 @@
                 article.id = id;
                 article.linkTitle = article.title;
                 article.title = page.title;
-                article.thumbnail = page.thumbnail.source;
+                article.thumbnail = page.thumbnail ? page.thumbnail.source : null;
                 article.hovering = false;
                 self.update();
 
@@ -96,8 +102,8 @@
             riot.mount('preview', {
                 articles: self.articles,
                 title: e.item.title,
-                from: self.from.value,
-                to: self.to.value,
+                from: self.source.value,
+                to: self.target.value,
             });
         }
 
