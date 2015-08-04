@@ -43,8 +43,12 @@ def get_recommender(s, t):
     return  model[s][t]['translation_recommender']
 
 
-
 @app.route('/')
+def home():
+    return render_template('index.html')
+
+
+@app.route('/api')
 def personal_recommendations():
 
     s = request.args.get('s')
