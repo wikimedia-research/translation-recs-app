@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Recommend</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/semantic-ui/dist/semantic.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+
+    <body>
+        <menu></menu>
+
+        <div id="page">
+        </div>
+
+        <script src="{{ url_for('static', filename='menu.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='Home.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='Recommend.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='About.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='preview.tag') }}" type="riot/tag"></script>
+
+        <script src="{{ url_for('static', filename='bower_components/riot/riot+compiler.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/semantic-ui/dist/semantic.min.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+    </body>
+</html>
