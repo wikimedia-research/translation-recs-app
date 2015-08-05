@@ -1,3 +1,6 @@
+# External dependencies
+bower_components
+
 # Compiled source #
 ###################
 *.com
