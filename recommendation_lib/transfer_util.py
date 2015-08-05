@@ -60,7 +60,7 @@ def main():
     parser.add_argument('--translation_directions', required = False, default = '../test_translation_directions.json', help='path to json file defining language directions' )
     args = parser.parse_args()   
     with open(args.translation_directions) as f:
-        t_dict = args.translation_directions)
+        t_dict = json.load(f)
 
     for fr, to in pairs:
         transfer_from_to(fr, to, t_dict)
