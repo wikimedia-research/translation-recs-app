@@ -1,13 +1,9 @@
 import os
-
-#fr = 'stat1002.eqiad.wmnet:/home/ellery/translation-recs-app/data'
-#to = '/Users/ellerywulczyn/translation-recs-app/data'
-
-fr = '/Users/ellerywulczyn/translation-recs-app/data'
-to = 'ewulczyn@recommendations.eqiad.wmflabs:/home/ewulczyn/translation-recs-app/data'
+import argparse
+import json
 
 
-t_dict = {'en': ['fr', 'es', 'simple'], 'simple': ['fr', 'es'],}
+
 
 def transfer(fr, to, fname):
     from_fname = os.path.join(fr, fname)
@@ -17,39 +13,57 @@ def transfer(fr, to, fname):
     os.system(cmd)
 
 
-# create directories
-for s in t_dict.keys():
+def transfer_from_to(fr, to, t_dict):
+    # create directories
     for s in t_dict.keys():
-        directory = os.path.join(to, s)
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-        for t in t_dict[s]:
-            directory = os.path.join(to, s, t)
+        for s in t_dict.keys():
+            directory = os.path.join(to, s)
             if not os.path.exists(directory):
                 os.makedirs(directory)
+            for t in t_dict[s]:
+                directory = os.path.join(to, s, t)
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
 
 
-# language models
-lm_files = ['article2index.txt', 'doc2topic.mtx']
-for s in t_dict.keys():
-    for f in lm_files:
-        fname = os.path.join(s, f)
-        try:
-            transfer(fr, to, fname)
-        except:
-            print('Could not transfer %s' %fname)
-
-
-# ranked missing
-
-rank_files = [ 'ranked_missing_items.tsv']
-for s in t_dict.keys():
-    for t in t_dict[s]:
-        for f in rank_files:
-            fname = os.path.join(s, t, f)
+    # language models
+    lm_files = ['article2index.txt', 'doc2topic.mtx']
+    for s in t_dict.keys():
+        for f in lm_files:
+            fname = os.path.join(s, f)
             try:
                 transfer(fr, to, fname)
             except:
-                print('Could not transfer %s' % fname)
-    
+                print('Could not transfer %s' %fname)
 
+
+    # ranked missing
+
+    rank_files = [ 'ranked_missing_items.tsv']
+    for s in t_dict.keys():
+        for t in t_dict[s]:
+            for f in rank_files:
+                fname = os.path.join(s, t, f)
+                try:
+                    transfer(fr, to, fname)
+                except:
+                    print('Could not transfer %s' % fname)
+  
+
+def main():
+    stat2 = 'stat1002.eqiad.wmnet:/home/ellery/translation-recs-app/data'
+    me = '/Users/ellerywulczyn/translation-recs-app/data'
+    labs = 'ewulczyn@recommendations.eqiad.wmflabs:/home/ewulczyn/translation-recs-app/data'
+    pairs = [(stat2, me), (me, labs)]
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--translation_directions', required = False, default = '../test_translation_directions.json', help='path to json file defining language directions' )
+    args = parser.parse_args()   
+    with open(args.translation_directions) as f:
+        t_dict = args.translation_directions)
+
+    for fr, to in pairs:
+        transfer_from_to(fr, to, t_dict)
+
+if __name__ == '__main__':
+    main()
