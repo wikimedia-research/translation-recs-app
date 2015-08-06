@@ -13,15 +13,25 @@
         <div id="page">
         </div>
 
+        <script>
+        // globals from server
+        window.translationAppGlobals = {
+            languageCodes: JSON.parse('{{ language_codes | safe }}'),
+            languagePairs: JSON.parse('{{ language_pairs | safe }}'),
+        };
+        </script>
+
         <script src="{{ url_for('static', filename='menu.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='Home.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='Recommend.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='ArticleList.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='About.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='preview.tag') }}" type="riot/tag"></script>
 
         <script src="{{ url_for('static', filename='bower_components/riot/riot+compiler.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/semantic-ui/dist/semantic.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/store2/dist/store2.min.js') }}"></script>
 
         <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>

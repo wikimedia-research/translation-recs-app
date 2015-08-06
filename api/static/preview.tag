@@ -43,8 +43,7 @@
 
         self.articles = opts.articles || [];
         self.title = opts.title || '';
-        // TODO: should this link to the destination wiki?
-        self.translateRoot = '//en.wikipedia.org/wiki/Special:ContentTranslation?' +
+        self.translateRoot = '//' + opts.from + '.wikipedia.org/wiki/Special:ContentTranslation?' +
             'from=' + opts.from +
             '&to=' + opts.to +
             '&campaign=article-recommendation';
@@ -57,7 +56,7 @@
             }
         }
 
-        var mobileRoot = 'http://rest.wikimedia.org/en.wikipedia.org/v1/page/html/';
+        var previewRoot = 'http://rest.wikimedia.org/' + opts.from + '.wikipedia.org/v1/page/html/';
 
         self.show = function () {
             var showing = self.articles[self.showIndex];
@@ -66,7 +65,7 @@
 
             $('.preview.body').append('<div class="mask">Loading...</div>');
 
-            $.get(mobileRoot + showing.title).done(function (data) {;
+            $.get(previewRoot + showing.title).done(function (data) {;
                 self.showPreview(showing, data);
             }).fail(function (data) {
                 self.showPreview(showing, 'No Internet');
