@@ -17,7 +17,7 @@ python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/translation_directions.json \
 --download_dump \
---extract_wills 
+--dum_day 20150805
 
 
 """
@@ -33,7 +33,7 @@ def get_wikidata_dump(cp, day):
     os.system('hadoop fs -mkdir %s' % wikidata_path)
     url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
     fname = cp.get('find_missing', 'wikidata_dump')
-    os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname)
+    os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname))
 
 
 def get_WILLs(cp):
