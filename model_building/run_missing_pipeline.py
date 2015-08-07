@@ -16,9 +16,8 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/translation_directions.json \
---sqoop_tables \
---find_missing \
---rank_missing
+--download_dump \
+--extract_wills 
 
 
 """
@@ -28,11 +27,13 @@ def create_hadoop_dirs(cp):
     os.system('hadoop fs -mkdir %s' % cp.get('DEFAULT', 'hadoop_data_path'))
 
 
-def get_wikidata_dump(cp):
+def get_wikidata_dump(cp, day):
     wikidata_path  = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
     os.system('hadoop fs -rm -r -f %s' % wikidata_path)
     os.system('hadoop fs -mkdir %s' % wikidata_path)
-    os.system("wget -O - http://dumps.wikimedia.org/wikidatawiki/latest/wikidatawiki-latest-pages-articles.xml.bz2 | hadoop fs -put - %s" % cp.get('find_missing', 'wikidata_dump'))
+    url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
+    fname = cp.get('find_missing', 'wikidata_dump')
+    os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname)
 
 
 def get_WILLs(cp):
@@ -160,6 +161,7 @@ if __name__ == '__main__':
     parser.add_argument('--config', required = True, help='path to config file' )
     parser.add_argument('--translation_directions', required = True)
     parser.add_argument('--download_dump',action='store_true', default=False)
+    parser.add_argument('--dump_day', default='20150805' )
     parser.add_argument('--extract_wills',action='store_true', default=False)
     parser.add_argument('--sqoop_tables', action='store_true', default=False)
     parser.add_argument('--find_missing', action='store_true', default=False)
@@ -174,7 +176,7 @@ if __name__ == '__main__':
 
     if args.download_dump:
         create_hadoop_dirs(cp)
-        get_wikidata_dump(cp)
+        get_wikidata_dump(cp, args.dump_day)
     
     if args.extract_wills:
         get_WILLs(cp)
