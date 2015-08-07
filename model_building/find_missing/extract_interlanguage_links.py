@@ -41,12 +41,11 @@ def agg_site_links_to_str(rows):
 
 def get_agg_sitelinks(line):
     
+    item = None
+
     try:
         item = json.loads(line.rstrip('\n,'))
     except:
-        item = []
-
-    if item is None:
         return []
 
     item_id = item['id']
