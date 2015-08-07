@@ -9,14 +9,10 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from spark_util import save_rdd, get_parser
 
-import json, re, codecs, sys, HTMLParser
 
-
-JSON_PATTERN = re.compile(r'^\s*<text xml:space="preserve">(\{&quot;type&quot;:&quot;item&quot;,&quot;id&quot;:&quot;Q.*&quot;,&quot;labels&quot;:.*)</text>')
-WIKI_PATTERN = re.compile(r'^(.*)wiki$')
-PARSER = HTMLParser.HTMLParser()
-
-
+import json
+from pprint import pprint
+import re
 
 """
 Usage: 
@@ -30,22 +26,43 @@ spark-submit \
 
 
 
-def get_WILL(line):
-    match = JSON_PATTERN.match(line)
-    if not match:
+p = re.compile('.*wiki$')
+
+
+def site_links_to_str(row):
+    return '\t'.join(row)
+
+def agg_site_links_to_str(rows):
+    s = [rows[0][0]]
+    for row in rows:
+        s.append(row[1] + '|' + row[2])
+    return '\t'.join(s)
+        
+
+def get_agg_sitelinks(line):
+    
+    try:
+        item = json.loads(line.rstrip('\n,'))
+    except:
+        item = []
+
+    if item is None:
         return []
-    line = PARSER.unescape(match.group(1))
-    obj = json.loads(line)
-    links = obj['sitelinks']
-    if len(links) == 0:
-      links = dict()
-    ret = []
-    for wiki in sorted(links.keys()):
-        m = WIKI_PATTERN.match(wiki)
-        if m:
-            lang = m.group(1)
-            ret.append('\t'.join([obj['id'], lang, links[wiki]['title']]))
-    return ret
+
+    item_id = item['id']
+    
+    if not item_id.startswith('Q'):
+        return []
+    links = item['sitelinks']
+    
+    rows = []
+    for k, d in links.iteritems():
+        wiki = d['site']
+        if p.match(wiki): 
+            title = d['title']
+            rows.append([item_id, wiki[:-4], title])
+    return rows
+
 
 
 if __name__ == '__main__':
@@ -63,8 +80,25 @@ if __name__ == '__main__':
     sc = SparkContext(conf=conf)
 
     dumpfile = cp.get('find_missing', 'wikidata_dump')
+    
+
     dump = sc.textFile(dumpfile)
-    WILLfile = cp.get('find_missing', 'WILL')
-    os.system('hadoop fs -rm -r ' + WILLfile)
-    dump.flatMap(get_WILL).saveAsTextFile ( WILLfile)
-    sc.stop()
+    will = dump.flatMap(get_agg_sitelinks).map(site_links_to_str)
+    agg = dump.map(get_agg_sitelinks).filter(lambda x: len(x) > 0).map(agg_site_links_to_str)
+
+
+    WILLpath = cp.get('find_missing', 'WILL').split('/')[-1]
+    aggpath = cp.get('find_missing', 'aggregated_WILL').split('/')[-1]
+
+    os.system('hadoop fs -rm -r ' + WILLpath)
+    os.system('hadoop fs -rm -r ' + aggpath)
+
+    WILLname = cp.get('find_missing', 'WILL').split('/')[-1]
+    aggname = cp.get('find_missing', 'aggregated_WILL').split('/')[-1]
+
+    haddop_wikidata_path = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
+    wikidata_path = os.path.join(cp.get('DEFAULT', 'data_path'), 'wikidata')
+
+    save_rdd(will, wikidata_path, haddop_wikidata_path, WILLname)
+    save_rdd(agg, wikidata_path, haddop_wikidata_path, aggname)
+
