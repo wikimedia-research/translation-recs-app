@@ -27,7 +27,7 @@
             </div>
             <div class="three wide aligned column">
                 <h3>To</h3>
-                <select class="ui personalize dropdown" name="target">
+                <select class="ui personalize dropdown" name="target" onchange={ fetchArticles }>
                     <option each={ code in targets } value={ code }>
                         { parent.languageCodes[code] }
                     </option>
@@ -35,27 +35,27 @@
             </div>
         </div>
 
-        <div class="ui middle aligned row">
+        <div class="ui middle aligned row form">
 
-            <label>
-                Articles Similar To
-                <input placeholder=" seed article" name="seedArticle"/>
-                (optional)
-            </label>
-
-        </div>
-        <div class="row">
-            <button class="ui button">
-                Recommend
-            </button>
+            <div class="field">
+                <label>Articles Similar To (optional)</label>
+                <div class="fields">
+                    <div class="field">
+                        <input placeholder=" seed article" name="seedArticle"/>
+                    </div>
+                    <div class="field">
+                        <button class="ui button" onclick={ fetchArticles }>
+                            Recommend
+                        </button>
+                    </div>
+                </div>
+            </div>
 
         </div>
         <div class="row"></div>
 
-        <ArticleList></ArticleList>
+        <articles></articles>
     </div>
-
-    <preview></preview>
 
     <script>
         var self = this;
@@ -65,28 +65,44 @@
         self.sources = Object.keys(self.languagePairs).sort();
         self.targets = [];
 
-        var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
+        self.fetchArticles = function () {
 
-        if (this.seedArticle.value) {
-            url += '&article=' + this.seedArticle.value;
+            var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
+
+            if (this.seedArticle.value) {
+                url += '&article=' + this.seedArticle.value;
+            }
+
+            $.ajax({
+                url: url,
+            }).done(function (data) {
+                var articles = self.filter(data.articles);
+
+                riot.mount('articles', {
+                    articles: articles,
+                    source: self.source.value,
+                    target: self.target.value,
+                });
+            });
         }
 
-        $.ajax({
-            url: url,
-        }).done(function (data) {
-            console.log(data.articles);
-            riot.mount('ArticleList', {articles: data.articles});
-        });
+        self.filter = function (articles) {
+            var personalBlacklist = store(translationAppGlobals.personalBlacklistKey) || {},
+                targetWikiBlacklist = (store(translationAppGlobals.globalBlacklistKey) || {})[self.target.value] || {};
 
-        refreshUI () {
-            $('.ui.dropdown').dropdown();
+            return articles.filter(function (a) {
+                return !personalBlacklist.hasOwnProperty(a.wikidata_id)
+                    && !targetWikiBlacklist.hasOwnProperty(a.wikidata_id);
+            });
         }
 
-        refreshTargets () {
+        self.refreshUI = function () {
+            $('.ui.dropdown', self.root).dropdown();
+        }
+
+        self.refreshTargets = function () {
             self.targets = self.languagePairs[self.source.value].sort();
-            self.update();
-            // have to give a kick to the semantic ui dropdown
-            $('.ui.dropdown[name=target]').dropdown();
+            // TODO: have to give a kick to the target semantic ui dropdown
         }
 
         this.on('mount', function (){

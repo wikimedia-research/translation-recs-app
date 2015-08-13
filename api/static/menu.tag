@@ -20,7 +20,7 @@
         }
 
         this.on('mount', function (){
-            $('.ui.dropdown').dropdown()
+            $('.ui.dropdown', self.root).dropdown()
         });
 
         self.select('Recommend')

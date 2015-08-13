@@ -1,4 +1,4 @@
-<ArticleList class="ui centered grid container tight cards">
+<articles class="ui centered grid container tight cards">
 
     <p if={ !articles || !articles.length } class="ui warning message">
         No articles found.  Try without a seed article, or let us know if this keeps happening.
@@ -16,34 +16,34 @@
         <span class={ hidden: !hovering }>
 
             <button class="ui top right corner icon button pointing personalize dropdown link">
-                <i class="dropdown icon"></i>
+                <i class="flag icon"></i>
                 <div class="menu">
                     <div class="item" onclick={ addToPersonalBlacklist }>
                         Remove, I am not interested
                     </div>
                     <div class="item" onclick={ addToGlobalBlacklist }>
-                        Remove, this is not notable for { target.value } wikipedia
+                        Remove, this is not notable for { target } wikipedia
                     </div>
                 </div>
             </button>
         </span>
     </div>
 
+    <preview></preview>
+
 
     <script>
         var self = this;
 
-        self.articles = opts.articles;
-        console.log('promising')
-        var promises = self.articles.map(self.detail);
-        $.when.apply(this, promises).then(self.refresh);
-        console.log('waiting for promises')
+        self.articles = opts.articles || [];
+        self.source = opts.source || 'no-source-language';
+        self.target = opts.target || 'no-target-language';
 
         var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=50&format=json&prop=pageimages&titles=';
 
         self.detail = function (article) {
             return $.ajax({
-                url: thumbQuery.replace('{source}', self.source.value) + article.title,
+                url: thumbQuery.replace('{source}', self.source) + article.title,
                 dataType: 'jsonp',
                 contentType: 'application/json',
 
@@ -51,7 +51,6 @@
                 var id = Object.keys(data.query.pages)[0],
                     page = data.query.pages[id];
 
-                console.log('done ')
                 article.id = id;
                 article.linkTitle = article.title;
                 article.title = page.title;
@@ -62,14 +61,11 @@
             });
         }
 
-        self.personalBlacklistKey = 'personal.blacklist';
-        self.globalBlacklistKey = 'not.notable.blacklist';;
+        self.remove = function (article, personal) {
 
-        self.remove = function (e, personal) {
-
-            var blacklistKey = personal ? self.personalBlacklistKey : self.globalBlacklistKey,
+            var blacklistKey = personal ? translationAppGlobals.personalBlacklistKey : translationAppGlobals.globalBlacklistKey,
                 blacklist = store(blacklistKey) || {},
-                wikidataId = e.item.wikidata_id;
+                wikidataId = article.wikidata_id;
 
             if (personal) {
                 // store wikidata id without associating to source or target, so
@@ -79,35 +75,37 @@
             } else {
                 // store the wikidata id relative to the target, so that this article
                 // can be ignored regardless of source language
-                blacklist[this.target.value] = blacklist[this.target.value] || {};
-                blacklist[this.target.value][wikidataId] = true;
+                blacklist[self.target] = blacklist[self.target] || {};
+                blacklist[self.target][wikidataId] = true;
             }
 
             store(blacklistKey, blacklist);
 
-            var index = this.articles.indexOf(e.item);
-            this.articles.splice(index, 1);
+            var index = self.articles.indexOf(article);
+            self.articles.splice(index, 1);
+            self.update();
         }
 
         addToPersonalBlacklist (e) {
-            this.remove(e, true);
+            this.remove(e.item, true);
         }
 
         addToGlobalBlacklist (e) {
-            this.remove(e, false);
+            this.remove(e.item, false);
         }
 
         preview (e) {
             riot.mount('preview', {
                 articles: self.articles,
                 title: e.item.title,
-                from: self.source.value,
-                to: self.target.value,
+                from: self.source,
+                to: self.target,
+                remove: self.remove,
             });
         }
 
         refresh () {
-            $('.ui.dropdown').dropdown();
+            $('.ui.dropdown', self.root).dropdown();
         }
 
         hoverIn (e) {
@@ -117,6 +115,10 @@
         hoverOut (e) {
             e.item.hovering = false;
         }
+
+        // kick off the loading of the articles
+        var promises = self.articles.map(self.detail);
+        $.when.apply(this, promises).then(self.refresh);
     </script>
 
-</ArticleList>
+</articles>
