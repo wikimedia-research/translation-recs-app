@@ -29,6 +29,7 @@
 
 .tight.cards .top.right.corner.button {
     position: absolute;
-    top: 0; right: 0; left: 92%; bottom: 50%;
+    top: 0; right: 0; left: 92%; 
+    bottom: 50%;
     width: 33px;
 }

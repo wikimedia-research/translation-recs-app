@@ -6,9 +6,16 @@
     </div>
     <div class="ui menu">
         <div class="item">
-            <button class="ui button">
-                <i class="remove icon"></i>
-                Skip
+            <button class="ui top right corner icon button pointing personalize dropdown link">
+                <i class="flag icon"></i>
+                <div class="menu">
+                    <div class="item" onclick={ addToPersonalBlacklist }>
+                        Remove, I am not interested
+                    </div>
+                    <div class="item" onclick={ addToGlobalBlacklist }>
+                        Remove, this is not notable for { opts.to } wikipedia
+                    </div>
+                </div>
             </button>
         </div>
         <div class="item">
@@ -46,7 +53,7 @@
         self.translateRoot = '//' + opts.from + '.wikipedia.org/wiki/Special:ContentTranslation?' +
             'from=' + opts.from +
             '&to=' + opts.to +
-            '&campaign=article-recommendation';
+            '&campaign=' + translationAppGlobals.campaign;
 
         self.index = -1;
         for (var i=0; i<self.articles.length; i++) {
@@ -63,8 +70,6 @@
             self.title = showing.title;
             self.translateLink = self.translateRoot + '&page=' + showing.linkTitle;
 
-            $('.preview.body').append('<div class="mask">Loading...</div>');
-
             $.get(previewRoot + showing.title).done(function (data) {;
                 self.showPreview(showing, data);
             }).fail(function (data) {
@@ -73,26 +78,39 @@
         }
 
         self.showPreview = function (showing, body) {
-            $('.preview.body').html(body);
+            $('.preview.body', self.root).html(body);
 
-            $('.ui.modal.preview').modal({
+            $(self.root).modal({
                 onHide: function () {
                     // strip out the nasty CSS
-                    $('.preview.body').html('');
+                    $('.preview.body', self.root).html('');
                 },
             }).modal('show');
+
+            // enable any dropdown
+            $('.ui.dropdown', self.root).dropdown();
 
             self.update();
         }
 
-        left (e) {
+        addToPersonalBlacklist () {
+            opts.remove(self.articles[self.showIndex], true);
+            $(self.root).modal('hide');
+        }
+
+        addToGlobalBlacklist () {
+            opts.remove(self.articles[self.showIndex], false);
+            $(self.root).modal('hide');
+        }
+
+        left () {
             if (self.showIndex > 0) {
                 self.showIndex --;
                 self.show();
             }
         }
 
-        right (e) {
+        right () {
             if (self.showIndex < self.articles.length - 1) {
                 self.showIndex ++;
                 self.show();
@@ -102,16 +120,6 @@
         if (isFinite(self.showIndex)) {
             self.show();
         }
-
-        /*
-        this.on('mount', function () {
-            var showing = self.articles[self.showIndex];
-            if (!showing) { return; }
-
-            $('.preview a.translate.button')[0].href =
-                self.translateRoot + '&page=' + showing.linkTitle;
-        });
-        */
     </script>
 
 </preview>
