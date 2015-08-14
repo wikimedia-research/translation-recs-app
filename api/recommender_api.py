@@ -64,7 +64,7 @@ def personal_recommendations():
 
     s = request.args.get('s')
     t = request.args.get('t')
-    article = request.args.get('article').replace(' ', '_')
+    article = request.args.get('article')
     n = request.args.get('n')
     try:
         n = int(n)
@@ -76,6 +76,7 @@ def personal_recommendations():
 
     if recommender:
         if article:
+            article = article.replace(' ', '_')
             ret['articles'] = recommender.get_seeded_recommendations(
                 article, num_recs=n, min_score=0.1
             )
