@@ -16,9 +16,7 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/translation_directions.json \
---download_dump \
---dum_day 20150805
-
+--extract_wills 
 
 """
 

@@ -24,10 +24,12 @@ def load_recommenders(data_dir, translation_directions, language_codes):
 
     for s, ts in directions.items():
         model[s] = {}
+        print('Loading Topic Model for: ', s)
         tm = TopicModel(data_dir, s)
         model[s]['topic_model'] = tm
         for t in ts:
             model[s][t] = {}
+            print('Loading Recommender for: ', t)
             tr = TranslationRecommender(data_dir, s, t, tm)
             model[s][t]['translation_recommender'] = tr
     print("LOADED MODELS")
@@ -62,7 +64,7 @@ def personal_recommendations():
 
     s = request.args.get('s')
     t = request.args.get('t')
-    article = request.args.get('article')
+    article = request.args.get('article').replace(' ', '_')
     n = request.args.get('n')
     try:
         n = int(n)

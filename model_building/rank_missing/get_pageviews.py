@@ -10,11 +10,11 @@ import argparse
 Usage: 
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
---s simple \
---min_views 10 \
+--s fr \
+--min_views 1 \
 --min_year 2015 \
---min_month 6 \
---min_day 28 \
+--min_month 7 \
+--min_day 12 \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
     AND month >= %(month)s
     AND day >= %(month)s
     GROUP BY page_title
-    HAVING sum(view_count) > %(min_views)s;
+    HAVING sum(view_count) >= %(min_views)s;
     """
 
     params = {
