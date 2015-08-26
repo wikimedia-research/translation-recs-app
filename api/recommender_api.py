@@ -3,6 +3,7 @@ import sys
 import inspect
 import json
 import argparse
+import requests
 
 from flask import Flask, render_template, jsonify, request
 
@@ -58,6 +59,21 @@ def home():
         language_codes=json.dumps(model['codes'])
     )
 
+def normalize_title(s, title):
+
+    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
+    params = {'action': 'query', 'format': 'json', 'titles': title, 'redirects': ''}
+    response = requests.get(mw_api, params = params).json()['query']
+    page_id, page_info = list(response['pages'].items())[0]
+
+    if page_id == '-1':
+        return title
+    else:
+        return page_info['title'].replace(' ', '_')
+    
+        
+
+
 
 @app.route('/api')
 def personal_recommendations():
@@ -76,7 +92,8 @@ def personal_recommendations():
 
     if recommender:
         if article:
-            article = article.replace(' ', '_')
+            article  =  normalize_title(s, article)
+            print(article)
             ret['articles'] = recommender.get_seeded_recommendations(
                 article, num_recs=n, min_score=0.1
             )
