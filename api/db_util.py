@@ -6,6 +6,7 @@ import os
 # mysql -us52262 -peolaiheiheeviish -hlabsdb1001.eqiad.wmnet
 
 def mysql_to_pandas(dicts):
+
     dmaster = {}
     for d in dicts:
         for k in d.keys():
@@ -13,7 +14,15 @@ def mysql_to_pandas(dicts):
                 dmaster[k] = []
             
             dmaster[k].append(d[k]) 
-    return pd.DataFrame(dmaster)
+    df =  pd.DataFrame(dmaster)
+
+    for c in df.columns:
+        if type(df[c][df.index[0]]) == bytes:
+            df[c] = df[c].apply(lambda x: x.decode(encoding='UTF-8'))
+    return df
+
+
+
 
 def query_through_tunnel(port,cnf_path, query, params):
     conn = pymysql.connect(host="127.0.0.1", port=port, read_default_file=cnf_path)
