@@ -1,6 +1,6 @@
-wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
-bash Miniconda3-latest-Linux-x86_64.sh
-sudo apt-get install liblapack-dev
-conda install pandas
-conda install flask
-conda install scikit-learn
+sudo apt-get update
+sudo apt-get install python3 python3-dev build-essentials libatlas-base-dev gfortran
+curl https://bootstrap.pypa.io/get-pip.py | sudo python3.4
+sudo python3 -m pip install uwsgi flask scipy pandas scikit-learn
+
+sudo apt-get install nginx
