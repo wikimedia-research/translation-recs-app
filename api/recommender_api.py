@@ -14,6 +14,8 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 from recommendation_lib.rec_util import TopicModel, TranslationRecommender
+
+
 app = Flask(__name__)
 
 
@@ -105,33 +107,32 @@ def personal_recommendations():
     return jsonify(**ret)
 
 
-if __name__ == '__main__':
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '--debug', required=False, type=bool, default=True,
+    help='run in debug mode'
+)
+parser.add_argument(
+    '--data_dir', required=False, default=os.path.join(parentdir, 'data'),
+    help='path to model files'
+)
+parser.add_argument(
+    '--translation_directions', required=False,
+    default=os.path.join(parentdir, 'served_translation_directions.json'),
+    help='path to json file defining language directions'
+)
+parser.add_argument(
+    '--language-codes', required=False,
+    default=os.path.join(parentdir, 'language_codes.json'),
+    help='path to json dictionary from language codes to friendly names'
+)
+args = parser.parse_args()
+app.debug = args.debug
+model = load_recommenders(
+    args.data_dir,
+    args.translation_directions,
+    args.language_codes
+)
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--debug', required=False, type=bool, default=True,
-        help='run in debug mode'
-    )
-    parser.add_argument(
-        '--data_dir', required=False, default='../data',
-        help='path to model files'
-    )
-    parser.add_argument(
-        '--translation_directions', required=False,
-        default='../served_translation_directions.json',
-        help='path to json file defining language directions'
-    )
-    parser.add_argument(
-        '--language-codes', required=False,
-        default='../language_codes.json',
-        help='path to json dictionary from language codes to friendly names'
-    )
-    args = parser.parse_args()
-    app.debug = args.debug
-    global model
-    model = load_recommenders(
-        args.data_dir,
-        args.translation_directions,
-        args.language_codes
-    )
+if __name__ == '__main__':
     app.run(host='0.0.0.0')
