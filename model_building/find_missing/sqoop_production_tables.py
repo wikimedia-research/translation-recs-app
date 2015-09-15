@@ -208,7 +208,7 @@ for lang in langs:
     print (cmd)
     ret += os.system( cmd )
 
-    assert(ret ==0)
+    assert ret ==0
 
 
 

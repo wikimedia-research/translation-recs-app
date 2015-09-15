@@ -37,7 +37,7 @@ def get_wikidata_dump(cp, day):
     url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
     fname = cp.get('find_missing', 'wikidata_dump')
     ret = os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname))
-    assert(ret == 0, 'Loading Wikidata Dump Failed')
+    assert ret == 0, 'Loading Wikidata Dump Failed'
 
 
 def get_WILLs(cp):
@@ -58,7 +58,7 @@ def get_WILLs(cp):
     --config %(config)s 
     """
     ret = os.system(cmd % params)
-    assert(ret == 0, 'Extracting WILLS from Wikidata Dump Failed')
+    assert ret == 0, 'Extracting WILLS from Wikidata Dump Failed'
 
 
 def sqoop_tables(config, translation_directions_file):
@@ -77,7 +77,7 @@ def sqoop_tables(config, translation_directions_file):
     """
     print (cmd % params)
     ret = os.system(cmd % params)
-    assert(ret == 0, 'Sqooping Production Tables Failed')
+    assert ret == 0, 'Sqooping Production Tables Failed'
 
 
 
@@ -107,7 +107,7 @@ def get_missing(config, translation_directions):
             params['t'] = t
             print (cmd % params)
             ret = os.system(cmd % params )
-            assert(ret == 0, 'get_missing_articles.py failed for s=%s, t=%s' % (s, t))
+            assert ret == 0, 'get_missing_articles.py failed for s=%s, t=%s' % (s, t)
 
 
 
@@ -125,7 +125,7 @@ def rank_missing(config, translation_directions):
         params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_disambiguation_pages.py')
         print(cmd % params)
         ret = os.system(cmd % params)
-        assert(ret == 0, 'Getting get_disambiguation_pages.py failed s=%s' % s)
+        assert ret == 0, 'Getting get_disambiguation_pages.py failed s=%s' % s
 
 
         cmd = """
@@ -149,7 +149,7 @@ def rank_missing(config, translation_directions):
         params['min_views'] = min_views.get(s, 10)
 
         ret = os.system(cmd % params)
-        assert(ret == 0, 'get_pageviews.py failed for s=%s' % s)
+        assert ret == 0, 'get_pageviews.py failed for s=%s' % s
 
         for t in ts:
             params['t'] = t
@@ -161,7 +161,7 @@ def rank_missing(config, translation_directions):
             --config %(config)s 
             """
             ret = os.system(cmd % params)
-            assert(ret == 0, 'rank_missing_by_pageviews.py failed for s = %s, t = %s' % (s, t))
+            assert ret == 0, 'rank_missing_by_pageviews.py failed for s = %s, t = %s' % (s, t)
 
 
 
