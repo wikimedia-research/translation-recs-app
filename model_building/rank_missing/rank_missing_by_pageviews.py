@@ -50,7 +50,7 @@ if __name__ == '__main__':
     d_missing = pd.read_csv(missing_fname, sep = '\t', encoding = 'utf8', names = ['id', 'page_title'])
 
     def underscore(x):
-        return unicode(x).replace(u' ', u'_')
+        return x.replace(' ', '_')
         
     d_missing['page_title'] = d_missing['page_title'].apply(underscore)
     d_ranked = d_missing.merge(d_pv, how = 'inner', on = 'page_title')
