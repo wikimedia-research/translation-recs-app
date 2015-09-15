@@ -87,14 +87,14 @@ if __name__ == '__main__':
     agg = dump.map(get_agg_sitelinks).filter(lambda x: len(x) > 0).map(agg_site_links_to_str)
 
 
-    WILLpath = cp.get('find_missing', 'WILL').split('/')[-1]
-    aggpath = cp.get('find_missing', 'aggregated_WILL').split('/')[-1]
+    WILLpath = cp.get('find_missing', 'WILL')
+    aggpath = cp.get('find_missing', 'aggregated_WILL')
 
     os.system('hadoop fs -rm -r ' + WILLpath)
     os.system('hadoop fs -rm -r ' + aggpath)
 
-    will.saveAsTextFile (cp.get('find_missing', 'WILL') )
-    agg.saveAsTextFile (cp.get('find_missing', 'aggregated_WILL') )
+    will.saveAsTextFile (WILLpath)
+    agg.saveAsTextFile (aggpath )
 
     
 
