@@ -60,6 +60,7 @@ if __name__ == '__main__':
 
 
     df_dis = query_db(query % {'db': '%swiki' % s}, {})
+    df_dis['page_title'].astype(str)
     dest = os.path.join(cp.get('DEFAULT', 'data_path'), s)
     if not os.path.exists(dest):
         os.makedirs(dest)
