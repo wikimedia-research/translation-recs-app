@@ -68,7 +68,7 @@ def sqoop_tables(config, translation_directions_file):
     --config %(config)s \
     --translation_directions %(translation_directions_file)s \
     """
-    print cmd % params
+    print (cmd % params)
     os.system(cmd % params)
 
 

@@ -33,7 +33,7 @@ for s, ts in directions.items():
 create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
 params = {'db':db}
 cmd =  """hive -e " """ + create_db % params + """ " """
-print cmd
+print (cmd)
 os.system( cmd )
 
 
@@ -45,7 +45,7 @@ for lang in langs:
     for s2 in ['', '_joined']:
       table = lang+s1+s2
       params = {'db':db, 'table': table}
-      print cmd
+      print (cmd)
       cmd =  """hive -e " """ + delete_query % params + """ " """
       os.system( cmd )
 

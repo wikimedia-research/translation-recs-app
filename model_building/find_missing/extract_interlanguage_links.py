@@ -11,7 +11,6 @@ from spark_util import save_rdd, get_parser
 
 
 import json
-from pprint import pprint
 import re
 
 """

@@ -1,3 +1,4 @@
 flask
 sklearn
 pandas
+requests

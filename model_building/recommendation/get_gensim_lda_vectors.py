@@ -51,14 +51,15 @@ def main(args):
                                 iterations=50,\
                                 gamma_threshold=0.001)
     time2 = time.time()
-    print 'training lda model took %0.3f minutes' % ((time2-time1) / 60.0)
+    print ('training lda model took %0.3f minutes' % ((time2-time1) / 60.0))
     model.save(os.path.join(base_dir, 'lda_model'))
 
     time1 = time.time()
     matrix = model[corpus]
     MmWriter.write_corpus(doc2topic_file, matrix)
     time2 = time.time()
-    print 'creating lda vectors took %0.3f minutes' % ((time2-time1) / 60.0)
+    print ('creating lda vectors took %0.3f minutes' % ((time2-time1) / 60.0))
+    
 
     # move document vectors to hdfs
     #print os.system('hadoop fs -mkdir ' + hadoop_base_dir )
