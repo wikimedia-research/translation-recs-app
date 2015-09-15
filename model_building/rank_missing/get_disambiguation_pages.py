@@ -4,7 +4,7 @@ import pymysql
 import pandas as pd
 import os
 import argparse
-
+import logging
 
 """
 Usage: 
@@ -14,6 +14,7 @@ python /home/ellery/translation-recs-app/model_building/rank_missing/get_disambi
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
+logger = logging.getLogger(__name__)
 
 
 def query_db(query, params):
