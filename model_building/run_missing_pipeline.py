@@ -114,10 +114,10 @@ def get_missing(config, translation_directions):
         for t in ts:
             params['t'] = t
             logger.debug(cmd % params)
-            logger.info('Starting Get Missing for s=%s and t=%t', s, t)
+            logger.info('Starting Get Missing for s=%s and t=%s', s, t)
             ret = os.system(cmd % params )
             assert ret == 0, 'get_missing_articles.py failed for s=%s, t=%s' % (s, t)
-            logger.info('Completed Get Missing for s=%s and t=%t', s, t)
+            logger.info('Completed Get Missing for s=%s and t=%s', s, t)
     logger.info('Completed ALL Get Missing')
 
 
