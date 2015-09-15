@@ -1,7 +1,7 @@
 import os
 import argparse
 import json
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from datetime import date
 from dateutil.relativedelta import relativedelta
 
@@ -16,12 +16,12 @@ Usage
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
 --translation_directions /home/ellery/translation-recs-app/modeled_translation_directions.json \
---download_dump
---dump_day 20150914
---extract_wills
---sqoop_tables
---find_missing
---rank_missing
+--download_dump \
+--dump_day 20150914 \
+--extract_wills \
+--sqoop_tables \
+--find_missing \
+--rank_missing \
 
 """
 

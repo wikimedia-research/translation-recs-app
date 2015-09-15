@@ -1,7 +1,7 @@
 
 import os
 import sys
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import argparse
 import json
 

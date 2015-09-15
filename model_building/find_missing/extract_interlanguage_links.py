@@ -1,5 +1,5 @@
 from pyspark import SparkConf, SparkContext
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import pandas as pd
 import argparse
 

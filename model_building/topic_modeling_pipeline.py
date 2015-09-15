@@ -1,7 +1,7 @@
 import os
 import argparse
 import json
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from datetime import date
 from dateutil.relativedelta import relativedelta
 

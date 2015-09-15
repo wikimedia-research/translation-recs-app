@@ -3,7 +3,7 @@ import codecs
 import networkx as nx
 from collections import Counter
 from pprint import pprint
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import pandas as pd
 import argparse
 
