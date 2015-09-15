@@ -2,6 +2,8 @@ from pyspark import SparkConf, SparkContext
 from configparser import SafeConfigParser
 import pandas as pd
 import argparse
+import logging
+
 
 import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -91,12 +93,8 @@ if __name__ == '__main__':
     os.system('hadoop fs -rm -r ' + WILLpath)
     os.system('hadoop fs -rm -r ' + aggpath)
 
-    WILLname = cp.get('find_missing', 'WILL').split('/')[-1]
-    aggname = cp.get('find_missing', 'aggregated_WILL').split('/')[-1]
+    will.saveAsTextFile (cp.get('find_missing', 'WILL') )
+    agg.saveAsTextFile (cp.get('find_missing', 'aggregated_WILL') )
 
-    haddop_wikidata_path = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
-    wikidata_path = os.path.join(cp.get('DEFAULT', 'data_path'), 'wikidata')
-
-    save_rdd(will, wikidata_path, haddop_wikidata_path, WILLname)
-    save_rdd(agg, wikidata_path, haddop_wikidata_path, aggname)
+    
 
