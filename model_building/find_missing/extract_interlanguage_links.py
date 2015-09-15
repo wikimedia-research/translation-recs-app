@@ -54,7 +54,7 @@ def get_agg_sitelinks(line):
     links = item['sitelinks']
     
     rows = []
-    for k, d in links.iteritems():
+    for k, d in links.items():
         wiki = d['site']
         if p.match(wiki): 
             title = d['title']
