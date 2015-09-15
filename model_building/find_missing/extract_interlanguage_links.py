@@ -82,7 +82,7 @@ if __name__ == '__main__':
     dumpfile = cp.get('find_missing', 'wikidata_dump')
     
 
-    dump = sc.textFile(dumpfile, 1000)
+    dump = sc.textFile(dumpfile)
     will = dump.flatMap(get_agg_sitelinks).map(site_links_to_str)
     agg = dump.map(get_agg_sitelinks).filter(lambda x: len(x) > 0).map(agg_site_links_to_str)
 
