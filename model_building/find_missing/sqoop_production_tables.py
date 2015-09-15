@@ -14,7 +14,9 @@ args = parser.parse_args()
 cp = SafeConfigParser()
 cp.read(args.config)
 
-os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
+ret = 0
+
+ret += os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
 
 
 db = cp.get('DEFAULT', 'hive_db')
@@ -34,7 +36,7 @@ create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
 params = {'db':db}
 cmd =  """hive -e " """ + create_db % params + """ " """
 print (cmd)
-os.system( cmd )
+ret += os.system( cmd )
 
 
 # delete all the tables in db that will be refreshed, that already exist
@@ -47,7 +49,7 @@ for lang in langs:
       params = {'db':db, 'table': table}
       print (cmd)
       cmd =  """hive -e " """ + delete_query % params + """ " """
-      os.system( cmd )
+      ret += os.system( cmd )
 
 
 
@@ -149,11 +151,11 @@ WHERE $CONDITIONS
 """
 
 
-os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
+ret += os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
 for lang in langs:
     d = {'db':db, 'lang':lang}
     for table_query in [page_query, redirect_query, langlinks_query]:
-        os.system( table_query % d )
+        ret += os.system( table_query % d )
 
 
 # augment page ids with titles
@@ -180,7 +182,7 @@ for lang in langs:
 
     cmd =  """hive -e " """ +create_query % params + """ " """
     print (cmd)
-    os.system( cmd )
+    ret += os.system( cmd )
 
 
 
@@ -204,7 +206,9 @@ for lang in langs:
 
     cmd =  """hive -e " """ +create_query % params + """ " """
     print (cmd)
-    os.system( cmd )
+    ret += os.system( cmd )
+
+    assert(ret ==0)
 
 
 

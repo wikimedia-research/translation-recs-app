@@ -15,8 +15,13 @@ Usage
 
 python run_missing_pipeline.py \
 --config /home/ellery/translation-recs-app/translation-recs.ini \
---translation_directions /home/ellery/translation-recs-app/translation_directions.json \
---extract_wills 
+--translation_directions /home/ellery/translation-recs-app/modeled_translation_directions.json \
+--download_dump
+--dump_day 20150914
+--extract_wills
+--sqoop_tables
+--find_missing
+--rank_missing
 
 """
 
@@ -31,7 +36,8 @@ def get_wikidata_dump(cp, day):
     os.system('hadoop fs -mkdir %s' % wikidata_path)
     url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
     fname = cp.get('find_missing', 'wikidata_dump')
-    os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname))
+    ret = os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname))
+    assert(ret == 0, 'Loading Wikidata Dump Failed')
 
 
 def get_WILLs(cp):
@@ -51,7 +57,8 @@ def get_WILLs(cp):
     %(script)s \
     --config %(config)s 
     """
-    os.system(cmd % params)
+    ret = os.system(cmd % params)
+    assert(ret == 0, 'Extracting WILLS from Wikidata Dump Failed')
 
 
 def sqoop_tables(config, translation_directions_file):
@@ -69,7 +76,8 @@ def sqoop_tables(config, translation_directions_file):
     --translation_directions %(translation_directions_file)s \
     """
     print (cmd % params)
-    os.system(cmd % params)
+    ret = os.system(cmd % params)
+    assert(ret == 0, 'Sqooping Production Tables Failed')
 
 
 
@@ -98,7 +106,8 @@ def get_missing(config, translation_directions):
         for t in ts:
             params['t'] = t
             print (cmd % params)
-            os.system(cmd % params )
+            ret = os.system(cmd % params )
+            assert(ret == 0, 'get_missing_articles.py failed for s=%s, t=%s' % (s, t))
 
 
 
@@ -115,7 +124,8 @@ def rank_missing(config, translation_directions):
         """
         params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_disambiguation_pages.py')
         print(cmd % params)
-        os.system(cmd % params)
+        ret = os.system(cmd % params)
+        assert(ret == 0, 'Getting get_disambiguation_pages.py failed s=%s' % s)
 
 
         cmd = """
@@ -138,7 +148,8 @@ def rank_missing(config, translation_directions):
         params['min_day'] = lastMonth.strftime("%d")
         params['min_views'] = min_views.get(s, 10)
 
-        os.system(cmd % params)
+        ret = os.system(cmd % params)
+        assert(ret == 0, 'get_pageviews.py failed for s=%s' % s)
 
         for t in ts:
             params['t'] = t
@@ -149,7 +160,8 @@ def rank_missing(config, translation_directions):
             --t %(t)s \
             --config %(config)s 
             """
-            os.system(cmd % params)
+            ret = os.system(cmd % params)
+            assert(ret == 0, 'rank_missing_by_pageviews.py failed for s = %s, t = %s' % (s, t))
 
 
 
