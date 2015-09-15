@@ -125,7 +125,7 @@ def get_missing_items(sc, cp, G, s, t, delim, fname):
         missing_items.update(is_subgraph_missing_target_item(g, s, t, delim))
 
     logger.info ('Num missing items %d', len(missing_items))
-    missing_items_df = pd.DataFrame(missing_items.items())
+    missing_items_df = pd.DataFrame(list(missing_items.items()))
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
 
