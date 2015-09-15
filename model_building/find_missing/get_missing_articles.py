@@ -1,5 +1,4 @@
 from pyspark import SparkConf, SparkContext
-import codecs
 import networkx as nx
 from collections import Counter
 from pprint import pprint
@@ -164,7 +163,7 @@ def get_merged_items(g, s, t, delim):
 
 
 def save_merged_items(G, s, t, delim, filename):
-    f = open(filename, 'w')
+    f = open(filename, 'w', encoding='utf-8')
     gs = nx.connected_component_subgraphs (G)
     clusters = []
     for g in gs:
@@ -176,7 +175,7 @@ def save_merged_items(G, s, t, delim, filename):
             f.write( "\n")
             for edge in cluster:
                 line = edge[0] + " " + edge[1] + '\n'
-                f.write(line.encode('utf8'))
+                f.write(line)
     f.close()
      
 
