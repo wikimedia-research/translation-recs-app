@@ -6,12 +6,15 @@ from pprint import pprint
 from configparser import SafeConfigParser
 import pandas as pd
 import argparse
+import logging
 
 import os,sys,inspect
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from spark_util import get_parser
+
+logger = logging.getLogger(__name__)
 
 """
 Usage: 
@@ -36,10 +39,10 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
                     .filter(lambda x: x['language_code'] in wd_languages and x['id'].startswith('Q'))\
                     .map(lambda x: ('wikidata'+ delim + x['id'], x['language_code'] + delim + x['article_name']))  
     wikidata_links.persist()
-    print ("Got %d WILLs" % wikidata_links.count())     
+    logger.info ("Got %d WILLs" % wikidata_links.count())     
     G.add_edges_from(wikidata_links.collect())
     wikidata_links.unpersist()
-    print ("Got Wikidata Links")
+    logger.info ("Got Wikidata Links")
     # add interlanguage links
     prod_tables = cp.get('DEFAULT', 'hive_db_path')
 
@@ -50,9 +53,9 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
         .filter(lambda x: x[2] in ill_languages_to and len(x[1]) > 0 and len(x[0]) > 0)\
         .map(lambda x: (ill_lang + delim + x[0], x[2] + delim + x[1]))
         ill.persist()
-        print ("Got %d ILL links" % ill.count())
+        logger.info ("Got %d ILL links" % ill.count())
         G.add_edges_from(ill.collect())
-        print ("Got ILL links for %s" % ill_lang)
+        logger.info ("Got ILL links for %s" % ill_lang)
         ill.unpersist()
 
     # add redirect links
@@ -62,10 +65,10 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
         .map(lambda x: x.split('\t'))\
         .map(lambda x: (rd_lang + delim + x[0], rd_lang + delim + x[1]))
         rd.persist()
-        print ("Got %d rd links" % rd.count())
+        logger.info ("Got %d rd links" % rd.count())
         G.add_edges_from(rd.collect())
         rd.unpersist()
-        print ("got rdd links for %s" % rd_lang)
+        logger.info ("got rdd links for %s" % rd_lang)
     return G
 
 
@@ -121,7 +124,7 @@ def get_missing_items(sc, cp, G, s, t, delim, fname):
     for i, g in enumerate(cc):
         missing_items.update(is_subgraph_missing_target_item(g, s, t, delim))
 
-    print (len(missing_items))
+    logger.info ('Num missing items %d', len(missing_items))
     missing_items_df = pd.DataFrame(missing_items.items())
     missing_items_df.columns = ['id', 'title']
     missing_items_df = missing_items_df[missing_items_df['title'].apply(lambda x: (':' not in x) and (not x.startswith('List')))]
@@ -217,14 +220,14 @@ if __name__ == '__main__':
 
 
     G = create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, ill_languages_to)
-    print ("Got entire Graph")
+    logger.info ("Got entire Graph")
 
     get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('find_missing', 'missing_items')))
-    print ("Got missing Items")
+    logger.info ("Got missing Items")
 
     merged_filename = os.path.join(innerdir, cp.get('find_missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
-    print ("Got clusters")
+    logger.info ("Got clusters")
 
     sc.stop()
     

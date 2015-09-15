@@ -22,7 +22,7 @@ python /home/ellery/translation-recs-app/model_building/rank_missing/get_pagevie
 
 def query_hive_ssh(query, file_name):
     cmd =  """hive -e \" """  +query+ """ \" > """ + file_name
-    print (cmd)
+    logger.debug (cmd)
     os.system(cmd)
     d = pd.read_csv(file_name,  sep='\t')
     os.system('rm ' + file_name)

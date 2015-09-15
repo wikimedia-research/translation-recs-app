@@ -4,6 +4,7 @@ import json
 from configparser import SafeConfigParser
 from datetime import date
 from dateutil.relativedelta import relativedelta
+import logging
 
 #config = /home/ellery/translation-recs-app/translation-recs.ini
 # rec_home = /home/ellery/translation-recs-app
@@ -31,17 +32,20 @@ def create_hadoop_dirs(cp):
 
 
 def get_wikidata_dump(cp, day):
+    logger.info('Starting Download of Wikidata Dump')
     wikidata_path  = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
     os.system('hadoop fs -rm -r -f %s' % wikidata_path)
     os.system('hadoop fs -mkdir %s' % wikidata_path)
     url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
     fname = cp.get('find_missing', 'wikidata_dump')
-    ret = os.system("wget -O - %s | hadoop fs -put - %s" % (url, fname))
+    ret = os.system("wget -O - %s | gunzip | hadoop fs -put - %s" % (url, fname))
     assert ret == 0, 'Loading Wikidata Dump Failed'
+    logger.info('Completed Download of Wikidata Dump')
 
 
 def get_WILLs(cp):
 
+    logger.info('Starting WILL extraction')
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/extract_interlanguage_links.py')
     params = {
         'config': cp.get('DEFAULT', 'config'),
@@ -59,9 +63,11 @@ def get_WILLs(cp):
     """
     ret = os.system(cmd % params)
     assert ret == 0, 'Extracting WILLS from Wikidata Dump Failed'
+    logger.info('Completed WILL extraction')
 
 
 def sqoop_tables(config, translation_directions_file):
+    logger.info('Starting Sqoop tables')
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/sqoop_production_tables.py')
 
     params = {
@@ -75,14 +81,16 @@ def sqoop_tables(config, translation_directions_file):
     --config %(config)s \
     --translation_directions %(translation_directions_file)s \
     """
-    print (cmd % params)
+    logger.debug(cmd % params)
     ret = os.system(cmd % params)
     assert ret == 0, 'Sqooping Production Tables Failed'
+    logger.info('Completed Sqoop Tables')
 
 
 
 def get_missing(config, translation_directions):
 
+    logger.info('Starting Get Missing')
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/get_missing_articles.py')
     
     cmd = """
@@ -105,13 +113,18 @@ def get_missing(config, translation_directions):
         params['s'] = s
         for t in ts:
             params['t'] = t
-            print (cmd % params)
+            logger.debug(cmd % params)
+            logger.info('Starting Get Missing for s=%s and t=%t', s, t)
             ret = os.system(cmd % params )
             assert ret == 0, 'get_missing_articles.py failed for s=%s, t=%s' % (s, t)
+            logger.info('Completed Get Missing for s=%s and t=%t', s, t)
+    logger.info('Completed ALL Get Missing')
 
 
 
 def rank_missing(config, translation_directions):
+    logger.info('Starting Rank Missing')
+
     params = { 'config': cp.get('DEFAULT', 'config') }
 
     for s, ts in translation_directions.items():
@@ -123,9 +136,11 @@ def rank_missing(config, translation_directions):
         --config %(config)s
         """
         params['script'] = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/rank_missing/get_disambiguation_pages.py')
-        print(cmd % params)
+        logger.debug(cmd % params)
+        logger.info('Starting to get disambiguation pages for s = %s', s)
         ret = os.system(cmd % params)
         assert ret == 0, 'Getting get_disambiguation_pages.py failed s=%s' % s
+        logger.info('Completed getting disambiguation pages for s = %s', s)
 
 
         cmd = """
@@ -148,8 +163,10 @@ def rank_missing(config, translation_directions):
         params['min_day'] = lastMonth.strftime("%d")
         params['min_views'] = min_views.get(s, 10)
 
+        logger.info('Starting to get pageviews for s = %s', s)
         ret = os.system(cmd % params)
         assert ret == 0, 'get_pageviews.py failed for s=%s' % s
+        logger.info('Completed getting pageviews for s = %s', s)
 
         for t in ts:
             params['t'] = t
@@ -160,8 +177,12 @@ def rank_missing(config, translation_directions):
             --t %(t)s \
             --config %(config)s 
             """
+
+            logger.info('Starting rank_missing_by_pageviews.py for s = %s, t = %s', s, t)
             ret = os.system(cmd % params)
             assert ret == 0, 'rank_missing_by_pageviews.py failed for s = %s, t = %s' % (s, t)
+            logger.info('Completed rank_missing_by_pageviews.py for s = %s, t = %s', s, t)
+    logger.info('Completed Rank Missing')
 
 
 
@@ -177,6 +198,20 @@ if __name__ == '__main__':
     parser.add_argument('--find_missing', action='store_true', default=False)
     parser.add_argument('--rank_missing', action='store_true', default=False)
 
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    handler = logging.FileHandler('missing_pipeline.log')
+    handler.setLevel(logging.info)
+    shandler = logging.StreamHandler()
+    shandler.setLevel(logging.ERROR)
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+    shandler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.addHandler(shandler)
+
+
     args = parser.parse_args() 
     cp = SafeConfigParser()
     cp.read(args.config)
@@ -187,7 +222,7 @@ if __name__ == '__main__':
     if args.download_dump:
         create_hadoop_dirs(cp)
         get_wikidata_dump(cp, args.dump_day)
-    
+
     if args.extract_wills:
         get_WILLs(cp)
 
