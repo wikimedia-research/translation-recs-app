@@ -5,7 +5,7 @@ import time
 import argparse
 from scipy.io import mmwrite
 from gensim.matutils import MmWriter
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import logging
 logger = logging.getLogger(__name__)
 

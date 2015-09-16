@@ -125,6 +125,8 @@ if __name__ == '__main__':
     logger.addHandler(handler)
     logger.addHandler(shandler)
 
+    logger.info('###### STARTING TOPIC MODELING PIPELINE ######')
+
     args = parser.parse_args() 
     cp = SafeConfigParser()
     cp.read(args.config)
