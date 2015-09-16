@@ -12,6 +12,10 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0,parentdir) 
 from spark_util import get_parser, save_rdd
 
+import logging
+logger = logging.getLogger(__name__)
+
+
 
 
 """
@@ -173,8 +177,8 @@ def main(args):
     pre_blei_corpus_file = os.path.join( base_dir, 'articles.pre_blei')
     article2index_file = os.path.join( base_dir, cp.get('recommendation', 'article2index'))
     blei_corpus_file = os.path.join( base_dir, cp.get('recommendation', 'blei_corpus')) 
-    print os.system( "cut  -d' ' -f2- %s > %s" % (pre_blei_corpus_file,  blei_corpus_file))
-    print os.system( "cut  -d' ' -f1 %s > %s" % (pre_blei_corpus_file, article2index_file))
+    assert os.system( "cut  -d' ' -f2- %s > %s" % (pre_blei_corpus_file,  blei_corpus_file)) == 0, 'Error in cut1'
+    assert os.system( "cut  -d' ' -f1 %s > %s" % (pre_blei_corpus_file, article2index_file)) == 0, 'Error in cut2'
     os.system("rm " + pre_blei_corpus_file)
     #sc.stop()
 

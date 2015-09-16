@@ -6,6 +6,8 @@ import argparse
 from scipy.io import mmwrite
 from gensim.matutils import MmWriter
 from ConfigParser import SafeConfigParser
+import logging
+logger = logging.getLogger(__name__)
 
 
 
@@ -51,14 +53,14 @@ def main(args):
                                 iterations=50,\
                                 gamma_threshold=0.001)
     time2 = time.time()
-    print ('training lda model took %0.3f minutes' % ((time2-time1) / 60.0))
+    logger.info ('training lda model took %0.3f minutes' % ((time2-time1) / 60.0))
     model.save(os.path.join(base_dir, 'lda_model'))
 
     time1 = time.time()
     matrix = model[corpus]
     MmWriter.write_corpus(doc2topic_file, matrix)
     time2 = time.time()
-    print ('creating lda vectors took %0.3f minutes' % ((time2-time1) / 60.0))
+    logger.info ('creating lda vectors took %0.3f minutes' % ((time2-time1) / 60.0))
     
 
     # move document vectors to hdfs
