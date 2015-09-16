@@ -98,7 +98,7 @@ def lda(cp, translation_directions):
         params['s'] = s
         params['dim'] = dims.get(s, 100)
         ret = os.system(cmd % params)
-         assert ret == 0, 'Error LDA for s = %s' % s
+        assert ret == 0, 'Error LDA for s = %s' % s
 
     logger.info('End: LDA')
 
