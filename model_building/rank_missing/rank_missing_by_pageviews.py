@@ -52,6 +52,7 @@ if __name__ == '__main__':
     def underscore(x):
         return x.replace(' ', '_')
         
+    d_missing['page_title'] = d_missing['page_title'].astype(str)
     d_missing['page_title'] = d_missing['page_title'].apply(underscore)
     d_ranked = d_missing.merge(d_pv, how = 'inner', on = 'page_title')
     d_dis['is_dis'] = 1

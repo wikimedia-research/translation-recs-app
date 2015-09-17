@@ -12,7 +12,7 @@ Usage:
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/get_pageviews.py \
 --s fr \
---min_views 1 \
+--min_views 4 \
 --min_year 2015 \
 --min_month 7 \
 --min_day 12 \
