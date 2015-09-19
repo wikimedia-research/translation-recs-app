@@ -54,7 +54,15 @@
         </div>
         <div class="row"></div>
 
-        <articles></articles>
+        <div class="ui basic segment">
+            <div class={
+                    ui: true, active: fetching, dimmer: true
+                }>
+                <div class="ui text loader">Preparing Article Recommendations</div>
+            </div>
+            <articles></articles>
+            <div class="ui basic segment" if={ fetching }></div>
+        </div>
     </div>
 
     <script>
@@ -64,8 +72,11 @@
         self.languageCodes = window.translationAppGlobals.languageCodes;
         self.sources = Object.keys(self.languagePairs).sort();
         self.targets = [];
+        self.fetching = false;
 
         self.fetchArticles = function () {
+
+            self.fetching = true;
 
             var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
 
@@ -75,6 +86,9 @@
 
             $.ajax({
                 url: url,
+            }).complete(function () {
+                self.fetching = false;
+                self.update();
             }).done(function (data) {
                 var articles = self.filter(data.articles);
 
