@@ -18,7 +18,7 @@
                 <h3>From</h3>
                 <select class="ui personalize dropdown" name="source" onchange={ refreshTargets }>
                     <option each={ code in sources } value={ code }>
-                        { parent.languageCodes[code] }
+                        { languageCodes[code] }
                     </option>
                 </select>
             </div>
@@ -27,9 +27,9 @@
             </div>
             <div class="three wide aligned column">
                 <h3>To</h3>
-                <select class="ui personalize dropdown" name="target" onchange={ fetchArticles }>
+                <select class="ui personalize dropdown recommendTarget" name="target" onchange={ fetchArticles }>
                     <option each={ code in targets } value={ code }>
-                        { parent.languageCodes[code] }
+                        { languageCodes[code] }
                     </option>
                 </select>
             </div>
@@ -116,7 +116,15 @@
 
         self.refreshTargets = function () {
             self.targets = self.languagePairs[self.source.value].sort();
-            // TODO: have to give a kick to the target semantic ui dropdown
+            self.update();
+            if (self.targets) {
+                // NOTE: class name hack.  Semantic changes the html when making the dropdown
+                $('.ui.dropdown.recommendTarget', self.root).dropdown('set text', self.languageCodes[self.targets[0]]);
+                // NOTE: necessary hack to kick the dropdown back to life when the source changes
+                if (!self.fetching) {
+                    self.fetchArticles();
+                }
+            }
         }
 
         this.on('mount', function (){
