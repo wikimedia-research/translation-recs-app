@@ -3,13 +3,16 @@ import argparse
 import json
 
 
-
+"""
+python mk_data_dirs.py \ 
+--translation_directions ../served_translation_directions.json
+"""
 
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--translation_directions', required = False, default = '../test_translation_directions.json', help='path to json file defining language directions' )
+    parser.add_argument('--translation_directions', required = False, default = '../served_translation_directions.json', help='path to json file defining language directions' )
     parser.add_argument('--data_dir', required = False, default = '../data', help='data dir' )
     args = parser.parse_args()   
     with open(args.translation_directions) as f:

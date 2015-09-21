@@ -53,7 +53,7 @@ def transfer_from_to(fr, to, t_dict):
 def main():
     stat2 = 'stat1002.eqiad.wmnet:/home/ellery/translation-recs-app/data'
     me = '/Users/ellerywulczyn/translation-recs-app/data'
-    labs = 'ewulczyn@recommendations.eqiad.wmflabs:/home/ewulczyn/translation-recs-app/data'
+    labs = 'ewulczyn@recommendations.eqiad.wmflabs:/srv/recommend/data'
     pairs = [(stat2, me), (me, labs)]
 
     parser = argparse.ArgumentParser()
