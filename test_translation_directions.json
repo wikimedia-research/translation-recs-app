@@ -1,5 +1,9 @@
 {
-    "test_source": [
-        "test_target"
+    "en": [
+        "es",
+        "ro"
+    ],
+    "ro": [
+        "fr"
     ]
 }

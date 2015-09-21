@@ -61,24 +61,29 @@ def home():
         language_codes=json.dumps(model['codes'])
     )
 
+
 def normalize_title(s, title):
 
     mw_api = 'https://%s.wikipedia.org/w/api.php' % s
-    params = {'action': 'query', 'format': 'json', 'titles': title, 'redirects': ''}
-    response = requests.get(mw_api, params = params).json()['query']
+    params = {
+        'action': 'query', 'format': 'json', 'titles': title, 'redirects': ''
+    }
+    response = requests.get(mw_api, params=params).json()['query']
     page_id, page_info = list(response['pages'].items())[0]
 
     if page_id == '-1':
         return title
     else:
         return page_info['title'].replace(' ', '_')
-    
-        
-
 
 
 @app.route('/api')
 def personal_recommendations():
+
+    if app.debug:
+        # add an artificial delay to test UI when in debug mode
+        import time
+        time.sleep(3)
 
     s = request.args.get('s')
     t = request.args.get('t')
@@ -94,7 +99,7 @@ def personal_recommendations():
 
     if recommender:
         if article:
-            article  =  normalize_title(s, article)
+            article = normalize_title(s, article)
             print(article)
             ret['articles'] = recommender.get_seeded_recommendations(
                 article, num_recs=n, min_score=0.1
@@ -109,7 +114,7 @@ def personal_recommendations():
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    '--debug', required=False, type=bool, default=True,
+    '--debug', required=False, action="store_true",
     help='run in debug mode'
 )
 parser.add_argument(
