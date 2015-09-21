@@ -18,7 +18,7 @@
                 <h3>From</h3>
                 <select class="ui personalize dropdown" name="source" onchange={ refreshTargets }>
                     <option each={ code in sources } value={ code }>
-                        { parent.languageCodes[code] }
+                        { languageCodes[code] }
                     </option>
                 </select>
             </div>
@@ -27,9 +27,9 @@
             </div>
             <div class="three wide aligned column">
                 <h3>To</h3>
-                <select class="ui personalize dropdown" name="target" onchange={ fetchArticles }>
+                <select class="ui personalize dropdown recommendTarget" name="target" onchange={ fetchArticles }>
                     <option each={ code in targets } value={ code }>
-                        { parent.languageCodes[code] }
+                        { languageCodes[code] }
                     </option>
                 </select>
             </div>
@@ -54,7 +54,15 @@
         </div>
         <div class="row"></div>
 
-        <articles></articles>
+        <div class="ui basic segment">
+            <div class={
+                    ui: true, active: fetching, dimmer: true
+                }>
+                <div class="ui text loader">Preparing Article Recommendations</div>
+            </div>
+            <articles></articles>
+            <div class="ui basic segment" if={ fetching }></div>
+        </div>
     </div>
 
     <script>
@@ -64,8 +72,11 @@
         self.languageCodes = window.translationAppGlobals.languageCodes;
         self.sources = Object.keys(self.languagePairs).sort();
         self.targets = [];
+        self.fetching = false;
 
         self.fetchArticles = function () {
+
+            self.fetching = true;
 
             var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
 
@@ -75,6 +86,9 @@
 
             $.ajax({
                 url: url,
+            }).complete(function () {
+                self.fetching = false;
+                self.update();
             }).done(function (data) {
                 var articles = self.filter(data.articles);
 
@@ -102,7 +116,15 @@
 
         self.refreshTargets = function () {
             self.targets = self.languagePairs[self.source.value].sort();
-            // TODO: have to give a kick to the target semantic ui dropdown
+            self.update();
+            if (self.targets) {
+                // NOTE: class name hack.  Semantic changes the html when making the dropdown
+                $('.ui.dropdown.recommendTarget', self.root).dropdown('set text', self.languageCodes[self.targets[0]]);
+                // NOTE: necessary hack to kick the dropdown back to life when the source changes
+                if (!self.fetching) {
+                    self.fetchArticles();
+                }
+            }
         }
 
         this.on('mount', function (){
