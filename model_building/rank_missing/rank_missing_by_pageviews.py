@@ -11,8 +11,8 @@ import logging
 Usage: 
 
 python /home/ellery/translation-recs-app/model_building/rank_missing/rank_missing_by_pageviews.py \
---s en \
---t es \
+--s fr \
+--t ca \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
