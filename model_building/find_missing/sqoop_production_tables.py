@@ -18,7 +18,7 @@ parser.add_argument('--revision',  action = 'store_true', default = False )
 
 
 args = parser.parse_args()
-langs = args.langs.split('')
+langs = args.langs.split(',')
 
 
 ret = 0
