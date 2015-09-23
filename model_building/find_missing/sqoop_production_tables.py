@@ -135,7 +135,7 @@ FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON( a.ll_
 
 queries = {
   'page' : {'sqoop': page_sqoop_query},
-  'redirect': {'sqoop': redirect_sqoop_query,  'join': },
+  'redirect': {'sqoop': redirect_sqoop_query,  'join': redirect_join_query},
   'langlinks': {'sqoop': langlinks_sqoop_query, 'join': langlinks_join_query},
   'revision': {'sqoop': revison_sqoop_query, 'join': 'NOT IMPLEMENTED'}
 }
