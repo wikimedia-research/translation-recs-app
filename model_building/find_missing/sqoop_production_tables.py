@@ -209,7 +209,7 @@ if __name__ == '__main__':
 
 
         if table == 'page':
-          pass
+          continue
 
         ret += exec_hive(delete_query % params)
         ret += exec_hive(queries[table]['join'] % params)
