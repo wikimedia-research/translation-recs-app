@@ -1,34 +1,28 @@
 
 import os
 import sys
-from configparser import SafeConfigParser
 import argparse
 import json
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--config', required = True, help='path to recommendation file' )
-parser.add_argument('--translation_directions', required = True,  help='path to json file defining language directions' )
+parser.add_argument('--db', required = True, help='path to recommendation file' )
+parser.add_argument('--langs', required = True,  help='comma seperated list of languages' )
+parser.add_argument('--page', required = True,  action = 'store_true', default = False )
+parser.add_argument('--redirect', required = True,  action = 'store_true', default = False )
+parser.add_argument('--langlinks', required = True,  action = 'store_true', default = False )
+parser.add_argument('--revision', required = True,  action = 'store_true', default = False )
+
+
+
+
 
 
 args = parser.parse_args()
-cp = SafeConfigParser()
-cp.read(args.config)
+
 
 ret = 0
 
 ret += os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
-
-
-db = cp.get('DEFAULT', 'hive_db')
-
-with open(args.translation_directions) as f:
-  directions = json.load(f)
-langs  = set()
-langs.add('wikidata')
-for s, ts in directions.items():
-  langs.add(s)
-  for t in ts:
-    langs.add(t)
 
 
 # create the db if it does not exist
