@@ -7,10 +7,10 @@ import json
 parser = argparse.ArgumentParser()
 parser.add_argument('--db', required = True, help='path to recommendation file' )
 parser.add_argument('--langs', required = True,  help='comma seperated list of languages' )
-parser.add_argument('--page', required = True,  action = 'store_true', default = False )
-parser.add_argument('--redirect', required = True,  action = 'store_true', default = False )
-parser.add_argument('--langlinks', required = True,  action = 'store_true', default = False )
-parser.add_argument('--revision', required = True,  action = 'store_true', default = False )
+parser.add_argument('--page',  action = 'store_true', default = False )
+parser.add_argument('--redirect',  action = 'store_true', default = False )
+parser.add_argument('--langlinks',  action = 'store_true', default = False )
+parser.add_argument('--revision',  action = 'store_true', default = False )
 
 
 

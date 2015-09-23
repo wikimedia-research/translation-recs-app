@@ -93,7 +93,7 @@ def sqoop_tables(config, translation_directions_file):
     --langs %(langs)s \
     --page \ 
     --langlinks \ 
-    --revision
+    --redirect
     """
     logger.debug(cmd % params)
     ret = os.system(cmd % params)
