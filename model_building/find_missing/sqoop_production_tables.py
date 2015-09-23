@@ -172,7 +172,7 @@ if __name__ == '__main__':
 
   # create the db if it does not exist
   create_db = 'CREATE DATABASE IF NOT EXISTS %(hive_db)s;'
-  params = {'db':db}
+  params = {'hive_db':db}
   ret += exec_hive(create_db % params)
 
   # delete table before creating them
