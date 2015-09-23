@@ -18,6 +18,7 @@ parser.add_argument('--revision', required = True,  action = 'store_true', defau
 
 
 args = parser.parse_args()
+langs = args.langs.split('')
 
 
 ret = 0
@@ -27,7 +28,7 @@ ret += os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'"
 
 # create the db if it does not exist
 create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
-params = {'db':db}
+params = {'db':args.db}
 cmd =  """hive -e " """ + create_db % params + """ " """
 print (cmd)
 ret += os.system( cmd )
