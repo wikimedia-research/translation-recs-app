@@ -47,7 +47,7 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
 
     names = ['ll_from', 'll_to', 'll_lang']
     for ill_lang in ill_languages_from:
-        ill = sc.textFile(os.path.join(prod_tables,  ill_lang + 'wiki_langlinks_joined'))\
+        ill = sc.textFile(os.path.join(prod_tables,  ill_lang + '_langlinks'))\
         .map(lambda x: x.split('\t'))\
         .filter(lambda x: x[2] in ill_languages_to and len(x[1]) > 0 and len(x[0]) > 0)\
         .map(lambda x: (ill_lang + delim + x[0], x[2] + delim + x[1]))
@@ -60,7 +60,7 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
     # add redirect links
     names = ['rd_from', 'rd_to']
     for rd_lang in rd_languages:
-        rd = sc.textFile(os.path.join(prod_tables,  rd_lang + "wiki_redirect_joined"))\
+        rd = sc.textFile(os.path.join(prod_tables,  rd_lang + "_redirect"))\
         .map(lambda x: x.split('\t'))\
         .map(lambda x: (rd_lang + delim + x[0], rd_lang + delim + x[1]))
         rd.persist()

@@ -4,54 +4,11 @@ import sys
 import argparse
 import json
 
-parser = argparse.ArgumentParser()
-parser.add_argument('--db', required = True, help='path to recommendation file' )
-parser.add_argument('--langs', required = True,  help='comma seperated list of languages' )
-parser.add_argument('--redirect',  action = 'store_true', default = False )
-parser.add_argument('--langlinks',  action = 'store_true', default = False )
-parser.add_argument('--revision',  action = 'store_true', default = False )
 
 
-
-
-
-
-args = parser.parse_args()
-langs = args.langs.split(',')
-db = args.db
-
-ret = 0
-
-ret += os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
-
-
-# create the db if it does not exist
-create_db = 'CREATE DATABASE IF NOT EXISTS %(db)s;'
-params = {'db':db}
-cmd =  """hive -e " """ + create_db % params + """ " """
-print (cmd)
-ret += os.system( cmd )
-
-
-# delete all the tables in db that will be refreshed, that already exist
-delete_query = "DROP TABLE IF EXISTS %(db)s.%(table)s; "
-
-for lang in langs:
-  for s1 in ['wiki_page', 'wiki_redirect', 'wiki_langlinks']:
-    for s2 in ['', '_joined']:
-      table = lang+s1+s2
-      params = {'db':db, 'table': table}
-      print (cmd)
-      cmd =  """hive -e " """ + delete_query % params + """ " """
-      ret += os.system( cmd )
-
-
-
-# sqoop tables into db
-
-page_query = """
+page_sqoop_query = """
 sqoop import                                                        \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki    \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(mysql_db)s    \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_XXXXXX)      \
   --delete-target-dir                                               \
@@ -59,9 +16,9 @@ sqoop import                                                        \
   --password-file /user/ellery/sqoop.password                       \
   --split-by a.page_id                                              \
   --hive-import                                                     \
-  --hive-database %(db)s                                       \
+  --hive-database %(hive_db)s                                       \
   --create-hive-table                                               \
-  --hive-table %(lang)swiki_page                                        \
+  --hive-table %(result_table)s                                   \
   --query '
 SELECT
   a.page_id AS page_id,
@@ -71,9 +28,9 @@ WHERE $CONDITIONS AND page_namespace = 0
 '  
 """                                        
 
-redirect_query = """
+redirect_sqoop_query = """
 sqoop import                                                        \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(mysql_db)s      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_1XXXXX)      \
   --delete-target-dir                                               \
@@ -81,9 +38,9 @@ sqoop import                                                        \
   --password-file /user/ellery/sqoop.password                       \
   --split-by b.rd_from                                              \
   --hive-import                                                     \
-  --hive-database %(db)s                                        \
+  --hive-database %(hive_db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(lang)swiki_redirect                                          \
+  --hive-table %(result_table)s                                          \
   --query '
 SELECT
   b.rd_from AS rd_from,
@@ -93,9 +50,9 @@ WHERE $CONDITIONS AND rd_namespace = 0
 '   
 """              
 
-langlinks_query = """
+langlinks_sqoop_query = """
 sqoop import                                                      \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(mysql_db)s      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_2XXXXX)      \
   --delete-target-dir                                               \
@@ -103,9 +60,9 @@ sqoop import                                                      \
   --password-file /user/ellery/sqoop.password                       \
   --split-by a.ll_from                                              \
   --hive-import                                                     \
-  --hive-database %(db)s                                        \
+  --hive-database %(hive_db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(lang)swiki_langlinks                                         \
+  --hive-table %(result_table)s                                         \
   --query '
 SELECT
   a.ll_from AS ll_from,
@@ -117,9 +74,9 @@ WHERE $CONDITIONS
 """
 
 
-revision_query = """
+revision_sqoop_query = """
 sqoop import                                                      \
-  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(lang)swiki      \
+  --connect jdbc:mysql://analytics-store.eqiad.wmnet/%(mysql_db)s      \
   --verbose                                                         \
   --target-dir /tmp/$(mktemp -u -p '' -t ${USER}_sqoop_2XXXXX)      \
   --delete-target-dir                                               \
@@ -127,9 +84,9 @@ sqoop import                                                      \
   --password-file /user/ellery/sqoop.password                       \
   --split-by rev_parent_id                                              \
   --hive-import                                                     \
-  --hive-database %(db)s                                        \
+  --hive-database %(hive_db)s                                        \
   --create-hive-table                                               \
-  --hive-table %(lang)swiki_revision                                         \
+  --hive-table %(result_table)s                                          \
   --query '
 SELECT
   rev_page,
@@ -144,24 +101,23 @@ WHERE $CONDITIONS
 '
 """
 
-
-redirect_joined_query = """
-CREATE TABLE  %(db)s.%(lang)swiki_redirect_joined (
+redirect_join_query = """
+CREATE TABLE  %(hive_db)s.%(result_table)s (
 rd_from STRING,
 rd_to STRING)
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE;
 set mapreduce.job.queuename=priority;
-INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_redirect_joined
+INSERT OVERWRITE TABLE %(hive_db)s.%(result_table)s
 SELECT 
 b.page_title as rd_from,
 a.rd_title as rd_to
-FROM %(db)s.%(lang)swiki_redirect a JOIN %(db)s.%(lang)swiki_page b ON( a.rd_from = b.page_id);
+FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON( a.rd_from = b.page_id);
 """
 
-langlinks_joined_query = """
-CREATE TABLE  %(db)s.%(lang)swiki_langlinks_joined (
+langlinks_join_query = """
+CREATE TABLE  %(hive_db)s.%(result_table)s (
 ll_from STRING,
 ll_to STRING,
 ll_lang STRING)
@@ -169,46 +125,99 @@ ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
 STORED AS TEXTFILE;
 set mapreduce.job.queuename=priority;
-INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_langlinks_joined
+INSERT OVERWRITE TABLE %(hive_db)s.%(result_table)s
 SELECT 
 b.page_title as ll_from,
 a.ll_title as ll_to,
 a.ll_lang as ll_lang
-FROM %(db)s.%(lang)swiki_langlinks a JOIN %(db)s.%(lang)swiki_page b ON( a.ll_from = b.page_id);
+FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON( a.ll_from = b.page_id);
 """
 
+queries = {
+  'page' : {'sqoop': page_sqoop_query},
+  'redirect' {'sqoop': redirect_sqoop_query,  'join': },
+  'langlinks' {'sqoop': langlinks_sqoop_query, 'join': langlinks_join_query},
+  'revision' {'sqoop': revison_sqoop_query, 'join': 'NOT IMPLEMENTED'}
+}
 
 
-ret += os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
-for lang in langs:
-    d = {'db':db, 'lang':lang}
-    ret += os.system( page_query % d )
-    if args.redirect:
-      ret += os.system( redirect_query % d )
-    if args.langlinks:
-      ret += os.system( langlinks_query % d )
-    if args.revision:
-      ret += os.system( revision_query % d )
+def exec_hive(statement):
+  cmd =  """hive -e " """ + statement + """ " """
+  print (cmd)
+  ret =  os.system( cmd )
+  assert ret == 0
+  return ret
 
-        
-
-
-# augment page ids with titles, revision not implemented
-
-for lang in langs:
-    params = {'db':db, 'lang':lang}
-
-    if args.redirect:
-      cmd =  """hive -e " """ +redirect_joined_query % params + """ " """
-      ret += os.system( cmd )
+def exec_sqoop(statement):
+  ret =  os.system(statement)
+  assert ret == 0
+  return ret
 
 
+if __name__ == '__main__':
 
-    if args.langlinks:
-      cmd =  """hive -e " """ +langlinks_joined_query % params + """ " """
-      ret += os.system( cmd )
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--db', required = True, help='path to recommendation file' )
+  parser.add_argument('--langs', required = True,  help='comma seperated list of languages' )
+  parser.add_argument('--tables',  required = True )
+  args = parser.parse_args()
+  langs = args.langs.split(',')
+  tables = args.tables.split(',') 
+  db = args.db
 
-assert ret ==0
+  ret = 0
+
+  # make this is a  priority job
+  ret += os.system("export HIVE_OPTS='-hiveconf mapreduce.job.queuename=priority'")
+
+  # create the db if it does not exist
+  create_db = 'CREATE DATABASE IF NOT EXISTS %(hive_db)s;'
+  params = {'db':db}
+  ret += exec_hive(create_db % params)
+
+  # delete table before creating them
+  delete_query = "DROP TABLE IF EXISTS %(hive_db)s.%(result_table)s; "
+
+
+  # sqoop requested tables into db
+  ret += os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
+
+  for lang in langs:
+    for table in tables:
+
+      params = {'hive_db': db,
+               'mysql_db' : lang + 'wiki', 
+               'result_table': lang + '_' + table + '_raw'
+               }
+
+      ret += exec_hive(delete_query % params)
+      ret += exec_hive(queries[table]['sqoop'] % params)
+
+
+
+    
+  # join sqooped tables with page table to get clean final table
+
+  for lang in langs:
+      for table in tables:
+
+        params = {'hive_db': db,
+               'raw_page_table': lang + '_' + 'page' + '_raw'
+               'raw_table': lang + '_' + table + '_raw'
+               'result_table': lang + '_'  + table 
+               }
+
+
+        if table == 'page':
+          pass
+
+        ret += exec_hive(delete_query % params)
+        ret += exec_hive(queries[table]['join'] % params)
+
+
+       
+
+  assert ret ==0
 
 
 
