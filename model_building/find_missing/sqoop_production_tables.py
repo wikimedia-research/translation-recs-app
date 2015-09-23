@@ -137,7 +137,7 @@ queries = {
   'page' : {'sqoop': page_sqoop_query},
   'redirect': {'sqoop': redirect_sqoop_query,  'join': redirect_join_query},
   'langlinks': {'sqoop': langlinks_sqoop_query, 'join': langlinks_join_query},
-  'revision': {'sqoop': revison_sqoop_query, 'join': 'NOT IMPLEMENTED'}
+  'revision': {'sqoop': revision_sqoop_query, 'join': 'NOT IMPLEMENTED'}
 }
 
 
