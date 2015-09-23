@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
       params = {'hive_db': db,
                'mysql_db' : lang + 'wiki', 
-               'result_table': lang + '_' + table + '_raw'
+               'result_table': lang + '_' + table + '_raw',
                }
 
       ret += exec_hive(delete_query % params)
@@ -202,9 +202,9 @@ if __name__ == '__main__':
       for table in tables:
 
         params = {'hive_db': db,
-               'raw_page_table': lang + '_' + 'page' + '_raw'
-               'raw_table': lang + '_' + table + '_raw'
-               'result_table': lang + '_'  + table 
+               'raw_page_table': lang + '_' + 'page' + '_raw',
+               'raw_table': lang + '_' + table + '_raw',
+               'result_table': lang + '_'  + table,
                }
 
 
