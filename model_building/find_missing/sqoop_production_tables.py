@@ -7,7 +7,6 @@ import json
 parser = argparse.ArgumentParser()
 parser.add_argument('--db', required = True, help='path to recommendation file' )
 parser.add_argument('--langs', required = True,  help='comma seperated list of languages' )
-parser.add_argument('--page',  action = 'store_true', default = False )
 parser.add_argument('--redirect',  action = 'store_true', default = False )
 parser.add_argument('--langlinks',  action = 'store_true', default = False )
 parser.add_argument('--revision',  action = 'store_true', default = False )
@@ -146,64 +145,70 @@ WHERE $CONDITIONS
 """
 
 
+redirect_joined_query = """
+CREATE TABLE  %(db)s.%(lang)swiki_redirect_joined (
+rd_from STRING,
+rd_to STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+STORED AS TEXTFILE;
+set mapreduce.job.queuename=priority;
+INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_redirect_joined
+SELECT 
+b.page_title as rd_from,
+a.rd_title as rd_to
+FROM %(db)s.%(lang)swiki_redirect a JOIN %(db)s.%(lang)swiki_page b ON( a.rd_from = b.page_id);
+"""
+
+langlinks_joined_query = """
+CREATE TABLE  %(db)s.%(lang)swiki_langlinks_joined (
+ll_from STRING,
+ll_to STRING,
+ll_lang STRING)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+STORED AS TEXTFILE;
+set mapreduce.job.queuename=priority;
+INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_langlinks_joined
+SELECT 
+b.page_title as ll_from,
+a.ll_title as ll_to,
+a.ll_lang as ll_lang
+FROM %(db)s.%(lang)swiki_langlinks a JOIN %(db)s.%(lang)swiki_page b ON( a.ll_from = b.page_id);
+"""
+
+
+
 ret += os.system("export JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-amd64")
 for lang in langs:
     d = {'db':db, 'lang':lang}
-    for table_query in [page_query, redirect_query, langlinks_query]:
-        ret += os.system( table_query % d )
+    ret += os.system( page_query % d )
+    if args.redirect:
+      ret += os.system( redirect_query % d )
+    if args.langlinks:
+      ret += os.system( langlinks_query % d )
+    if args.revision:
+      ret += os.system( revision_query % d )
+
+        
 
 
-# augment page ids with titles
+# augment page ids with titles, revision not implemented
 
 for lang in langs:
     params = {'db':db, 'lang':lang}
 
-    
-    create_query = """
-    CREATE TABLE  %(db)s.%(lang)swiki_redirect_joined (
-    rd_from STRING,
-    rd_to STRING)
-    ROW FORMAT DELIMITED
-    FIELDS TERMINATED BY '\t'
-    STORED AS TEXTFILE;
-    set mapreduce.job.queuename=priority;
-    INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_redirect_joined
-    SELECT 
-    b.page_title as rd_from,
-    a.rd_title as rd_to
-    FROM %(db)s.%(lang)swiki_redirect a JOIN %(db)s.%(lang)swiki_page b ON( a.rd_from = b.page_id);
-    """
-
-
-    cmd =  """hive -e " """ +create_query % params + """ " """
-    print (cmd)
-    ret += os.system( cmd )
+    if args.redirect:
+      cmd =  """hive -e " """ +redirect_joined_query % params + """ " """
+      ret += os.system( cmd )
 
 
 
-    create_query = """
-    CREATE TABLE  %(db)s.%(lang)swiki_langlinks_joined (
-    ll_from STRING,
-    ll_to STRING,
-    ll_lang STRING)
-    ROW FORMAT DELIMITED
-    FIELDS TERMINATED BY '\t'
-    STORED AS TEXTFILE;
-    set mapreduce.job.queuename=priority;
-    INSERT OVERWRITE TABLE %(db)s.%(lang)swiki_langlinks_joined
-    SELECT 
-    b.page_title as ll_from,
-    a.ll_title as ll_to,
-    a.ll_lang as ll_lang
-    FROM %(db)s.%(lang)swiki_langlinks a JOIN %(db)s.%(lang)swiki_page b ON( a.ll_from = b.page_id);
-    """
+    if args.langlinks:
+      cmd =  """hive -e " """ +langlinks_joined_query % params + """ " """
+      ret += os.system( cmd )
 
-
-    cmd =  """hive -e " """ +create_query % params + """ " """
-    print (cmd)
-    ret += os.system( cmd )
-
-    assert ret ==0
+assert ret ==0
 
 
 
