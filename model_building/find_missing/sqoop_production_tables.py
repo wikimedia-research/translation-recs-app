@@ -191,7 +191,7 @@ if __name__ == '__main__':
                }
 
       ret += exec_hive(delete_query % params)
-      ret += exec_hive(queries[table]['sqoop'] % params)
+      ret += exec_sqoop(queries[table]['sqoop'] % params)
 
 
 
