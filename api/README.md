@@ -1,10 +1,14 @@
 To start the api with a small test data set, execute
 ```
-cd translation-recs-app/api
-python recommender_api.py
+python api/recommender_api.py --translation_directions test_translation_directions.json
 ```
 
-Then navigate to:
+Then navigate here to see the UI:
+```
+http://localhost:5000/
+```
+
+To check out the API, go to:
 ```
 http://localhost:5000/?s=test_source&t=test_target&article=Bannana
 ```
