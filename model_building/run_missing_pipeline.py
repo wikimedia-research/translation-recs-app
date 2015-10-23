@@ -69,17 +69,29 @@ def get_WILLs(cp):
 def sqoop_tables(config, translation_directions_file):
     logger.info('Starting Sqoop tables')
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/sqoop_production_tables.py')
+    db = 
+
+    with open(args.translation_directions) as f:
+      directions = json.load(f)
+    langs  = set()
+    langs.add('wikidata')
+    for s, ts in directions.items():
+      langs.add(s)
+      for t in ts:
+        langs.add(t)
+
 
     params = {
-        'translation_directions_file': translation_directions_file,
+        'db': cp.get('DEFAULT', 'hive_db'),
         'script': script,
-        'config': cp.get('DEFAULT', 'config'),
+        'langs': ','.join(langs),
     }
 
     cmd = """
     python %(script)s \
-    --config %(config)s \
-    --translation_directions %(translation_directions_file)s \
+    --db %(db)s \
+    --langs %(langs)s \
+    --tables = page,langlinks,redirect \ 
     """
     logger.debug(cmd % params)
     ret = os.system(cmd % params)
