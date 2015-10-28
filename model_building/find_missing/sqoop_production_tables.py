@@ -101,36 +101,29 @@ WHERE $CONDITIONS
 '
 """
 
+
+
 redirect_join_query = """
-CREATE TABLE  %(hive_db)s.%(result_table)s (
-rd_from STRING,
-rd_to STRING)
+CREATE TABLE  %(hive_db)s.%(result_table)s 
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
-STORED AS TEXTFILE;
-set mapreduce.job.queuename=priority;
-INSERT OVERWRITE TABLE %(hive_db)s.%(result_table)s
-SELECT 
-b.page_title as rd_from,
-a.rd_title as rd_to
-FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON( a.rd_from = b.page_id);
+STORED AS TEXTFILE
+AS SELECT 
+regexp_replace(b.page_title, '_',  ' ') as rd_from,
+regexp_replace(a.rd_title, '_', ' ') as rd_to
+FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON ( a.rd_from = b.page_id)
 """
 
 langlinks_join_query = """
-CREATE TABLE  %(hive_db)s.%(result_table)s (
-ll_from STRING,
-ll_to STRING,
-ll_lang STRING)
+CREATE TABLE  %(hive_db)s.%(result_table)s 
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '\t'
-STORED AS TEXTFILE;
-set mapreduce.job.queuename=priority;
-INSERT OVERWRITE TABLE %(hive_db)s.%(result_table)s
-SELECT 
-b.page_title as ll_from,
-a.ll_title as ll_to,
+STORED AS TEXTFILE
+AS SELECT 
+regexp_replace(b.page_title, '_', ' ' ) as ll_from,
+regexp_replace(a.ll_title, '_', '')  as ll_to,
 a.ll_lang as ll_lang
-FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON( a.ll_from = b.page_id);
+FROM %(hive_db)s.%(raw_table)s a JOIN %(hive_db)s.%(raw_page_table)s b ON ( a.ll_from = b.page_id)
 """
 
 queries = {
@@ -190,8 +183,8 @@ if __name__ == '__main__':
                'result_table': lang + '_' + table + '_raw',
                }
 
-      ret += exec_hive(delete_query % params)
-      ret += exec_sqoop(queries[table]['sqoop'] % params)
+      #ret += exec_hive(delete_query % params)
+      #ret += exec_sqoop(queries[table]['sqoop'] % params)
 
 
 

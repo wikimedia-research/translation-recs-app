@@ -25,8 +25,6 @@ spark-submit \
 --config /home/ellery/translation-recs-app/translation-recs.ini 
 """
 
-
-
 p = re.compile('.*wiki$')
 
 

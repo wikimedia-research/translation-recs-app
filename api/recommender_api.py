@@ -13,29 +13,40 @@ currentdir = os.path.dirname(
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from recommendation_lib.rec_util import TopicModel, TranslationRecommender
+from recommendation_lib.rec_util import TopicModel, LDATranslationRecommender, SearchTranslationRecommender
 
 
 app = Flask(__name__)
 
 
-def load_recommenders(data_dir, translation_directions, language_codes):
+def load_recommenders(data_dir, translation_directions, language_codes, alg):
     model = {}
     directions = json.load(open(translation_directions))
     model['directions'] = directions
     model['codes'] = json.load(open(language_codes))
 
-    for s, ts in directions.items():
-        model[s] = {}
-        print('Loading Topic Model for: ', s)
-        tm = TopicModel(data_dir, s)
-        model[s]['topic_model'] = tm
-        for t in ts:
-            model[s][t] = {}
-            print('Loading Recommender for: ', t)
-            tr = TranslationRecommender(data_dir, s, t, tm)
-            model[s][t]['translation_recommender'] = tr
-    print("LOADED MODELS")
+    if alg == 'lda':
+        for s, ts in directions.items():
+            model[s] = {}
+            print('Loading Topic Model for: ', s)
+            tm = TopicModel(data_dir, s)
+            model[s]['topic_model'] = tm
+            for t in ts:
+                model[s][t] = {}
+                print('Loading Recommender for: ', t)
+                tr = LDATranslationRecommender(data_dir, s, t, tm)
+                model[s][t]['translation_recommender'] = tr
+        print("LOADED MODELS")
+    else:
+        for s, ts in directions.items():
+            print('source', s)
+            model[s] = {}
+            for t in ts:
+
+                print('target', t)
+                model[s][t] = {}
+                tr = SearchTranslationRecommender(data_dir, s, t)
+                model[s][t]['translation_recommender'] = tr
 
     return model
 
@@ -62,23 +73,9 @@ def home():
     )
 
 
-def normalize_title(s, title):
-
-    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
-    params = {
-        'action': 'query', 'format': 'json', 'titles': title, 'redirects': ''
-    }
-    response = requests.get(mw_api, params=params).json()['query']
-    page_id, page_info = list(response['pages'].items())[0]
-
-    if page_id == '-1':
-        return title
-    else:
-        return page_info['title'].replace(' ', '_')
-
 
 @app.route('/api')
-def personal_recommendations():
+def seed_recommendations():
 
     if app.debug:
         # add an artificial delay to test UI when in debug mode
@@ -99,10 +96,8 @@ def personal_recommendations():
 
     if recommender:
         if article:
-            article = normalize_title(s, article)
-            print(article)
             ret['articles'] = recommender.get_seeded_recommendations(
-                article, num_recs=n, min_score=0.1
+                article, num_recs=n
             )
         else:
             ret['articles'] = recommender.get_global_recommendations(
@@ -113,6 +108,11 @@ def personal_recommendations():
 
 
 parser = argparse.ArgumentParser()
+
+parser.add_argument(
+    '--alg', required=False, default='search',
+    help='what model to use to return related results. Options: lda, search'
+)
 parser.add_argument(
     '--debug', required=False, action="store_true",
     help='run in debug mode'
@@ -136,7 +136,8 @@ app.debug = args.debug
 model = load_recommenders(
     args.data_dir,
     args.translation_directions,
-    args.language_codes
+    args.language_codes,
+    args.alg
 )
 
 if __name__ == '__main__':

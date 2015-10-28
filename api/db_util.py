@@ -3,8 +3,6 @@ import pandas as pd
 import os
 
 
-# mysql -us52262 -peolaiheiheeviish -hlabsdb1001.eqiad.wmnet
-
 def mysql_to_pandas(dicts):
 
     dmaster = {}

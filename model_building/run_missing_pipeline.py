@@ -91,7 +91,7 @@ def sqoop_tables(config, translation_directions_file):
     python %(script)s \
     --db %(db)s \
     --langs %(langs)s \
-    --tables = page,langlinks,redirect \ 
+    --tables page,langlinks,redirect \ 
     """
     logger.debug(cmd % params)
     ret = os.system(cmd % params)

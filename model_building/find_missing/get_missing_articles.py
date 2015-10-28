@@ -68,6 +68,8 @@ def create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, 
         G.add_edges_from(rd.collect())
         rd.unpersist()
         logger.info ("got rdd links for %s" % rd_lang)
+
+    sc.stop()
     return G
 
 
@@ -114,7 +116,7 @@ def is_subgraph_missing_target_item(g, s, t, delim):
         return {}
     
 
-def get_missing_items(sc, cp, G, s, t, delim, fname):
+def get_missing_items(G, s, t, delim, fname):
     """
     Find all items in s missing in t
     """
@@ -221,14 +223,14 @@ if __name__ == '__main__':
     G = create_graph(sc, cp, delim, wd_languages, rd_languages, ill_languages_from, ill_languages_to)
     logger.info ("Got entire Graph")
 
-    get_missing_items(sc, cp, G, s, t, delim, os.path.join(innerdir, cp.get('find_missing', 'missing_items')))
+    get_missing_items(G, s, t, delim, os.path.join(innerdir, cp.get('find_missing', 'missing_items')))
     logger.info ("Got missing Items")
 
     merged_filename = os.path.join(innerdir, cp.get('find_missing', 'merged_items'))
     save_merged_items(G, s, t, delim, merged_filename)
     logger.info ("Got clusters")
 
-    sc.stop()
+    
     
     
 

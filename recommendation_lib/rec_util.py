@@ -5,33 +5,19 @@ from scipy.io import mmread
 import numpy as np
 import scipy
 from sklearn.preprocessing import normalize
-
-
-
-class TopicModel:
-
-    def __init__(self, data_dir, s):
-        self.id2index, self.index2id, self.id2sname  = get_recommendation_maps(os.path.join(data_dir,s, 'article2index.txt'))
-        self.sname2id = inv_map = {v: k for k, v in self.id2sname.items()}
-        topic_matrix_file = os.path.join(data_dir, s, 'doc2topic.mtx')
-        with open(topic_matrix_file, 'rb') as f:
-            self.source_topic_matrix =  normalize(mmread(f).tocsr(), norm='l2', axis=1)
-
+import requests
 
 
 class TranslationRecommender:
-
-    def __init__(self, data_dir, s, t, topic_model):
-
-        self.topic_model = topic_model
+    def __init__(self, data_dir, s, t,):
+        self.data_dir = data_dir
+        self.s = s
+        self.t = t
         self.missing_df = pd.read_csv(os.path.join(data_dir, s, t, 'ranked_missing_items.tsv'), sep = '\t', encoding = 'utf8')
         self.missing_df['page_title'] = self.missing_df['page_title'].astype(str)
-        self.missing_df['page_title'] = self.missing_df['page_title'].apply(lambda x: x.replace(u' ', u'_'))
+        self.missing_df['page_title'] = self.missing_df['page_title'].apply(lambda x: x.replace(' ', '_'))
         self.missing_df.index = self.missing_df['page_title']
         del self.missing_df['page_title']
-        missing_set = set(self.missing_df['id'])
-        self.missing_topic_matrix = reweight(topic_model, missing_set)
-
 
     def get_global_recommendations(self, num_recs=100):
         names = list(self.missing_df[:num_recs].index.values)
@@ -40,19 +26,69 @@ class TranslationRecommender:
                  'wikidata_id': self.missing_df.ix[name]['id']}
                 for name in names] 
 
+    def get_seeded_recommendations(self, article, num_recs=100):
+        pass
+
+
+class SearchTranslationRecommender(TranslationRecommender):
+    def __init__(self, data_dir, s, t):
+        TranslationRecommender.__init__(self, data_dir, s, t)
+
+    def get_seeded_recommendations(self, article, num_recs=100):
+
+        mw_api = 'https://%s.wikipedia.org/w/api.php' % self.s
+        params = {
+            'action': 'query',
+            'list': 'search',
+            'format': 'json',
+            'srsearch': article,
+            'srnamespace' : 0,
+            'srwhat': 'text',
+            'srprop': 'wordcount',
+            'srlimit': num_recs * 3
+
+        }
+        response = requests.get(mw_api, params=params).json()['query']['search']
+        results = [r['title'].replace(' ', '_') for r in response]
+        
+        results = [r for r in results if r in self.missing_df.index]
+        results =  [{'title': name,
+                 'pageviews': int(self.missing_df.ix[name]['page_views']),
+                 'wikidata_id': self.missing_df.ix[name]['id']}
+                for name in results][:num_recs]
+
+        results.sort(key = lambda x: x['pageviews'], reverse=True)
+        return results
+
+        
+
+class LDATranslationRecommender(TranslationRecommender):
+
+    def __init__(self, data_dir, s, t, topic_model):
+        TranslationRecommender.__init__(self, data_dir, s, t)
+        self.topic_model = topic_model
+        self.missing_ids = set(self.missing_df['id'])
+        self.missing_topic_matrix = self.reweight(self.topic_model, self.missing_ids)
+
+
+    def reweight(self, topic_model, missing_set):
+        M = topic_model.source_topic_matrix
+        num_docs = M.shape[0]
+        M = M.transpose()
+        diagonal = [ 1.0 if topic_model.index2id[i] in missing_set else 0.0 for i in range(num_docs)]
+        diagonal = np.array(diagonal)
+        assert(np.count_nonzero(np.isnan(diagonal))==0)
+        R = scipy.sparse.diags(diagonal, 0)
+        M = M*R
+        return M.transpose().tocsr()
+
 
     def get_personlized_recommendations(self, interest_vector, num_recs=100, min_score=0.4):
         scores = self.missing_topic_matrix.dot(interest_vector)
         non_zero_indices = np.where(scores > min_score)
         ranking = np.argsort(-scores[non_zero_indices])[:num_recs]
         rec_ids = self.topic_model.index2id[non_zero_indices][ranking]
-        #rec_scores = scores[non_zero_indices][ranking]
-        #rec_tuples = zip(rec_ids,rec_scores )
-        #recs_df = pd.Dataframe(rec_tuples, columns = ['wikidata_id', 'score'])
-
         names = [self.topic_model.id2sname[wdid] for wdid in rec_ids]
-
-        
         return [{'title': name,
                  'pageviews': int(self.missing_df.ix[name]['page_views']),
                  'wikidata_id': self.missing_df.ix[name]['id']}
@@ -60,6 +96,7 @@ class TranslationRecommender:
 
 
     def get_seeded_recommendations(self, article, num_recs=100, min_score=0.4):
+        article = self.normalize_title(self.s, article)
         if article not in self.topic_model.sname2id:
             return []
         # get article vector
@@ -69,8 +106,20 @@ class TranslationRecommender:
         return self.get_personlized_recommendations(article_vector, num_recs=num_recs, min_score=min_score)
 
 
+    def normalize_title(s, title):
+        mw_api = 'https://%s.wikipedia.org/w/api.php' % s
+        params = {
+            'action': 'query', 'format': 'json', 'titles': title, 'redirects': ''
+        }
+        response = requests.get(mw_api, params=params).json()['query']
+        page_id, page_info = list(response['pages'].items())[0]
 
-    def get_user_recommendations(self, contributions_df, num_recs=100, min_score=0.4):
+        if page_id == '-1':
+            return title
+        else:
+            return page_info['title'].replace(' ', '_')
+
+    def get_user_recommendations(self, contributions_df, num_recs=100, min_score=0.1):
 
         interest_vector = self.get_user_interest_vector(contributions_df)
         return self.get_personlized_recommendations(interest_vector, num_recs=num_recs, min_score=min_score)
@@ -99,34 +148,36 @@ class TranslationRecommender:
         return interest_vector / np.linalg.norm(interest_vector)
 
 
+class TopicModel:
 
-def reweight( topic_model, missing_set):
-    M = topic_model.source_topic_matrix
-    num_docs = M.shape[0]
-    M = M.transpose()
-    diagonal = [ 1.0 if topic_model.index2id[i] in missing_set else 0.0 for i in range(num_docs)]
-    diagonal = np.array(diagonal)
-    assert(np.count_nonzero(np.isnan(diagonal))==0)
-    R = scipy.sparse.diags(diagonal, 0)
-    M = M*R
-    return M.transpose().tocsr()
+    def __init__(self, data_dir, s):
+        self.id2index, self.index2id, self.id2sname  = self.load_topic_model_maps(os.path.join(data_dir,s, 'article2index.txt'))
+        self.sname2id = inv_map = {v: k for k, v in self.id2sname.items()}
+        topic_matrix_file = os.path.join(data_dir, s, 'doc2topic.mtx')
+        with open(topic_matrix_file, 'rb') as f:
+            self.source_topic_matrix =  normalize(mmread(f).tocsr(), norm='l2', axis=1)
 
 
-def get_recommendation_maps(dict_file):
-    id2index = {}
-    index2id = []
-    id2name = {}
-    
-    with open(dict_file) as f:
-        for index, identifier in enumerate(f):
-            identifiers = identifier.strip().split('|')
-            item_id  = identifiers[2]
-            name = identifiers[1]
-            
-            id2name[item_id] = name
-            id2index[item_id] = index
-            index2id.append(item_id)
-    return id2index, np.array(index2id), id2name   
+    def load_topic_model_maps(self, dict_file):
+        id2index = {}
+        index2id = []
+        id2name = {}
+        
+        with open(dict_file) as f:
+            for index, identifier in enumerate(f):
+                identifiers = identifier.strip().split('|')
+                item_id  = identifiers[2]
+                name = identifiers[1]
+                
+                id2name[item_id] = name
+                id2index[item_id] = index
+                index2id.append(item_id)
+        return id2index, np.array(index2id), id2name 
+
+
+
+
+  
 
 
  
