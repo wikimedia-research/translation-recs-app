@@ -6,6 +6,35 @@ import numpy as np
 import scipy
 from sklearn.preprocessing import normalize
 import requests
+from google import search
+
+
+def google_search(s, article, n = 10):
+    q = 'site:%s.wikipedia.org %s' % (s, article)
+    results = list(search(q, stop=n))
+    main_articles = []
+    for r in results:
+        if r.startswith('https://en.wikipedia.org/wiki'):
+            r = r[30:]
+            if ':' not in r and '%3' not in r:
+                main_articles.append(r)
+    return main_articles
+                
+def wiki_search(s, article, n = 10):
+    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
+    params = {
+        'action': 'query',
+        'list': 'search',
+        'format': 'json',
+        'srsearch': article,
+        'srnamespace' : 0,
+        'srwhat': 'text',
+        'srprop': 'wordcount',
+        'srlimit': n
+
+    }
+    response = requests.get(mw_api, params=params).json()['query']['search']
+    return [r['title'].replace(' ', '_') for r in response]
 
 
 class TranslationRecommender:
@@ -34,22 +63,15 @@ class SearchTranslationRecommender(TranslationRecommender):
     def __init__(self, data_dir, s, t):
         TranslationRecommender.__init__(self, data_dir, s, t)
 
-    def get_seeded_recommendations(self, article, num_recs=100):
+    def get_seeded_recommendations(self, article, num_recs=10):
 
-        mw_api = 'https://%s.wikipedia.org/w/api.php' % self.s
-        params = {
-            'action': 'query',
-            'list': 'search',
-            'format': 'json',
-            'srsearch': article,
-            'srnamespace' : 0,
-            'srwhat': 'text',
-            'srprop': 'wordcount',
-            'srlimit': num_recs * 3
+        try:
+            results = google_search(self.s, article, num_recs * 3)
+            print(results)
+        except:
+            print('Could not use google search')
+            results = wiki_search(self.s, article, num_recs * 3)
 
-        }
-        response = requests.get(mw_api, params=params).json()['query']['search']
-        results = [r['title'].replace(' ', '_') for r in response]
         
         results = [r for r in results if r in self.missing_df.index]
         results =  [{'title': name,
