@@ -36,11 +36,24 @@
         </div>
         <div class="right menu">
             <div class="item">
-                <a class="ui primary translate button" target="_blank"
-                   href={ translateLink }>
+                <div class="ui teal buttons">
+                    <a class="ui primary translate button" target="_blank"
+                       href={ translateLink }>
                     <i class="write icon"></i>
-                    Translate
-                </a>
+                       Translate
+                    </a>
+                    <div class="ui dropdown icon button">
+                       <i class="dropdown icon"></i>
+                       <div class="menu">
+                           <div class="item">
+                               <i class="unhide icon"></i><a target="_blank"
+                                    href={ articleLink }>
+                               View article
+                               </a>
+                            </div>
+                       </div>
+                    </div>
+		</div>
             </div>
         </div>
     </div>
@@ -54,6 +67,8 @@
             'from=' + opts.from +
             '&to=' + opts.to +
             '&campaign=' + translationAppGlobals.campaign;
+
+        self.articleRoot = '//' + opts.from + '.wikipedia.org/wiki/';
 
         self.index = -1;
         for (var i=0; i<self.articles.length; i++) {
@@ -69,6 +84,7 @@
             var showing = self.articles[self.showIndex];
             self.title = showing.title;
             self.translateLink = self.translateRoot + '&page=' + showing.linkTitle;
+            self.articleLink = self.articleRoot + showing.linkTitle;
 
             $.get(previewRoot + showing.title).done(function (data) {;
                 self.showPreview(showing, data);
