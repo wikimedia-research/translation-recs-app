@@ -54,10 +54,10 @@ def seed_recommendations():
 
     # make sure language codes are valid
     if s not in language_codes or t not in language_codes:
-        return ret
+        return jsonify(**ret)
 
     if s==t:
-        return ret
+        return jsonify(**ret)
 
     if article:
         ret['articles'] = get_seeded_recommendations(
