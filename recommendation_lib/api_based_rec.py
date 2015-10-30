@@ -10,28 +10,24 @@ import multiprocessing as mp
 #from google import search
 
 def get_seeded_recommendations(s, t, seed, n):
-    t1 = time.time()
+    """
+    Returns n articles in s missing in t based on a search for seed
+    """
     titles = wiki_search(s, seed, 3*n)
-    t2 = time.time()
-    print('Search:', t2-t1)
     titles = filter_missing(s, t, titles)[:n]
-    t3 = time.time()
-    print('Filter:', t3-t2)
     article_pv_dict = get_article_views_parallel(s, titles)
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
-    t4 = time.time()
-    print('Pageviews:', t4-t3)
     return ret
 
+
 def get_global_recommendations(s, t, n):
-    t1 = time.time()
+    """
+    Returns n most viewd articles yesterday in s missing in t
+    """
     article_pv_dict = get_top_article_views(s)
-    t2 = time.time()
-    print('Get Top:', t2-t1)
-    titles = list(article_pv_dict.keys())[3:300]
+    # dont include top hits and limit the number to filter
+    titles = list(article_pv_dict.keys())[3:300] 
     titles = filter_missing(s, t, titles)[:n]
-    t3 = time.time()
-    print('Filter:', t3-t2)
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
     return ret
 
@@ -39,6 +35,9 @@ def get_global_recommendations(s, t, n):
 
 
 def get_top_article_views(s):
+    """
+    Get top viewd articles from pageview api
+    """
     dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
     response = requests.get(query).json()
@@ -50,39 +49,32 @@ def get_top_article_views(s):
 
 
 
-def wiki_search(s, article, n):
-    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
-    params = {
-        'action': 'query',
-        'list': 'search',
-        'format': 'json',
-        'srsearch': article,
-        'srnamespace' : 0,
-        'srwhat': 'text',
-        'srprop': 'wordcount',
-        'srlimit': n
-
-    }
-    response = requests.get(mw_api, params=params).json()['query']['search']
-    return [r['title'].replace(' ', '_') for r in response]
-
 def get_article_views_parallel(s, articles):
+    """
+    Get the number of pageviews in the last 14 days for each article
+    """
     p = mp.Pool(len(articles))
     return dict(p.map(get_article_views, [(s, a) for a in articles]))
 
 
 def get_article_views(arg_tuple):
-        s = arg_tuple[0]
-        article = arg_tuple[1]
-        start = (datetime.utcnow() - relativedelta.relativedelta(days=1)).strftime('%Y%m%d00')
-        stop = (datetime.utcnow() - relativedelta.relativedelta(days=15)).strftime('%Y%m%d00')
-        query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%s.wikipedia/all-access/user/%s/daily/%s/%s"
-        query = query % (s, article, stop, start)
-        response = requests.get(query).json()
-        return (article, sum([x['views'] for x in response['items']]))
+    """
+    Get pv counts for a single article from pv api
+    """
+    s = arg_tuple[0]
+    article = arg_tuple[1]
+    start = (datetime.utcnow() - relativedelta.relativedelta(days=1)).strftime('%Y%m%d00')
+    stop = (datetime.utcnow() - relativedelta.relativedelta(days=15)).strftime('%Y%m%d00')
+    query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%s.wikipedia/all-access/user/%s/daily/%s/%s"
+    query = query % (s, article, stop, start)
+    response = requests.get(query).json()
+    return (article, sum([x['views'] for x in response['items']]))
 
 
 def filter_missing(s, t, titles):
+    """
+    Query wikidata to filer out articles in s that exist in t
+    """
     query = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' % (s, '|'.join(titles))
     response = requests.get(query).json()
     missing = []
@@ -94,6 +86,25 @@ def filter_missing(s, t, titles):
                 missing.append(v['sitelinks'][swiki]['title'].replace(' ', '_'))
     return [t for t in titles if t in missing]
 
+
+def wiki_search(s, seed, n):
+    """
+    Query wiki search for articles related to seed
+    """
+    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
+    params = {
+        'action': 'query',
+        'list': 'search',
+        'format': 'json',
+        'srsearch': seed,
+        'srnamespace' : 0,
+        'srwhat': 'text',
+        'srprop': 'wordcount',
+        'srlimit': n
+
+    }
+    response = requests.get(mw_api, params=params).json()['query']['search']
+    return [r['title'].replace(' ', '_') for r in response]
 
 """
 def google_search(s, article, n = 10):
