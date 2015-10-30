@@ -1,7 +1,7 @@
 <About>
     <div class="main ui container">
-        <p>Find important articles in a source wiki that are most likely to be important in the destination wiki.</p>
-        <p>Translate them.</p>
-        <p>Have fun.  Personalize if you like.</p>
+        <p>This tool is designed to help you find articles to translate from one language to another. 
+        By default the dool displays the most popular articles in the source language that do not exist in the target language based on Wikidata sitelinks.
+        You can enter a seed article to get recommendations for articles to translate that are similar to the seed. Have fun!
     </div>
 </About>
