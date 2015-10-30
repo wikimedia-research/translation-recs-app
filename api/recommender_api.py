@@ -24,15 +24,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    language_codes = json.load(open(args.language_codes))
-    translation_directions = {}
-    for k1 in language_codes.keys():
-        translation_directions[k1] = []
-        for k2 in language_codes.keys():
-            if k1!=k2:
-                translation_directions[k1].append(k2)
-
-
     return render_template(
         'index.html',
         language_pairs=json.dumps(translation_directions),
@@ -53,12 +44,20 @@ def seed_recommendations():
     t = request.args.get('t')
     article = request.args.get('article')
     n = request.args.get('n')
+
     try:
         n = int(n)
     except:
         n = 10
 
     ret = {'articles': []}
+
+    # make sure language codes are valid
+    if s not in language_codes or t not in language_codes:
+        return ret
+
+    if s==t:
+        return ret
 
     if article:
         ret['articles'] = get_seeded_recommendations(
@@ -87,8 +86,17 @@ parser.add_argument(
     default=os.path.join(parentdir, 'language_codes.json'),
     help='path to json dictionary from language codes to friendly names'
 )
+
 args = parser.parse_args()
 app.debug = args.debug
+
+language_codes = json.load(open(args.language_codes))
+translation_directions = {}
+for k1 in language_codes.keys():
+    translation_directions[k1] = []
+    for k2 in language_codes.keys():
+        if k1!=k2:
+            translation_directions[k1].append(k2)
 
 
 if __name__ == '__main__':
