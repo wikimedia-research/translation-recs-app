@@ -14,7 +14,15 @@ def get_seeded_recommendations(s, t, seed, n):
     Returns n articles in s missing in t based on a search for seed
     """
     titles = wiki_search(s, seed, 3*n)
+    if len(titles) ==0:
+        print('No Search Results')
+        return []
+
     titles = filter_missing(s, t, titles)[:n]
+    if len(titles) == 0:
+        print('All articles exist in target')
+        return []
+
     article_pv_dict = get_article_views_parallel(s, titles)
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
     return ret
@@ -42,9 +50,13 @@ def get_top_article_views(s):
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
     response = requests.get(query).json()
     article_pv_dict = OrderedDict()
-    for d in json.loads(response['items'][0]['articles']):
-        if 'article' in d and ':' not in d['article'] and not d['article'].startswith('List'):
-            article_pv_dict[d['article']] =  d['views']
+
+    try:
+        for d in json.loads(response['items'][0]['articles']):
+            if 'article' in d and ':' not in d['article'] and not d['article'].startswith('List'):
+                article_pv_dict[d['article']] =  d['views']
+    except:
+        print('PV TOP Article API response malformed')
     return article_pv_dict
 
 
@@ -68,6 +80,8 @@ def get_article_views(arg_tuple):
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%s.wikipedia/all-access/user/%s/daily/%s/%s"
     query = query % (s, article, stop, start)
     response = requests.get(query).json()
+    if 'items' not in response:
+        return (article, 0)
     return (article, sum([x['views'] for x in response['items']]))
 
 

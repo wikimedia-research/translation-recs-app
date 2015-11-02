@@ -23,7 +23,7 @@ def json_response(dat):
 
     resp = Response(response=json.dumps(dat),
         status=200, \
-        mimetype="application/json")
+        mimetype="text/html")
     return(resp)
 
 
