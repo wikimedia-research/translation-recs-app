@@ -70,6 +70,7 @@ def seed_recommendations():
     t2 = time.time()
     print('Total:', t2-t1)
 
+    print(jsonify(**ret))
     return jsonify(**ret)
 
 
