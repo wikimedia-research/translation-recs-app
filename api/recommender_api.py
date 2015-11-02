@@ -5,7 +5,7 @@ import json
 import argparse
 import requests
 import time
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, Response
 
 currentdir = os.path.dirname(
     os.path.abspath(inspect.getfile(inspect.currentframe()))
@@ -19,6 +19,12 @@ from recommendation_lib.api_based_rec import get_seeded_recommendations, get_glo
 app = Flask(__name__)
 
 
+def json_response(dat):
+
+    resp = Response(response=json.dumps(dat),
+        status=200, \
+        mimetype="application/json")
+    return(resp)
 
 
 
@@ -54,10 +60,10 @@ def seed_recommendations():
 
     # make sure language codes are valid
     if s not in language_codes or t not in language_codes:
-        return jsonify(**ret)
+        return json_response(ret)
 
     if s==t:
-        return jsonify(**ret)
+        return json_response(ret)
 
     if article:
         ret['articles'] = get_seeded_recommendations(
@@ -70,8 +76,7 @@ def seed_recommendations():
     t2 = time.time()
     print('Total:', t2-t1)
 
-    print(jsonify(**ret))
-    return jsonify(**ret)
+    return json_response(ret)
 
 
 parser = argparse.ArgumentParser()
