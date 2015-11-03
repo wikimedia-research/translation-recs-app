@@ -24,9 +24,9 @@ def get_seeded_recommendations(s, t, seed, n):
         return []
 
 
-    #article_pv_dict = get_article_views_parallel(s, titles)
+    article_pv_dict = get_article_views_parallel(s, titles)
+    #article_pv_dict = dict(get_article_views((s,t)) for t in titles)
 
-    article_pv_dict = dict(get_article_views((s,t)) for t in titles)
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
     return ret
 
@@ -68,8 +68,8 @@ def get_article_views_parallel(s, articles):
     """
     Get the number of pageviews in the last 14 days for each article
     """
-    p = mp.Pool(len(articles))
-    return dict(p.map(get_article_views, [(s, a) for a in articles]))
+    p_pool = mp.Pool(4)
+    return dict(p_pool.map(get_article_views, [(s, a) for a in articles]))
 
 
 def get_article_views(arg_tuple):
