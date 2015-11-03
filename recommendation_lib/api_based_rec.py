@@ -13,11 +13,12 @@ def get_seeded_recommendations(s, t, seed, n):
     """
     Returns n articles in s missing in t based on a search for seed
     """
-    #return  [{"pageviews": 233735, "wikidata_id": "", "title": "Lincoln's_Lost_Speech"}, {"pageviews": 120015, "wikidata_id": "", "title": "Tracking_(education)"}]
     titles = wiki_search(s, seed, 3*n)
     if len(titles) ==0:
         print('No Search Results')
         return []
+        
+    return  [{"pageviews": 233735, "wikidata_id": "", "title": "Lincoln's_Lost_Speech"}, {"pageviews": 120015, "wikidata_id": "", "title": "Tracking_(education)"}]
 
     titles = filter_missing(s, t, titles)[:n]
     if len(titles) == 0:
