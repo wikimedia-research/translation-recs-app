@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 
 def json_response(dat):
-
+    print(json.dumps(dat))
     resp = Response(response=json.dumps(dat),
         status=200, \
         mimetype="text/html")
