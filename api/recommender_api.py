@@ -19,12 +19,7 @@ from recommendation_lib.api_based_rec import get_seeded_recommendations, get_glo
 app = Flask(__name__)
 
 
-def json_response(dat):
-    print(json.dumps(dat))
-    resp = Response(response=json.dumps(dat),
-        status=200, \
-        mimetype="application/json")
-    return(resp)
+
 
 
 
@@ -60,10 +55,10 @@ def seed_recommendations():
 
     # make sure language codes are valid
     if s not in language_codes or t not in language_codes:
-        return json_response(ret)
+        return jsonify(**ret)
 
     if s==t:
-        return json_response(ret)
+        return jsonify(**ret)
 
     if article:
         ret['articles'] = get_seeded_recommendations(
@@ -76,7 +71,7 @@ def seed_recommendations():
     t2 = time.time()
     print('Total:', t2-t1)
 
-    return json_response(ret)
+    return jsonify(**ret)
 
 
 parser = argparse.ArgumentParser()
