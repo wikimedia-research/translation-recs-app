@@ -13,6 +13,9 @@ def get_seeded_recommendations(s, t, seed, n):
     """
     Returns n articles in s missing in t based on a search for seed
     """
+
+    return get_global_recommendations(s, t, n)
+
     titles = wiki_search(s, seed, 3*n)
     if len(titles) ==0:
         print('No Search Results')
