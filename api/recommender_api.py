@@ -66,8 +66,8 @@ def seed_recommendations():
         return json_response(ret)
 
     if article:
-        ret['articles'] = get_seeded_recommendations(
-            s, t, article, n
+        ret['articles'] = get_global_recommendations(
+            s, t, n
         )
     else:
         ret['articles'] = get_global_recommendations(
