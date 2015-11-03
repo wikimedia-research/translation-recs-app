@@ -24,8 +24,8 @@ def get_seeded_recommendations(s, t, seed, n):
         return []
 
 
-    article_pv_dict = get_article_views_parallel(s, titles)
-    #article_pv_dict = dict(get_article_views((s,t)) for t in titles)
+    #article_pv_dict = get_article_views_parallel(s, titles)
+    article_pv_dict = dict(get_article_views((s,t)) for t in titles)
 
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
     return ret
