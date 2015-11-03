@@ -21,9 +21,9 @@ app = Flask(__name__)
 
 def json_response(dat):
     print(json.dumps(dat))
-    resp = Response(response=json.dumps({'articles': [{'title':'Apple', 'pageviews': 5, 'wikidata_id': 'Q!'}]}),
+    resp = Response(response=json.dumps(dat),
         status=200, \
-        mimetype="tex/plain")
+        mimetype="text/plain")
     return(resp)
 
 
@@ -44,7 +44,7 @@ def seed_recommendations():
 
     if app.debug:
         # add an artificial delay to test UI when in debug mode
-        time.sleep(3)
+        time.sleep(0)
 
     s = request.args.get('s')
     t = request.args.get('t')
@@ -66,8 +66,8 @@ def seed_recommendations():
         return json_response(ret)
 
     if article:
-        ret['articles'] = get_seeded_recommendations(
-            s, t, article, n
+        ret['articles'] = get_global_recommendations(
+            s, t, n
         )
     else:
         ret['articles'] = get_global_recommendations(
