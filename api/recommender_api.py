@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 def json_response(dat):
     print(json.dumps(dat))
-    resp = Response(response=json.dumps({'articles': [{'title':'Apple', 'pageviews:' 5, 'wikidata_id': 'Q!'}]}),
+    resp = Response(response=json.dumps({'articles': [{'title':'Apple', 'pageviews': 5, 'wikidata_id': 'Q!'}]}),
         status=200, \
         mimetype="application/json")
     return(resp)
