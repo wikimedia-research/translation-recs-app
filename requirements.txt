@@ -2,3 +2,4 @@ flask
 sklearn
 pandas
 requests
+futures
