@@ -2,32 +2,39 @@ import requests
 import random
 from datetime import datetime
 from dateutil import relativedelta
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 import json
 import time
 import multiprocessing as mp
-
+import concurrent.futures
 #from google import search
 
-def get_seeded_recommendations(s, t, seed, n):
+def get_seeded_recommendations(s, t, seed, n, pageviews=True):
     """
     Returns n articles in s missing in t based on a search for seed
     """
-    titles = wiki_search(s, seed, 3*n)
-    if len(titles) ==0:
+    articles = wiki_search(s, seed, 3*n)
+    if len(articles) ==0:
         print('No Search Results')
         return []
 
-    titles = filter_missing(s, t, titles)[:n]
-    if len(titles) == 0:
+    missing_article_id_dict = filter_missing(s, t, articles)
+    missing_articles = [a for a in articles if a in missing_article_id_dict][:n] #keep search ranking order
+
+    if len(missing_articles) == 0:
         print('All articles exist in target')
         return []
 
+    missing_article_pv_dict  = defaultdict(int)
 
-    #article_pv_dict = get_article_views_parallel(s, titles)
-    article_pv_dict = dict(get_article_views((s,t)) for t in titles)
+    if pageviews:
+        missing_article_pv_dict = get_article_views_threaded(s, missing_articles)
+        #missing_article_pv_dict = dict(get_article_views((s,t)) for t in missing_article_id_dict.keys())
 
-    ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
+    ret =  [{'title': a,
+             'pageviews': missing_article_pv_dict[a],
+             'wikidata_id': missing_article_id_dict[a]} for a in missing_articles]
+
     return ret
 
 
@@ -35,11 +42,13 @@ def get_global_recommendations(s, t, n):
     """
     Returns n most viewd articles yesterday in s missing in t
     """
-    article_pv_dict = get_top_article_views(s)
+    top_article_pv_dict = get_top_article_views(s)
     # dont include top hits and limit the number to filter
-    titles = list(article_pv_dict.keys())[3:300] 
-    titles = filter_missing(s, t, titles)[:n]
-    ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
+    top_articles = list(top_article_pv_dict.keys())[3:300] 
+    top_missing_articles_id_dict = filter_missing(s, t, top_articles)
+    top_missing_articles = [a for a in top_articles if a in top_missing_articles_id_dict][:n]
+
+    ret =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
     return ret
 
 
@@ -66,11 +75,17 @@ def get_top_article_views(s):
 
 def get_article_views_parallel(s, articles):
     """
-    Get the number of pageviews in the last 14 days for each article
+    Get the number of pageviews in the last 14 days for each article.
+    Does not play nice with uwsgi
     """
     p_pool = mp.Pool(4)
     return dict(p_pool.map(get_article_views, [(s, a) for a in articles]))
 
+
+def get_article_views_threaded(s, articles):
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+        result = executor.map(get_article_views, [(s, a) for a in articles])
+        return dict(result)
 
 def get_article_views(arg_tuple):
     """
@@ -90,18 +105,20 @@ def get_article_views(arg_tuple):
 
 def filter_missing(s, t, titles):
     """
-    Query wikidata to filer out articles in s that exist in t
+    Query wikidata to filter out articles in s that exist in t. Returns
+    a dict of missing articles and their wikidata ids
     """
     query = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' % (s, '|'.join(titles))
     response = requests.get(query).json()
-    missing = []
+    missing_article_id_dict = {}
     swiki = '%swiki' % s
     twiki = '%swiki' % t
     for k, v in response['entities'].items():
         if 'sitelinks' in v:
             if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
-                missing.append(v['sitelinks'][swiki]['title'].replace(' ', '_'))
-    return [t for t in titles if t in missing]
+                title = v['sitelinks'][swiki]['title'].replace(' ', '_')
+                missing_article_id_dict[title] = k
+    return missing_article_id_dict
 
 
 def wiki_search(s, seed, n):

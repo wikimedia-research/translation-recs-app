@@ -20,7 +20,6 @@ app = Flask(__name__)
 
 
 def json_response(dat):
-    print(json.dumps(dat))
     resp = Response(response=json.dumps(dat),
         status=200, \
         mimetype="application/json")
@@ -33,7 +32,7 @@ def home():
     return render_template(
         'index.html',
         language_pairs=json.dumps(translation_directions),
-        language_codes=json.dumps(language_codes)
+        language_codes=json.dumps(language_codes_map)
     )
 
 
@@ -51,6 +50,11 @@ def seed_recommendations():
     article = request.args.get('article')
     n = request.args.get('n')
 
+    if request.args.get('pageviews') == 'false':
+        pageviews = False
+    else:
+        pageviews = True
+
     try:
         n = int(n)
     except:
@@ -67,7 +71,7 @@ def seed_recommendations():
 
     if article:
         ret['articles'] = get_seeded_recommendations(
-            s, t, article, n
+            s, t, article, n, pageviews
         )
     else:
         ret['articles'] = get_global_recommendations(
@@ -88,21 +92,26 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '--language_codes', required=False,
-    default=os.path.join(parentdir, 'language_codes.json'),
-    help='path to json dictionary from language codes to friendly names'
+    '--language_codes_map', required=False,
+    default=os.path.join(parentdir, 'language_codes_map.json'),
+    help='path to json dictionary from language codes to friendly names for served language pairs'
 )
 
 args = parser.parse_args()
 app.debug = args.debug
 
-language_codes = json.load(open(args.language_codes))
+language_codes =  json.load(open(os.path.join(parentdir, 'language_codes.json')))
+
+language_codes_map = json.load(open(args.language_codes_map))
 translation_directions = {}
-for k1 in language_codes.keys():
-    translation_directions[k1] = []
-    for k2 in language_codes.keys():
-        if k1!=k2:
-            translation_directions[k1].append(k2)
+for s in language_codes_map.keys():
+    translation_directions[s] = []
+    for t in language_codes_map.keys():
+        if s==t:
+            continue
+        translation_directions[s].append(t)
+
+
 
 
 if __name__ == '__main__':
