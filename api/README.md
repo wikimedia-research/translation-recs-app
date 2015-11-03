@@ -26,7 +26,7 @@
 
 * **Sample Call:**
 
-  http://recommend.wmflabs.org/api?s=en&t=fr&n=3&seed=Apple
+  http://recommend.wmflabs.org/api?s=en&t=fr&n=3&article=Apple
 
   
   ```
@@ -34,19 +34,19 @@
   {
     "articles": [
         {
-            "pageviews": 233735,
-            "title": "Lincoln's_Lost_Speech",
-            "wikidata_id": "Q6550353"
+            "pageviews": 3221,
+            "title": "Mutsu_(apple)",
+            "wikidata_id": "Q2613423"
         },
         {
-            "pageviews": 120015,
-            "title": "Tracking_(education)",
-            "wikidata_id": "Q466845"
+            "pageviews": 127,
+            "title": "Liveland_Raspberry_apple",
+            "wikidata_id": "Q19597760"
         },
         {
-            "pageviews": 70513,
-            "title": "Hillary_Clinton_presidential_campaign,_2016",
-            "wikidata_id": "Q19872173"
+            "pageviews": 91,
+            "title": "Eva_(apple)",
+            "wikidata_id": "Q5414989"
         }
     ]
   }
@@ -67,7 +67,7 @@
 
   To check out the API, go to:
   ```
-  http://localhost:5000/api?s=en&t=fr&n=3&seed=Apple
+  http://localhost:5000/api?s=en&t=fr&n=3&article=Apple
   ```
 
   You should get the same response as above
