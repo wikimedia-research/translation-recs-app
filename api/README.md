@@ -55,9 +55,9 @@
 
 *  **Running the API**
 
-  To start the api with a small test data set, execute
+  To start the api, execute
   ```
-  python api/recommender_api.py --translation_directions test_translation_directions.json
+  python api/recommender_api.py 
   ```
 
   Then navigate here to see the UI:
@@ -67,26 +67,9 @@
 
   To check out the API, go to:
   ```
-  http://localhost:5000/?s=test_source&t=test_target&article=Bannana
+  http://localhost:5000/api?s=en&t=fr&n=3&seed=Apple
   ```
 
-  You should get this response:
+  You should get the same response as above
 
-  ```
-  {
-    "articles": [
-      {
-        "pageviews": 15209,
-        "title": "Bannana"
-      },
-      {
-        "pageviews": 11726,
-        "title": "Pear"
-      },
-      {
-        "pageviews": 33621,
-        "title": "Apple"
-      }
-    ]
-  }
-  ```
+  
