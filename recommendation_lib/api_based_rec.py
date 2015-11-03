@@ -22,13 +22,13 @@ def get_seeded_recommendations(s, t, seed, n):
     if len(titles) == 0:
         print('All articles exist in target')
         return []
-    return  [{"pageviews": 233735, "wikidata_id": "", "title": "Lincoln's_Lost_Speech"}, {"pageviews": 120015, "wikidata_id": "", "title": "Tracking_(education)"}]
 
 
-    article_pv_dict = get_article_views_parallel(s, titles)
+    #article_pv_dict = get_article_views_parallel(s, titles)
+
+    article_pv_dict = dict(get_article_views((s,t)) for t in titles)
     ret =  [{'title': a, 'pageviews': article_pv_dict[a],'wikidata_id': ''} for a in titles]
-    return  [{"pageviews": 233735, "wikidata_id": "", "title": "Lincoln's_Lost_Speech"}, {"pageviews": 120015, "wikidata_id": "", "title": "Tracking_(education)"}]
-
+    return ret
 
 
 def get_global_recommendations(s, t, n):
