@@ -14,22 +14,18 @@ def get_seeded_recommendations(s, t, seed, n, pageviews=True):
     Returns n articles in s missing in t based on a search for seed
     """
     articles = wiki_search(s, seed, 3*n)
-    if len(articles) ==0:
-        print('No Search Results')
-        return []
+    
+    missing_article_id_dict = find_missing(s, t, articles)
+    disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
 
-    missing_article_id_dict = filter_missing(s, t, articles)
-    missing_articles = [a for a in articles if a in missing_article_id_dict][:n] #keep search ranking order
-
-    if len(missing_articles) == 0:
-        print('All articles exist in target')
-        return []
+    missing_articles = [ a for a in articles \
+                         if a in missing_article_id_dict \
+                         and a not in disambiguation_pages][:n] #keep search ranking order
 
     missing_article_pv_dict  = defaultdict(int)
 
     if pageviews:
         missing_article_pv_dict = get_article_views_threaded(s, missing_articles)
-        #missing_article_pv_dict = dict(get_article_views((s,t)) for t in missing_article_id_dict.keys())
 
     ret =  [{'title': a,
              'pageviews': missing_article_pv_dict[a],
@@ -45,12 +41,97 @@ def get_global_recommendations(s, t, n):
     top_article_pv_dict = get_top_article_views(s)
     # dont include top hits and limit the number to filter
     top_articles = list(top_article_pv_dict.keys())[3:300] 
-    top_missing_articles_id_dict = filter_missing(s, t, top_articles)
+    top_missing_articles_id_dict = find_missing(s, t, top_articles)
     top_missing_articles = [a for a in top_articles if a in top_missing_articles_id_dict][:n]
 
     ret =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
     return ret
 
+
+def wiki_search(s, seed, n):
+    """
+    Query wiki search for articles related to seed
+    """
+    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
+    params = {
+        'action': 'query',
+        'list': 'search',
+        'format': 'json',
+        'srsearch': seed,
+        'srnamespace' : 0,
+        'srwhat': 'text',
+        'srprop': 'wordcount',
+        'srlimit': n
+
+    }
+    response = requests.get(mw_api, params=params).json()['query']['search']
+    results =  [r['title'].replace(' ', '_') for r in response]
+
+    if len(results) == 0:
+        print('No Search Results')
+    return results
+
+"""
+def google_search(s, article, n = 10):
+    q = 'site:%s.wikipedia.org %s' % (s, article)
+    results = list(search(q, stop=n))
+    main_articles = []
+    for r in results:
+        if r.startswith('https://en.wikipedia.org/wiki'):
+            r = r[30:]
+            if ':' not in r and '%3' not in r:
+                main_articles.append(r)
+    return main_articles
+"""
+
+def find_missing(s, t, titles):
+    """
+    Query wikidata to find articles in s that exist in t. Returns
+    a dict of missing articles and their wikidata ids
+    """
+
+    missing_article_id_dict = {}
+    swiki = '%swiki' % s
+    twiki = '%swiki' % t
+
+
+    query = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' % (s, '|'.join(titles))
+    response = requests.get(query).json()
+
+    if 'entities' not in response:
+        print ('None of the titles have a Wikidata Item')
+        return {}
+
+    for k, v in response['entities'].items():
+        if 'sitelinks' in v:
+            if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
+                title = v['sitelinks'][swiki]['title'].replace(' ', '_')
+                missing_article_id_dict[title] = k
+    return missing_article_id_dict
+
+
+
+def find_disambiguation(s, titles):
+    """
+    Returns the subset of titles that are disambiguation pages
+    """
+    if len(titles) ==0:
+        print('No Disambiguation pages: titles list is empty')
+        return set()
+
+    query = 'https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops&ppprop=disambiguation&format=json&titles=%s' % (s, '|'.join(titles))
+    response = requests.get(query).json()
+    disambiguation = set()
+
+    if 'query' not in response and 'pages' not in response['query']:
+        print('Error finding disambiguation pages')
+        return set()
+
+    for k,v in response['query']['pages'].items():
+        if 'pageprops' in v and 'disambiguation' in v['pageprops']:
+            title = v['title'].replace(' ', '_')
+            disambiguation.add(title)
+    return disambiguation    
 
 
 
@@ -73,16 +154,11 @@ def get_top_article_views(s):
 
 
 
-def get_article_views_parallel(s, articles):
+def get_article_views_threaded(s, articles):
     """
     Get the number of pageviews in the last 14 days for each article.
-    Does not play nice with uwsgi
     """
-    p_pool = mp.Pool(4)
-    return dict(p_pool.map(get_article_views, [(s, a) for a in articles]))
 
-
-def get_article_views_threaded(s, articles):
     with concurrent.futures.ThreadPoolExecutor(10) as executor:
         result = executor.map(get_article_views, [(s, a) for a in articles])
         return dict(result)
@@ -103,52 +179,9 @@ def get_article_views(arg_tuple):
     return (article, sum([x['views'] for x in response['items']]))
 
 
-def filter_missing(s, t, titles):
-    """
-    Query wikidata to filter out articles in s that exist in t. Returns
-    a dict of missing articles and their wikidata ids
-    """
-    query = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' % (s, '|'.join(titles))
-    response = requests.get(query).json()
-    missing_article_id_dict = {}
-    swiki = '%swiki' % s
-    twiki = '%swiki' % t
-    for k, v in response['entities'].items():
-        if 'sitelinks' in v:
-            if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
-                title = v['sitelinks'][swiki]['title'].replace(' ', '_')
-                missing_article_id_dict[title] = k
-    return missing_article_id_dict
 
 
-def wiki_search(s, seed, n):
-    """
-    Query wiki search for articles related to seed
-    """
-    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
-    params = {
-        'action': 'query',
-        'list': 'search',
-        'format': 'json',
-        'srsearch': seed,
-        'srnamespace' : 0,
-        'srwhat': 'text',
-        'srprop': 'wordcount',
-        'srlimit': n
 
-    }
-    response = requests.get(mw_api, params=params).json()['query']['search']
-    return [r['title'].replace(' ', '_') for r in response]
 
-"""
-def google_search(s, article, n = 10):
-    q = 'site:%s.wikipedia.org %s' % (s, article)
-    results = list(search(q, stop=n))
-    main_articles = []
-    for r in results:
-        if r.startswith('https://en.wikipedia.org/wiki'):
-            r = r[30:]
-            if ':' not in r and '%3' not in r:
-                main_articles.append(r)
-    return main_articles
-"""
+
+
