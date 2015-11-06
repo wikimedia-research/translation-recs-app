@@ -19,8 +19,9 @@
    **Optional:**
  
   - `n=[int]`  # of recommendations to fetch (default 10)
-  - `article=[string]` seed for article for personalized recommendations
+  - `article=[string]` seed article for personalized recommendations. Can be a list of seeds seperated by |
   - `pageviews=[true|false]` whether to include pageview counts in the response (default true)
+  - `search=[wiki|google|morelike]` which search algorithm to use (default morelike)
 
 
 

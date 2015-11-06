@@ -53,15 +53,18 @@ def get_recommendations():
 
 
     #optional args with defaults
-    n = request.args.get('n', 10)
+    n_default = 12
+    n = request.args.get('n', n_default)
     try:
-        n = max(int(n), 25)
+        n = min(int(n), 25)
     except:
-        n = 10
+        n = n_default
 
-    search = request.args.get('search', 'morelike')
+    search_default = 'morelike'
+    search = request.args.get('search', search_default)
     if search not in ('google', 'wiki', 'morelike'):
-        search = 'morelike'
+        search = search_default
+
 
     pageviews = request.args.get('pageviews', 'true')
     if  pageviews == 'false':
@@ -71,7 +74,7 @@ def get_recommendations():
 
     article = request.args.get('article')
     if article:
-        ret['articles'] = get_seeded_recommendations( s, t, article, n, pageviews )
+        ret['articles'] = get_seeded_recommendations( s, t, article, n, pageviews, search)
     else:
         ret['articles'] = get_global_recommendations( s, t, n)
 

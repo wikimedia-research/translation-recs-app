@@ -8,14 +8,43 @@ import time
 import multiprocessing as mp
 import concurrent.futures
 from google import search
+import math
+import itertools
+
+def search(s, seed, n, search_alg):
+    """
+    s: source language
+    seed: queries/articles seperated by pipe
+    n: final number of recommendations requested
+    Does a concurrent search for seeds using search_alg
+    """
+    terms = seed.split('|')
+    n_total = 3.0*n # boost to avoid counteract filter
+    n_per_term = math.ceil(n_total/ len(terms))
+
+    if search_alg =='wiki':
+        search_function = standard_wiki_search
+    elif search_alg == 'google':
+        search_function = google_search
+    else:
+        search_function = morelike_wiki_search
+
+
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+        f = lambda args: search_function(*args)
+        results = executor.map(f, [(s, term, n_per_term) for term in terms])
+        combined_results = list(itertools.chain(*zip(*results)))
+        print(combined_results)
+        return combined_results
 
 
 
-def get_seeded_recommendations(s, t, seed, n, pageviews=True):
+
+def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
     """
     Returns n articles in s missing in t based on a search for seed
     """
-    articles = morelike_wiki_search(s, seed, 5*n)
+    articles = search(s, seed, n, search_alg)
     
     missing_article_id_dict = find_missing(s, t, articles)
     disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
@@ -104,7 +133,7 @@ def wiki_search(s, seed, n, morelike):
     return results
 
 
-def google_search(s, article, n = 10):
+def google_search(s, article, n):
     q = 'site:%s.wikipedia.org %s' % (s, article)
     results = list(search(q, stop=1))
     main_articles = []
