@@ -7,13 +7,15 @@ import json
 import time
 import multiprocessing as mp
 import concurrent.futures
-#from google import search
+from google import search
+
+
 
 def get_seeded_recommendations(s, t, seed, n, pageviews=True):
     """
     Returns n articles in s missing in t based on a search for seed
     """
-    articles = wiki_search(s, seed, 3*n)
+    articles = morelike_wiki_search(s, seed, 5*n)
     
     missing_article_id_dict = find_missing(s, t, articles)
     disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
@@ -48,10 +50,39 @@ def get_global_recommendations(s, t, n):
     return ret
 
 
-def wiki_search(s, seed, n):
+def standard_wiki_search(s, seed, n):
+    return wiki_search(s, seed, n, False)
+
+
+def morelike_wiki_search(s, query, n):
+    #get an actual article from seed
+    seed_list = wiki_search(s, query, 1, False)
+
+    if seed_list: # we have an article seed
+        seed = seed_list[0]
+        if seed != query:
+            print('Query: %s  Article: %s' % (query, seed))
+        results = wiki_search(s, seed, n, True)
+        if results:
+            results.insert(0, seed)
+            print('Succesfull Morelike Search')
+            return results
+        else:
+            print('Failed Morelike Search')
+            return wiki_search(s, query, n, False)
+    else:
+        return []
+
+    
+
+
+
+def wiki_search(s, seed, n, morelike):
     """
     Query wiki search for articles related to seed
     """
+    if morelike:
+        seed = 'morelike:' + seed
     mw_api = 'https://%s.wikipedia.org/w/api.php' % s
     params = {
         'action': 'query',
@@ -62,27 +93,30 @@ def wiki_search(s, seed, n):
         'srwhat': 'text',
         'srprop': 'wordcount',
         'srlimit': n
-
     }
     response = requests.get(mw_api, params=params).json()['query']['search']
     results =  [r['title'].replace(' ', '_') for r in response]
-
     if len(results) == 0:
-        print('No Search Results')
+        if morelike:
+            print('No Morelike Search Results')
+        else:
+            print('No Wiki Search Results')
     return results
 
-"""
+
 def google_search(s, article, n = 10):
     q = 'site:%s.wikipedia.org %s' % (s, article)
-    results = list(search(q, stop=n))
+    results = list(search(q, stop=1))
     main_articles = []
     for r in results:
-        if r.startswith('https://en.wikipedia.org/wiki'):
+        if r.startswith('https://%s.wikipedia.org/wiki' % s):
             r = r[30:]
             if ':' not in r and '%3' not in r:
                 main_articles.append(r)
+    if len(main_articles) == 0:
+        print('No Google Search Results')
     return main_articles
-"""
+
 
 def find_missing(s, t, titles):
     """
@@ -160,15 +194,16 @@ def get_article_views_threaded(s, articles):
     """
 
     with concurrent.futures.ThreadPoolExecutor(10) as executor:
-        result = executor.map(get_article_views, [(s, a) for a in articles])
+        f = lambda args: get_article_views(*args)
+        result = executor.map(f, [(s, a) for a in articles])
         return dict(result)
 
-def get_article_views(arg_tuple):
+
+def get_article_views(s, article):
     """
     Get pv counts for a single article from pv api
     """
-    s = arg_tuple[0]
-    article = arg_tuple[1]
+    
     start = (datetime.utcnow() - relativedelta.relativedelta(days=1)).strftime('%Y%m%d00')
     stop = (datetime.utcnow() - relativedelta.relativedelta(days=15)).strftime('%Y%m%d00')
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%s.wikipedia/all-access/user/%s/daily/%s/%s"

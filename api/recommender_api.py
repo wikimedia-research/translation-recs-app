@@ -38,49 +38,49 @@ def home():
 
 
 @app.route('/api')
-def seed_recommendations():
+def get_recommendations():
     t1 = time.time()
+    ret = {'articles': []}
 
-    if app.debug:
-        # add an artificial delay to test UI when in debug mode
-        time.sleep(0)
-
+    # required args
     s = request.args.get('s')
     t = request.args.get('t')
-    article = request.args.get('article')
-    n = request.args.get('n')
+    # make sure language codes are valid
+    if s not in language_codes or t not in language_codes:
+        return json_response(ret)
+    if s==t:
+        return json_response(ret)
 
-    if request.args.get('pageviews') == 'false':
+
+    #optional args with defaults
+    n = request.args.get('n', 10)
+    try:
+        n = max(int(n), 25)
+    except:
+        n = 10
+
+    search = request.args.get('search', 'morelike')
+    if search not in ('google', 'wiki', 'morelike'):
+        search = 'morelike'
+
+    pageviews = request.args.get('pageviews', 'true')
+    if  pageviews == 'false':
         pageviews = False
     else:
         pageviews = True
 
-    try:
-        n = int(n)
-    except:
-        n = 10
-
-    ret = {'articles': []}
-
-    # make sure language codes are valid
-    if s not in language_codes or t not in language_codes:
-        return json_response(ret)
-
-    if s==t:
-        return json_response(ret)
-
+    article = request.args.get('article')
     if article:
-        ret['articles'] = get_seeded_recommendations(
-            s, t, article, n, pageviews
-        )
+        ret['articles'] = get_seeded_recommendations( s, t, article, n, pageviews )
     else:
-        ret['articles'] = get_global_recommendations(
-            s, t, n
-        )
+        ret['articles'] = get_global_recommendations( s, t, n)
+
+
     t2 = time.time()
     print('Total:', t2-t1)
 
     return json_response(ret)
+
 
 @app.after_request
 def after_request(response):
@@ -89,9 +89,9 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   return response
 
+
+
 parser = argparse.ArgumentParser()
-
-
 parser.add_argument(
     '--debug', required=False, action="store_true",
     help='run in debug mode'
