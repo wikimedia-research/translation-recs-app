@@ -123,7 +123,13 @@ def wiki_search(s, seed, n, morelike):
         'srprop': 'wordcount',
         'srlimit': n
     }
-    response = requests.get(mw_api, params=params).json()['query']['search']
+    response = requests.get(mw_api, params=params).json()
+
+    if 'query' not in response or 'search' not in response['query']:
+        print('Search API error')
+        return []
+
+    response = response['query']['search']
     results =  [r['title'].replace(' ', '_') for r in response]
     if len(results) == 0:
         if morelike:
