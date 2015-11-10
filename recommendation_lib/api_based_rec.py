@@ -10,6 +10,8 @@ import concurrent.futures
 from google import search
 import math
 import itertools
+from pprint import pprint
+
 
 def search(s, seed, n, search_alg):
     """
@@ -34,7 +36,6 @@ def search(s, seed, n, search_alg):
         f = lambda args: search_function(*args)
         results = executor.map(f, [(s, term, n_per_term) for term in terms])
         combined_results = list(itertools.chain(*zip(*results)))
-        print(combined_results)
         return combined_results
 
 
@@ -47,20 +48,25 @@ def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
     articles = search(s, seed, n, search_alg)
     
     missing_article_id_dict = find_missing(s, t, articles)
-    disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
+    missing_articles = missing_article_id_dict.keys()
 
-    missing_articles = [ a for a in articles \
+    disambiguation_pages = find_disambiguation(s, missing_articles)
+    black_list = find_black_listed_articles(s, missing_articles)
+    print(black_list)
+
+    rec_articles = [ a for a in articles \
                          if a in missing_article_id_dict \
-                         and a not in disambiguation_pages][:n] #keep search ranking order
+                         and a not in disambiguation_pages \
+                         and a not in black_list][:n] #keep search ranking order
 
-    missing_article_pv_dict  = defaultdict(int)
+    rec_article_pv_dict  = defaultdict(int)
 
     if pageviews:
-        missing_article_pv_dict = get_article_views_threaded(s, missing_articles)
+        rec_article_pv_dict = get_article_views_threaded(s, rec_articles)
 
     ret =  [{'title': a,
-             'pageviews': missing_article_pv_dict[a],
-             'wikidata_id': missing_article_id_dict[a]} for a in missing_articles]
+             'pageviews': rec_article_pv_dict[a],
+             'wikidata_id': missing_article_id_dict[a]} for a in rec_articles]
 
     return ret
 
@@ -188,7 +194,7 @@ def find_disambiguation(s, titles):
         print('No Disambiguation pages: titles list is empty')
         return set()
 
-    query = 'https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops&ppprop=disambiguation&format=json&titles=%s' % (s, '|'.join(titles))
+    query = 'https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops|categories&ppprop=disambiguation&format=json&titles=%s' % (s, '|'.join(titles))
     response = requests.get(query).json()
     disambiguation = set()
 
@@ -201,6 +207,26 @@ def find_disambiguation(s, titles):
             title = v['title'].replace(' ', '_')
             disambiguation.add(title)
     return disambiguation    
+
+
+
+def find_black_listed_articles(s, titles):
+    patterns = {
+        'en' : {'prefixes' : ['List_of', 'Index_of'], },
+    }
+
+    black_list = set()
+
+    for t in titles:
+        for prefix in  patterns['en']['prefixes']:
+            if t.startswith(prefix):
+                black_list.add(t)
+
+    return black_list
+
+
+
+
 
 
 
