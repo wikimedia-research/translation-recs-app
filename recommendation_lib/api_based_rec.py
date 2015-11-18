@@ -12,7 +12,6 @@ import math
 import itertools
 from pprint import pprint
 
-
 def search(s, seed, n, search_alg):
     """
     s: source language
@@ -48,25 +47,20 @@ def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
     articles = search(s, seed, n, search_alg)
     
     missing_article_id_dict = find_missing(s, t, articles)
-    missing_articles = missing_article_id_dict.keys()
+    disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
 
-    disambiguation_pages = find_disambiguation(s, missing_articles)
-    black_list = find_black_listed_articles(s, missing_articles)
-    print(black_list)
-
-    rec_articles = [ a for a in articles \
+    missing_articles = [ a for a in articles \
                          if a in missing_article_id_dict \
-                         and a not in disambiguation_pages \
-                         and a not in black_list][:n] #keep search ranking order
+                         and a not in disambiguation_pages][:n] #keep search ranking order
 
-    rec_article_pv_dict  = defaultdict(int)
+    missing_article_pv_dict  = defaultdict(int)
 
     if pageviews:
-        rec_article_pv_dict = get_article_views_threaded(s, rec_articles)
+        missing_article_pv_dict = get_article_views_threaded(s, missing_articles)
 
     ret =  [{'title': a,
-             'pageviews': rec_article_pv_dict[a],
-             'wikidata_id': missing_article_id_dict[a]} for a in rec_articles]
+             'pageviews': missing_article_pv_dict[a],
+             'wikidata_id': missing_article_id_dict[a]} for a in missing_articles]
 
     return ret
 
@@ -77,8 +71,19 @@ def get_global_recommendations(s, t, n):
     """
     top_article_pv_dict = get_top_article_views(s)
     # dont include top hits and limit the number to filter
-    top_articles = list(top_article_pv_dict.keys())[3:300] 
-    top_missing_articles_id_dict = find_missing(s, t, top_articles)
+    top_articles = list(top_article_pv_dict.keys())
+    top_articles.remove('-')
+    top_missing_articles_id_dict = {}
+
+    step = 50
+    indices = list(zip(range(2, len(top_articles) - step, step), range(step, len(top_articles), step)))
+    
+    for start, stop in indices:
+        top_missing_articles_id_dict.update(find_missing(s, t, top_articles[start:stop]))
+        if len(top_missing_articles_id_dict) >= n:
+            break
+
+
     top_missing_articles = [a for a in top_articles if a in top_missing_articles_id_dict][:n]
 
     ret =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
@@ -107,9 +112,6 @@ def morelike_wiki_search(s, query, n):
             return wiki_search(s, query, n, False)
     else:
         return []
-
-    
-
 
 
 def wiki_search(s, seed, n, morelike):
@@ -182,6 +184,10 @@ def find_missing(s, t, titles):
             if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
                 title = v['sitelinks'][swiki]['title'].replace(' ', '_')
                 missing_article_id_dict[title] = k
+
+    if len(missing_article_id_dict) == 0:
+        print("None of the source articles missing in the target")
+
     return missing_article_id_dict
 
 
@@ -194,7 +200,7 @@ def find_disambiguation(s, titles):
         print('No Disambiguation pages: titles list is empty')
         return set()
 
-    query = 'https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops|categories&ppprop=disambiguation&format=json&titles=%s' % (s, '|'.join(titles))
+    query = 'https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops&ppprop=disambiguation&format=json&titles=%s' % (s, '|'.join(titles))
     response = requests.get(query).json()
     disambiguation = set()
 
@@ -210,26 +216,6 @@ def find_disambiguation(s, titles):
 
 
 
-def find_black_listed_articles(s, titles):
-    patterns = {
-        'en' : {'prefixes' : ['List_of', 'Index_of'], },
-    }
-
-    black_list = set()
-
-    for t in titles:
-        for prefix in  patterns['en']['prefixes']:
-            if t.startswith(prefix):
-                black_list.add(t)
-
-    return black_list
-
-
-
-
-
-
-
 def get_top_article_views(s):
     """
     Get top viewd articles from pageview api
@@ -239,12 +225,18 @@ def get_top_article_views(s):
     response = requests.get(query).json()
     article_pv_dict = OrderedDict()
 
+    # when T118913 is fixed, parse response with json
     try:
-        for d in json.loads(response['items'][0]['articles']):
+        for d in response['items'][0]['articles'][2:-2].split('},{'):
+            try:
+                d = json.loads('{' + d + '}')
+            except:
+                print('Malformed article dict')
+                continue
             if 'article' in d and ':' not in d['article'] and not d['article'].startswith('List'):
                 article_pv_dict[d['article']] =  d['views']
     except:
-        print('PV TOP Article API response malformed')
+        print('PV API response malformed')
     return article_pv_dict
 
 
