@@ -72,7 +72,9 @@ def get_global_recommendations(s, t, n):
     top_article_pv_dict = get_top_article_views(s)
     # dont include top hits and limit the number to filter
     top_articles = list(top_article_pv_dict.keys())
-    top_articles.remove('-')
+    if '-' in top_articles:
+        top_articles.remove('-')
+
     top_missing_articles_id_dict = {}
 
     step = 50
@@ -222,17 +224,13 @@ def get_top_article_views(s):
     """
     dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
+    print(query)
     response = requests.get(query).json()
     article_pv_dict = OrderedDict()
-
+    print(response['items'][0]['articles'][0])
     # when T118913 is fixed, parse response with json
     try:
-        for d in response['items'][0]['articles'][2:-2].split('},{'):
-            try:
-                d = json.loads('{' + d + '}')
-            except:
-                print('Malformed article dict')
-                continue
+        for d in response['items'][0]['articles']:
             if 'article' in d and ':' not in d['article'] and not d['article'].startswith('List'):
                 article_pv_dict[d['article']] =  d['views']
     except:
