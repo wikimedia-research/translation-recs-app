@@ -15,7 +15,7 @@
         </a>
         <span class={ hidden: !hovering }>
 
-            <button class="ui top right corner icon button pointing personalize dropdown link">
+            <div class="ui icon top right corner pointing dropdown button">
                 <i class="flag icon"></i>
                 <div class="menu">
                     <div class="item" onclick={ addToPersonalBlacklist }>
@@ -25,7 +25,7 @@
                         Remove, this is not notable for { target } wikipedia
                     </div>
                 </div>
-            </button>
+            </div>
         </span>
     </div>
 
