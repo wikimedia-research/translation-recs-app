@@ -78,7 +78,7 @@
             }
         }
 
-        var previewRoot = 'http://rest.wikimedia.org/' + opts.from + '.wikipedia.org/v1/page/html/';
+        var previewRoot = 'https://rest.wikimedia.org/' + opts.from + '.wikipedia.org/v1/page/html/';
 
         self.show = function () {
             var showing = self.articles[self.showIndex];
@@ -86,12 +86,12 @@
             self.translateLink = self.translateRoot + '&page=' + showing.linkTitle;
             self.articleLink = self.articleRoot + showing.linkTitle;
 
-            $.get(previewRoot + showing.title).done(function (data) {;
+            $.get(previewRoot + showing.title).done(function (data) {
                 self.showPreview(showing, data);
             }).fail(function (data) {
                 self.showPreview(showing, 'No Internet');
             });
-        }
+        };
 
         self.showPreview = function (showing, body) {
             $('.preview.body', self.root).html(body);
@@ -107,7 +107,7 @@
             $('.ui.dropdown', self.root).dropdown();
 
             self.update();
-        }
+        };
 
         addToPersonalBlacklist () {
             opts.remove(self.articles[self.showIndex], true);
