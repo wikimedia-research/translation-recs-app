@@ -1,59 +1,58 @@
-<preview class="ui modal preview">
-
-    <div class="ui three quarters scrollable container">
-        <h2 class="ui header">{ title }</h2>
-        <div class="preview body"></div>
-    </div>
-    <div class="ui menu">
-        <div class="item">
-            <div class="ui icon top right corner pointing dropdown button">
-                <i class="flag icon"></i>
-                <div class="menu">
-                    <div class="item" onclick={ addToPersonalBlacklist }>
-                        Remove, I am not interested
+<preview>
+    <div id="previewModal" class="modal fade" role="dialog" tabindex="-1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <h4 class="modal-title col-xs-8">{title}</h4>
+                            <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal">
+                                <h4 class="m-y-0">&#x274c;</h4>
+                            </button>
+                            <a role="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" target="_blank" href={articleLink}>
+                                <h4 class="m-y-0">&#x2197;</h4>
+                            </a>
+                        </div>
                     </div>
-                    <div class="item" onclick={ addToGlobalBlacklist }>
-                        Remove, this is not notable for { opts.to } wikipedia
+
+                </div>
+                <div class="modal-body">
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <iframe id="previewDiv"></iframe>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="item">
-            <button class={
-                disabled: showIndex === 0,
-                ui: true, icon: true, button: true
-            } onclick={ left }>
-                <i class="grey chevron left icon"></i>
-            </button>
-        </div>
-        <div class="item">
-            <button class={
-                disabled: showIndex > (articles.length - 2),
-                ui: true, icon: true, button: true
-            } onclick={ right }>
-                <i class="grey chevron right icon"></i>
-            </button>
-        </div>
-        <div class="right menu">
-            <div class="item">
-                <div class="ui teal buttons">
-                    <a class="ui primary translate button" target="_blank"
-                       href={ translateLink }>
-                    <i class="write icon"></i>
-                       Translate
-                    </a>
-                    <div class="ui dropdown icon button">
-                       <i class="dropdown icon"></i>
-                       <div class="menu">
-                           <div class="item">
-                               <i class="unhide icon"></i><a target="_blank"
-                                    href={ articleLink }>
-                               View article
-                               </a>
-                            </div>
-                       </div>
+                <div class="modal-footer">
+                    <button type="button" onclick={left}
+                            class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
+                            disabled: showIndex === 0}>
+                        <h4 class="m-y-0"><</h4>
+                    </button>
+                    <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-left" data-toggle="dropdown">
+                        <h4 class="m-y-0">&#x2691;</h4>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-left">
+                        <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                            Remove, I am not interested
+                        </button>
+                        <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                            Remove, this is not notable for {opts.to} wikipedia
+                        </button>
                     </div>
-		</div>
+                    <button type="button" onclick={right}
+                            class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
+                            disabled: showIndex > (articles.length - 2)}>
+                        <h4 class="m-y-0">></h4>
+                    </button>
+                    <div class="btn-group">
+                        <a role="button" class="btn btn-primary" target="_blank" href={translateLink}>Translate</a>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">Create from scratch</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -85,38 +84,37 @@
             self.title = showing.title;
             self.translateLink = self.translateRoot + '&page=' + showing.linkTitle;
             self.articleLink = self.articleRoot + showing.linkTitle;
+            self.previewUrl = previewRoot + showing.linkTitle;
 
-            $.get(previewRoot + showing.title).done(function (data) {
-                self.showPreview(showing, data);
+            $('#previewDiv').attr("srcdoc", "Loading...");
+
+            $.get(self.previewUrl).done(function (data) {
+                data = data.replace('</head>', '<style type="text/css">.mw-body {margin: 0; border: none; padding: 0;}</style></head>');
+                self.showPreview(data);
             }).fail(function (data) {
-                self.showPreview(showing, 'No Internet');
+                self.showPreview('No Internet');
             });
         };
 
-        self.showPreview = function (showing, body) {
-            $('.preview.body', self.root).html(body);
-
-            $(self.root).modal({
-                onHide: function () {
-                    // strip out the nasty CSS
-                    $('.preview.body', self.root).html('');
-                },
-            }).modal('show');
-
-            // enable any dropdown
-            $('.ui.dropdown', self.root).dropdown();
+        self.showPreview = function (data) {
+            $('#previewModal').on('shown.bs.modal', function (e) {
+                // Necessary for Firefox, which has problems reloading the iframe
+                $('#previewDiv').attr("srcdoc", data);
+            });
+            $('#previewDiv').attr("srcdoc", data);
+            $('#previewModal').modal('show');
 
             self.update();
         };
 
         addToPersonalBlacklist () {
             opts.remove(self.articles[self.showIndex], true);
-            $(self.root).modal('hide');
+            $('#previewModal').modal('hide');
         }
 
         addToGlobalBlacklist () {
             opts.remove(self.articles[self.showIndex], false);
-            $(self.root).modal('hide');
+            $('#previewModal').modal('hide');
         }
 
         left () {
@@ -136,6 +134,10 @@
         if (isFinite(self.showIndex)) {
             self.show();
         }
+
+        $('#previewModal').on('hide.bs.modal', function (e) {
+            $('#previewDiv').attr("srcdoc", "");
+        });
     </script>
 
 </preview>

@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "dependencies": {
-    "semantic-ui": "~2.0.4",
+    "bootstrap": "4.0.0-alpha.2",
+    "tether": "1.1.1",
     "riot": "~2.2.2",
     "store2": "~2.3.0"
   },

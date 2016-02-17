@@ -26,7 +26,6 @@ def json_response(dat):
     return(resp)
 
 
-
 @app.route('/')
 def home():
     return render_template(
@@ -34,7 +33,6 @@ def home():
         language_pairs=json.dumps(translation_directions),
         language_codes=json.dumps(language_codes_map)
     )
-
 
 
 @app.route('/api')
@@ -93,7 +91,6 @@ def after_request(response):
   return response
 
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--debug', required=False, action="store_true",
@@ -119,8 +116,6 @@ for s in language_codes_map.keys():
         if s==t:
             continue
         translation_directions[s].append(t)
-
-
 
 
 if __name__ == '__main__':

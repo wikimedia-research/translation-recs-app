@@ -1,69 +1,51 @@
-<Recommend class="ui">
-
-    <!--
-        two buttons for remove
-            filter client side
-
-        add a list of language mappings and make the dropdowns cascade
-    -->
-
-
-    <div class="ui nine column centered grid">
-        <div class="row">
-            <h2 class="header">Articles Recommended for Translation</h2>
+<Recommend>
+    <div class="container">
+        <div class="row m-b-1 text-xs-center">
+            <h3>Articles Recommended for Translation</h3>
         </div>
-
-        <div class="stackable row">
-            <div class="three wide aligned column">
-                <h3>From</h3>
-                <select class="ui personalize dropdown" name="source" onchange={ refreshTargets }>
-                    <option each={ code in sources } value={ code }>
-                        { languageCodes[code] }
+        <div class="row m-b-1 text-xs-center">
+            <div class="col-sm-4 col-sm-offset-1 col-xs-6">
+                <h5>From</h5>
+                <select class="c-select form-control form-control-lg" name="source" onchange={refreshTargets}>
+                    <option each={code in sources} value={code}>
+                        {languageCodes[code]}
                     </option>
                 </select>
             </div>
-            <div class="tablet computer only three wide bottom aligned column">
-                <i class="ui big right arrow icon"></i>
+            <div class="col-sm-2 hidden-xs-down">
+                <h1 class="display-3">&rightarrow;</h1>
             </div>
-            <div class="three wide aligned column">
-                <h3>To</h3>
-                <select class="ui personalize dropdown recommendTarget" name="target" onchange={ fetchArticles }>
-                    <option each={ code in targets } value={ code }>
-                        { languageCodes[code] }
+            <div class="col-sm-4 col-xs-6">
+                <h5>To</h5>
+                <select class="c-select form-control form-control-lg" name="target" onchange={fetchArticles}>
+                    <option each={code in targets} value={code}>
+                        {languageCodes[code]}
                     </option>
                 </select>
             </div>
         </div>
-
-        <div class="ui middle aligned row form">
-
-            <div class="field">
-                <label>Articles Similar To (optional)</label>
-                <div class="fields">
-                    <div class="field">
-                        <input placeholder=" seed article" name="seedArticle"/>
-                    </div>
-                    <div class="field">
-                        <button class="ui button" onclick={ fetchArticles }>
-                            Recommend
-                        </button>
-                    </div>
-                </div>
-            </div>
-
+        <div class="row text-xs-center">
+            Articles Similar To (optional)
         </div>
-        <div class="row"></div>
-
-        <div class="ui basic segment">
-            <div class={
-                    ui: true, active: fetching, dimmer: true
-                }>
-                <div class="ui text loader">Preparing Article Recommendations</div>
+        <div class="row m-b-3">
+            <div class="col-sm-8 col-sm-offset-2 input-group">
+                <input type="text" class="form-control" placeholder="seed article" name="seedArticle" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-secondary" onclick={fetchArticles}>
+                        Recommend
+                    </button>
+                </span>
             </div>
+        </div>
+        <div class="text-xs-center" if={fetching}>
+            Preparing article recommendations...
+        </div>
+        <div class={invisible: fetching}>
             <articles></articles>
-            <div class="ui basic segment" if={ fetching }></div>
         </div>
     </div>
+
+    <preview></preview>
 
     <script>
         var self = this;
@@ -71,12 +53,22 @@
         self.languagePairs = window.translationAppGlobals.languagePairs;
         self.languageCodes = window.translationAppGlobals.languageCodes;
         self.sources = Object.keys(self.languagePairs).sort();
-        self.targets = [];
+        self.targets = self.languagePairs[self.sources[0]].sort();
         self.fetching = false;
 
-        self.fetchArticles = function () {
+        self.refreshTargets = function () {
+            self.targets = self.languagePairs[self.source.value].sort();
+            self.update();
+            if (self.targets) {
+                if (!self.fetching) {
+                    self.fetchArticles();
+                }
+            }
+        };
 
+        self.fetchArticles = function () {
             self.fetching = true;
+            self.update();
 
             var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
 
@@ -85,7 +77,7 @@
             }
 
             $.ajax({
-                url: url,
+                url: url
             }).complete(function () {
                 self.fetching = false;
                 self.update();
@@ -95,10 +87,10 @@
                 riot.mount('articles', {
                     articles: articles,
                     source: self.source.value,
-                    target: self.target.value,
+                    target: self.target.value
                 });
             });
-        }
+        };
 
         self.filter = function (articles) {
             var personalBlacklist = store(translationAppGlobals.personalBlacklistKey) || {},
@@ -108,27 +100,10 @@
                 return !personalBlacklist.hasOwnProperty(a.wikidata_id)
                     && !targetWikiBlacklist.hasOwnProperty(a.wikidata_id);
             });
-        }
+        };
 
-        self.refreshUI = function () {
-            $('.ui.dropdown', self.root).dropdown();
-        }
-
-        self.refreshTargets = function () {
-            self.targets = self.languagePairs[self.source.value].sort();
-            self.update();
-            if (self.targets) {
-                // NOTE: class name hack.  Semantic changes the html when making the dropdown
-                $('.ui.dropdown.recommendTarget', self.root).dropdown('set text', self.languageCodes[self.targets[0]]);
-                // NOTE: necessary hack to kick the dropdown back to life when the source changes
-                if (!self.fetching) {
-                    self.fetchArticles();
-                }
-            }
-        }
-
-        this.on('mount', function (){
-            this.refreshUI();
+        self.on('mount', function () {
+            self.fetchArticles();
         });
 
     </script>
