@@ -1,35 +1,27 @@
-.ui.three.quarters { height: 70vh; }
-.ui.scrollable { overflow-y: scroll; padding: 20px; position: relative; }
-
-/*.transparent { background-color: transparent!important; }*/
-/*.preview.title { position: absolute; left: 20px; margin-bottom: 10px; }*/
-
-.hidden { display: none; }
-
-.mask {
-    z-index: 1;
-    position: absolute;
-    background-color: white;
-    top: 0; right: 0; bottom: 0; left: 0;
-    padding: 20px;
+.borderless.dropdown-toggle::after {
+    content: none;
 }
 
-.tight.cards .card {
-    width: 400px !important;
-    text-align: left;
-    background-color: #f6f6f6 !important;
-}
-.tight.cards .card h3 {
-    margin: 10px 20px 0 10px !important;
-    line-height: 1.1em !important;
-}
-.tight.cards a img {
-    height: 50px !important;
+.vertical-center {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
-.tight.cards .top.right.corner.button {
-    position: absolute;
-    top: 0; right: 0; left: 92%; 
-    bottom: 50%;
-    width: 33px;
+.no-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.borderless {
+    border: none;
+}
+
+.modal-lg {
+    max-width: 98%;
+}
+
+.nav-item {
+    cursor: pointer;
 }
