@@ -19,7 +19,7 @@
                         <small class="text-muted">{pageviews} recent views</small>
                     </div>
                 </button>
-                <button type="button" class="btn btn-secondary dropdown-toggle borderless" data-toggle="dropdown"
+                <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-right" data-toggle="dropdown"
                         style="width: 10%; height: 100%;">
                     <span hidden={!hovering}>&#x2691;</span>
                 </button>
@@ -126,7 +126,6 @@
                     $(item).popover({
                         template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>'
                     });
-                    console.log('popover added');
                 } else {
                     $(item).popover('dispose');
                 }
