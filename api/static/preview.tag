@@ -49,7 +49,7 @@
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Create from scratch</a>
+                            <button class="btn dropdown-item" data-dismiss="modal" onclick={showCreate}>Create from scratch</button>
                         </div>
                     </div>
                 </div>
@@ -57,11 +57,15 @@
         </div>
     </div>
 
+    <create_article></create_article>
+
     <script>
         var self = this;
 
         self.articles = opts.articles || [];
         self.title = opts.title || '';
+        self.to = opts.to;
+        self.from = opts.from;
         self.translateRoot = '//' + opts.from + '.wikipedia.org/wiki/Special:ContentTranslation?' +
             'from=' + opts.from +
             '&to=' + opts.to +
@@ -129,6 +133,17 @@
                 self.showIndex ++;
                 self.show();
             }
+        }
+
+        showCreate (e) {
+            riot.mount('create_article', {
+                title: self.title,
+                to: self.to,
+                from: self.from,
+                remove: self.remove
+            });
+
+            $('#createModal').modal('show');
         }
 
         if (isFinite(self.showIndex)) {
