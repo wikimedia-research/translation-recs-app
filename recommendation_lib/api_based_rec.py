@@ -44,6 +44,8 @@ def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
     """
     Returns n articles in s missing in t based on a search for seed
     """
+
+    print('SEED', seed)
     articles = search(s, seed, n, search_alg)
     
     missing_article_id_dict = find_missing(s, t, articles)
