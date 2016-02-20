@@ -1,20 +1,21 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
         <title>Recommend</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/semantic-ui/dist/semantic.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
-
     <body>
-        <menu></menu>
+        <navigation></navigation>
 
         <div id="page">
         </div>
 
-        <script src="{{ url_for('static', filename='menu.tag') }}" type="riot/tag"></script>
-        <script src="{{ url_for('static', filename='Home.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('static', filename='navigation.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='Recommend.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='articles.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='About.tag') }}" type="riot/tag"></script>
@@ -22,21 +23,23 @@
 
         <script src="{{ url_for('static', filename='bower_components/riot/riot+compiler.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='bower_components/semantic-ui/dist/semantic.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/tether/dist/js/tether.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/store2/dist/store2.min.js') }}"></script>
 
         <script>
-        // globals from server
-        window.translationAppGlobals = {
-            languageCodes: JSON.parse('{{ language_codes | safe }}'),
-            languagePairs: JSON.parse('{{ language_pairs | safe }}'),
+            // globals from server
+            window.translationAppGlobals = {
+                languageCodes: JSON.parse('{{ language_codes | safe }}'),
+                languagePairs: JSON.parse('{{ language_pairs | safe }}'),
 
-            personalBlacklistKey: 'personal.blacklist',
-            globalBlacklistKey: 'not.notable.blacklist',
+                personalBlacklistKey: 'personal.blacklist',
+                globalBlacklistKey: 'not.notable.blacklist',
 
-            campaign: 'article-recommender-1',
-        };
+                campaign: 'article-recommender-1',
+            };
         </script>
         <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
+
 </html>

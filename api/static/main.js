@@ -2,10 +2,10 @@
 
 var items = [
     { view: 'Recommend' },
-    { view: 'About' },
+    { view: 'About' }
 ];
 
-riot.mount('menu', { items: items });
+riot.mount('navigation', { items: items });
 
 var page = document.getElementById('page');
 

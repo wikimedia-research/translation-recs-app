@@ -1,36 +1,39 @@
-<articles class="ui centered grid container tight cards">
+<articles>
 
-    <p if={ !articles || !articles.length } class="ui warning message">
+    <div class="row text-xs-center" if={ !articles || !articles.length }>
         No articles found.  Try without a seed article, or let us know if this keeps happening.
-    </p>
-
-    <div each={ articles } class="card"
-        onmouseover={ hoverIn }
-        onmouseout={ hoverOut }>
-
-        <a onclick={ preview }>
-            <img src={ thumbnail } class="ui left floated image" />
-            <h3>{ title }</h3>
-            <span class="meta">viewed { pageviews } times recently</span>
-        </a>
-        <span class={ hidden: !hovering }>
-
-            <button class="ui top right corner icon button pointing personalize dropdown link">
-                <i class="flag icon"></i>
-                <div class="menu">
-                    <div class="item" onclick={ addToPersonalBlacklist }>
-                        Remove, I am not interested
-                    </div>
-                    <div class="item" onclick={ addToGlobalBlacklist }>
-                        Remove, this is not notable for { target } wikipedia
-                    </div>
-                </div>
-            </button>
-        </span>
     </div>
-
-    <preview></preview>
-
+    <div class="list-group row">
+        <div each={articles} class="col-sm-6 m-b-1" onmouseover={hoverIn} onmouseout={hoverOut}>
+            <div class="btn-group list-group-item p-a-0" style="height: 5rem;">
+                <button type="button" class="btn btn-secondary p-y-0 borderless" style="width: 90%; height: 100%;" onclick={preview}
+                        data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>
+                    <div class="m-r-1 pull-xs-left" style="width: 50px; height: 100%">
+                        <img class="img-rounded vertical-center" src={thumbnail} if={thumbnail}/>
+                    </div>
+                    <h6 class="text-xs-left m-t-1 m-b-0 no-overflow"
+                        style="height: 1.5rem;">
+                        {title}
+                    </h6>
+                    <div class="pull-xs-left">
+                        <small class="text-muted">{pageviews} recent views</small>
+                    </div>
+                </button>
+                <button type="button" class="btn btn-secondary dropdown-toggle borderless" data-toggle="dropdown"
+                        style="width: 10%; height: 100%;">
+                    <span hidden={!hovering}>&#x2691;</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                        Remove, I am not interested
+                    </button>
+                    <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                        Remove, this is not notable for {target} wikipedia
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         var self = this;
@@ -45,8 +48,7 @@
             return $.ajax({
                 url: thumbQuery.replace('{source}', self.source) + article.title,
                 dataType: 'jsonp',
-                contentType: 'application/json',
-
+                contentType: 'application/json'
             }).done(function (data) {
                 var id = Object.keys(data.query.pages)[0],
                     page = data.query.pages[id];
@@ -59,7 +61,7 @@
                 self.update();
 
             });
-        }
+        };
 
         self.remove = function (article, personal) {
 
@@ -84,7 +86,7 @@
             var index = self.articles.indexOf(article);
             self.articles.splice(index, 1);
             self.update();
-        }
+        };
 
         addToPersonalBlacklist (e) {
             this.remove(e.item, true);
@@ -104,10 +106,6 @@
             });
         }
 
-        refresh () {
-            $('.ui.dropdown', self.root).dropdown();
-        }
-
         hoverIn (e) {
             e.item.hovering = true;
         }
@@ -119,6 +117,21 @@
         // kick off the loading of the articles
         var promises = self.articles.map(self.detail);
         $.when.apply(this, promises).then(self.refresh);
+
+        self.on('update', function () {
+            // add tooltips for truncated article names
+            $.each($('[data-toggle="popover"]'), function (index, item) {
+                var header = $(item)[0].getElementsByTagName('h6')[0];
+                if ($(header.scrollWidth)[0] > $(header.offsetWidth)[0]) {
+                    $(item).popover({
+                        template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>'
+                    });
+                    console.log('popover added');
+                } else {
+                    $(item).popover('dispose');
+                }
+            });
+        });
     </script>
 
 </articles>
