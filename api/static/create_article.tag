@@ -36,7 +36,7 @@
         self.title = opts.title || '';
         self.to = opts.to || '';
         self.from = opts.from || '';
-        self.createRoot = 'https://' + opts.to + '.wikipedia.org/w/index.php?action=edit&title=';
+        self.createRoot = 'https://' + opts.to + '.wikipedia.org/w/index.php?action=edit&redlink=1&title=';
         self.existsLinkRoot = 'https://' + opts.to + '.wikipedia.org/wiki/';
         self.targetTitle = '';
         self.isValid = false;
