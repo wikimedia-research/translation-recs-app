@@ -70,8 +70,8 @@
             'from=' + opts.from +
             '&to=' + opts.to +
             '&campaign=' + translationAppGlobals.campaign;
-
         self.articleRoot = '//' + opts.from + '.wikipedia.org/wiki/';
+        self.isSrcDocSupported = document.createElement('iframe').srcdoc !== undefined;
 
         self.index = -1;
         for (var i=0; i<self.articles.length; i++) {
@@ -90,7 +90,7 @@
             self.articleLink = self.articleRoot + showing.linkTitle;
             self.previewUrl = previewRoot + showing.linkTitle;
 
-            $('#previewDiv').attr("srcdoc", "Loading...");
+            self.setPreviewContent('Loading...');
 
             $.get(self.previewUrl).done(function (data) {
                 data = data.replace('</head>', '<style type="text/css">.mw-body {margin: 0; border: none; padding: 0;}</style></head>');
@@ -100,12 +100,25 @@
             });
         };
 
+        self.setPreviewContent = function (data) {
+            var iframe = $('#previewDiv')[0];
+            $(iframe).attr("srcdoc", data);
+            if (!self.isSrcDocSupported) {
+                // This is needed to get the iframe content to load in IE, since srcdoc isn't supported yet
+                // Found at github.com/jugglinmike/srcdoc-polyfill
+                var jsUrl = "javascript: window.frameElement.getAttribute('srcdoc');"
+                $(iframe).attr("src", jsUrl);
+                iframe.contentWindow.location = jsUrl;
+            }
+        };
+
         self.showPreview = function (data) {
             $('#previewModal').on('shown.bs.modal', function (e) {
                 // Necessary for Firefox, which has problems reloading the iframe
-                $('#previewDiv').attr("srcdoc", data);
+                self.setPreviewContent(data);
             });
-            $('#previewDiv').attr("srcdoc", data);
+
+            self.setPreviewContent(data);
             $('#previewModal').modal('show');
 
             self.update();
@@ -146,12 +159,14 @@
             $('#createModal').modal('show');
         }
 
-        if (isFinite(self.showIndex)) {
-            self.show();
-        }
-
         $('#previewModal').on('hide.bs.modal', function (e) {
-            $('#previewDiv').attr("srcdoc", "");
+            self.setPreviewContent('');
+        });
+
+        self.on('mount', function () {
+            if (isFinite(self.showIndex)) {
+                self.show();
+            }
         });
     </script>
 
