@@ -93,6 +93,11 @@
             self.setPreviewContent('Loading...');
 
             $.get(self.previewUrl).done(function (data) {
+                // Make all links in preview (1) work and (2) open in new window
+                // This depends on the string below appearing in the html returned from the rest endpoint
+                // More complex manipulation may be needed if this breaks
+                data = data.replace('<base href="', '<base target="_blank" href="https:');
+                // Get rid of some of the undesirable mediawiki styles
                 data = data.replace('</head>', '<style type="text/css">.mw-body {margin: 0; border: none; padding: 0;}</style></head>');
                 self.showPreview(data);
             }).fail(function (data) {
