@@ -1,3 +1,7 @@
+#sublime
+*.sublime-project
+*.sublime-workspace
+
 # External dependencies
 bower_components
 
