@@ -7,7 +7,6 @@ import json
 import time
 import multiprocessing as mp
 import concurrent.futures
-from google import search
 import math
 import itertools
 from pprint import pprint
@@ -25,8 +24,6 @@ def search(s, seed, n, search_alg):
 
     if search_alg =='wiki':
         search_function = standard_wiki_search
-    elif search_alg == 'google':
-        search_function = google_search
     else:
         search_function = morelike_wiki_search
 
@@ -150,19 +147,6 @@ def wiki_search(s, seed, n, morelike):
             print('No Wiki Search Results')
     return results
 
-
-def google_search(s, article, n):
-    q = 'site:%s.wikipedia.org %s' % (s, article)
-    results = list(search(q, stop=1))
-    main_articles = []
-    for r in results:
-        if r.startswith('https://%s.wikipedia.org/wiki' % s):
-            r = r[30:]
-            if ':' not in r and '%3' not in r:
-                main_articles.append(r)
-    if len(main_articles) == 0:
-        print('No Google Search Results')
-    return main_articles
 
 
 def find_missing(s, t, titles):
