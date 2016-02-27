@@ -7,7 +7,6 @@ import json
 import time
 import multiprocessing as mp
 import concurrent.futures
-from google import search
 import math
 import itertools
 from pprint import pprint
@@ -25,8 +24,6 @@ def search(s, seed, n, search_alg):
 
     if search_alg =='wiki':
         search_function = standard_wiki_search
-    elif search_alg == 'google':
-        search_function = google_search
     else:
         search_function = morelike_wiki_search
 
@@ -80,14 +77,15 @@ def get_global_recommendations(s, t, n):
     top_missing_articles_id_dict = {}
 
     step = 50
-    indices = list(zip(range(2, len(top_articles) - step, step), range(step, len(top_articles), step)))
+    indices = list(zip(range(0, len(top_articles) - step, step), range(step, len(top_articles), step)))
     
+    # check top articles in chunks of 50 for missing articles
     for start, stop in indices:
         top_missing_articles_id_dict.update(find_missing(s, t, top_articles[start:stop]))
         if len(top_missing_articles_id_dict) >= n:
             break
 
-
+    # get n missing articles sorted by view counts
     top_missing_articles = [a for a in top_articles if a in top_missing_articles_id_dict][:n]
 
     ret =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
@@ -151,19 +149,6 @@ def wiki_search(s, seed, n, morelike):
     return results
 
 
-def google_search(s, article, n):
-    q = 'site:%s.wikipedia.org %s' % (s, article)
-    results = list(search(q, stop=1))
-    main_articles = []
-    for r in results:
-        if r.startswith('https://%s.wikipedia.org/wiki' % s):
-            r = r[30:]
-            if ':' not in r and '%3' not in r:
-                main_articles.append(r)
-    if len(main_articles) == 0:
-        print('No Google Search Results')
-    return main_articles
-
 
 def find_missing(s, t, titles):
     """
@@ -175,22 +160,36 @@ def find_missing(s, t, titles):
     swiki = '%swiki' % s
     twiki = '%swiki' % t
 
+    def query_wikidata(titles):
+        query_template = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' 
+        query = query_template % (s, '|'.join(titles))
+        response = requests.get(query)
+        if response:
+            return response.json()
+        else:
+            print('Bad Wikidata API response')
+            return {}
 
-    query = 'https://www.wikidata.org/w/api.php?action=wbgetentities&sites=%swiki&titles=%s&props=sitelinks/urls&format=json' % (s, '|'.join(titles))
-    response = requests.get(query).json()
+    with concurrent.futures.ThreadPoolExecutor(10) as executor:
+        chunk_size = 10
+        chunks = [titles[i:i+chunk_size] for i in range(0, len(titles), chunk_size)]
+        results = executor.map(query_wikidata, chunks)
+    
 
-    if 'entities' not in response:
-        print ('None of the titles have a Wikidata Item')
-        return {}
+    for result in results:
 
-    for k, v in response['entities'].items():
-        if 'sitelinks' in v:
-            if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
-                title = v['sitelinks'][swiki]['title'].replace(' ', '_')
-                missing_article_id_dict[title] = k
+        if 'entities' not in result:
+            print ('None of the titles have a Wikidata Item')
+            continue
 
-    if len(missing_article_id_dict) == 0:
-        print("None of the source articles missing in the target")
+        for k, v in result['entities'].items():
+            if 'sitelinks' in v:
+                if swiki in v['sitelinks'] and twiki not in v['sitelinks']:
+                    title = v['sitelinks'][swiki]['title'].replace(' ', '_')
+                    missing_article_id_dict[title] = k
+
+        if len(missing_article_id_dict) == 0:
+            print("None of the source articles missing in the target")
 
     return missing_article_id_dict
 
