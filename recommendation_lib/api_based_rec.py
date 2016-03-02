@@ -19,7 +19,7 @@ def search(s, seed, n, search_alg):
     Does a concurrent search for seeds using search_alg
     """
     terms = seed.split('|')
-    n_total = 3.0*n # boost to avoid counteract filter
+    n_total = 5.0*n # boost to avoid counteract filter
     n_per_term = math.ceil(n_total/ len(terms))
 
     if search_alg =='wiki':
@@ -27,12 +27,27 @@ def search(s, seed, n, search_alg):
     else:
         search_function = morelike_wiki_search
 
-
     with concurrent.futures.ThreadPoolExecutor(10) as executor:
         f = lambda args: search_function(*args)
         results = executor.map(f, [(s, term, n_per_term) for term in terms])
-        combined_results = list(itertools.chain(*zip(*results)))
-        return combined_results
+        article_lists = []
+        error_messages = set()
+        for recs, msg in results:
+            if recs:
+                article_lists.append(list(recs))
+            if msg:
+                error_messages.add(msg)
+
+        if len(error_messages) == 0:
+            error_message = None
+        else:
+            error_message = ' '.join(error_messages)
+
+        if len(article_lists) == 0:
+            return None, error_message
+        else:
+            return list(itertools.chain(*zip(*article_lists))), None # if there is something its ok
+        
 
 
 
@@ -42,9 +57,11 @@ def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
     Returns n articles in s missing in t based on a search for seed
     """
 
-    print('SEED', seed)
-    articles = search(s, seed, n, search_alg)
-    
+    articles, error = search(s, seed, n, search_alg)
+
+    if not articles:
+        return None, error
+
     missing_article_id_dict = find_missing(s, t, articles)
     disambiguation_pages = find_disambiguation(s, missing_article_id_dict.keys())
 
@@ -52,16 +69,19 @@ def get_seeded_recommendations(s, t, seed, n, pageviews, search_alg):
                          if a in missing_article_id_dict \
                          and a not in disambiguation_pages][:n] #keep search ranking order
 
+    if len(missing_articles) == 0:
+        return None, 'None of the articles similar to %s in %s that are linked to Wikidata and are missing in %s' % (seed, s, t)
+
     missing_article_pv_dict  = defaultdict(int)
 
     if pageviews:
         missing_article_pv_dict = get_article_views_threaded(s, missing_articles)
 
-    ret =  [{'title': a,
+    recs =  [{'title': a,
              'pageviews': missing_article_pv_dict[a],
              'wikidata_id': missing_article_id_dict[a]} for a in missing_articles]
 
-    return ret
+    return recs, None
 
 
 def get_global_recommendations(s, t, n):
@@ -69,6 +89,10 @@ def get_global_recommendations(s, t, n):
     Returns n most viewd articles yesterday in s missing in t
     """
     top_article_pv_dict = get_top_article_views(s)
+
+    if len(top_article_pv_dict) == 0:
+        return None, "Could not get most popular articles for %s from pageview API. Try using a seed article." % s
+
     # dont include top hits and limit the number to filter
     top_articles = list(top_article_pv_dict.keys())
     if '-' in top_articles:
@@ -88,8 +112,11 @@ def get_global_recommendations(s, t, n):
     # get n missing articles sorted by view counts
     top_missing_articles = [a for a in top_articles if a in top_missing_articles_id_dict][:n]
 
-    ret =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
-    return ret
+    if len(top_missing_articles) == 0:
+        return None, "None of the most popular articles in %s that linked to Wikidata are missing in %s" % (s, t)
+
+    recs =  [{'title': a, 'pageviews': top_article_pv_dict[a],'wikidata_id': top_missing_articles_id_dict[a]} for a in top_missing_articles]
+    return recs, None
 
 
 def standard_wiki_search(s, seed, n):
@@ -98,22 +125,22 @@ def standard_wiki_search(s, seed, n):
 
 def morelike_wiki_search(s, query, n):
     #get an actual article from seed
-    seed_list = wiki_search(s, query, 1, False)
+    seed_list, msg = wiki_search(s, query, 1, False)
 
     if seed_list: # we have an article seed
         seed = seed_list[0]
         if seed != query:
             print('Query: %s  Article: %s' % (query, seed))
-        results = wiki_search(s, seed, n, True)
+        results, msg = wiki_search(s, seed, n, True)
         if results:
             results.insert(0, seed)
             print('Succesfull Morelike Search')
-            return results
+            return results, None
         else:
-            print('Failed Morelike Search')
+            print('Failed Morelike Search. Reverting to standard search')
             return wiki_search(s, query, n, False)
     else:
-        return []
+        return None, msg
 
 
 def wiki_search(s, seed, n, morelike):
@@ -133,20 +160,20 @@ def wiki_search(s, seed, n, morelike):
         'srprop': 'wordcount',
         'srlimit': n
     }
-    response = requests.get(mw_api, params=params).json()
+    try:
+        response = requests.get(mw_api, params=params).json()
+    except:
+        return None, 'Could not search for articles related to seed in %s. Choose another language.' % s
 
     if 'query' not in response or 'search' not in response['query']:
-        print('Search API error')
-        return []
+        return None, 'Could not search for articles related to seed in %s. Choose another language.' % s
 
     response = response['query']['search']
     results =  [r['title'].replace(' ', '_') for r in response]
     if len(results) == 0:
-        if morelike:
-            print('No Morelike Search Results')
-        else:
-            print('No Wiki Search Results')
-    return results
+        return None, 'No articles similar to %s in %s. Try another seed.' % (seed, s)
+
+    return results, None
 
 
 
@@ -225,10 +252,8 @@ def get_top_article_views(s):
     """
     dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
     query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
-    print(query)
     response = requests.get(query).json()
     article_pv_dict = OrderedDict()
-    print(response['items'][0]['articles'][0])
     # when T118913 is fixed, parse response with json
     try:
         for d in response['items'][0]['articles']:

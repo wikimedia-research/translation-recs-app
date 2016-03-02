@@ -1,7 +1,7 @@
 <articles>
 
     <div class="row text-xs-center" if={ !articles || !articles.length }>
-        No articles found.  Try without a seed article, or let us know if this keeps happening.
+        {articles['error']}
     </div>
     <div class="list-group row">
         <div each={articles} class="col-sm-6 m-b-1" onmouseover={hoverIn} onmouseout={hoverOut}>

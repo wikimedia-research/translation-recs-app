@@ -6,9 +6,9 @@
         <div class="row m-b-1 text-xs-center">
             <div class="col-sm-4 col-sm-offset-1 col-xs-6">
                 <h5>From</h5>
-                <select class="c-select form-control form-control-lg" name="source" onchange={refreshTargets}>
+                <select class="c-select form-control form-control-lg" name="source">
                     <option each={code in sources} value={code}>
-                        {languageCodes[code]}
+                        {code}
                     </option>
                 </select>
             </div>
@@ -17,9 +17,9 @@
             </div>
             <div class="col-sm-4 col-xs-6">
                 <h5>To</h5>
-                <select class="c-select form-control form-control-lg" name="target" onchange={fetchArticles}>
+                <select class="c-select form-control form-control-lg" name="target">
                     <option each={code in targets} value={code}>
-                        {languageCodes[code]}
+                        {code}
                     </option>
                 </select>
             </div>
@@ -40,7 +40,12 @@
         <div class="text-xs-center" if={fetching}>
             Preparing article recommendations...
         </div>
-        <div class={invisible: fetching}>
+        <div class="text-xs-center alert alert-danger" role="alert" if={error}>
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            {error_msg} 
+        </div>
+        <div class={invisible: fetching || starting}>
             <articles></articles>
         </div>
     </div>
@@ -51,22 +56,22 @@
         var self = this;
 
         self.languagePairs = window.translationAppGlobals.languagePairs;
-        self.languageCodes = window.translationAppGlobals.languageCodes;
-        self.sources = Object.keys(self.languagePairs).sort();
-        self.targets = self.languagePairs[self.sources[0]].sort();
+        self.sources = self.languagePairs['source'].sort();
+        self.targets = self.languagePairs['target'].sort();
         self.fetching = false;
+        self.starting = true;
+        self.st_error = false;
 
-        self.refreshTargets = function () {
-            self.targets = self.languagePairs[self.source.value].sort();
-            self.update();
-            if (self.targets) {
-                if (!self.fetching) {
-                    self.fetchArticles();
-                }
-            }
-        };
-
+        
         self.fetchArticles = function () {
+            
+            if (self.source.value == self.target.value) {
+                self.error_msg = "From and To languages must be different"
+                self.error = true;
+                return
+            }
+            self.error = false;
+            self.starting = false;
             self.fetching = true;
             self.update();
 
@@ -82,7 +87,14 @@
                 self.fetching = false;
                 self.update();
             }).done(function (data) {
+                if (data.error) {
+                    self.error = true;
+                    self.error_msg = data.error;
+                    return
+                }
+
                 var articles = self.filter(data.articles);
+
 
                 riot.mount('articles', {
                     articles: articles,
@@ -103,7 +115,7 @@
         };
 
         self.on('mount', function () {
-            self.fetchArticles();
+            //self.fetchArticles();
         });
 
     </script>

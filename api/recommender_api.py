@@ -30,23 +30,24 @@ def json_response(dat):
 def home():
     return render_template(
         'index.html',
-        language_pairs=json.dumps(translation_directions),
-        language_codes=json.dumps(language_codes_map)
+        language_pairs=json.dumps(language_pairs),
     )
 
 
 @app.route('/api')
 def get_recommendations():
     t1 = time.time()
-    ret = {'articles': []}
 
     # required args
     s = request.args.get('s')
     t = request.args.get('t')
     # make sure language codes are valid
-    if s not in language_codes or t not in language_codes:
+    ret = {'articles': []}
+    if s not in language_pairs['source'] or t not in language_pairs['target']:
+        ret['error'] = 'Invalid source or target language'
         return json_response(ret)
     if s==t:
+        ret['error'] = 'Source is equal to target language'
         return json_response(ret)
 
 
@@ -71,11 +72,16 @@ def get_recommendations():
         pageviews = True
 
     article = request.args.get('article')
-    if article:
-        ret['articles'] = get_seeded_recommendations( s, t, article, n, pageviews, search)
-    else:
-        ret['articles'] = get_global_recommendations( s, t, n)
 
+    if article:
+        recs, error = get_seeded_recommendations( s, t, article, n, pageviews, search)
+    else:
+        recs, error = get_global_recommendations( s, t, n)
+
+    if recs:
+        ret['articles'] = recs
+    if error:
+        ret['error'] = error
 
     t2 = time.time()
     print('Total:', t2-t1)
@@ -90,6 +96,8 @@ def after_request(response):
   response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
   return response
 
+def get_language_pairs():
+    return requests.get('https://cxserver.wikimedia.org/v1/languagepairs').json()
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -97,26 +105,11 @@ parser.add_argument(
     help='run in debug mode'
 )
 
-parser.add_argument(
-    '--language_codes_map', required=False,
-    default=os.path.join(parentdir, 'language_codes_map.json'),
-    help='path to json dictionary from language codes to friendly names for served language pairs'
-)
 
 args = parser.parse_args()
 app.debug = args.debug
 
-language_codes =  json.load(open(os.path.join(parentdir, 'language_codes.json')))
-
-language_codes_map = json.load(open(args.language_codes_map))
-translation_directions = {}
-for s in language_codes_map.keys():
-    translation_directions[s] = []
-    for t in language_codes_map.keys():
-        if s==t:
-            continue
-        translation_directions[s].append(t)
-
+language_pairs = get_language_pairs()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
