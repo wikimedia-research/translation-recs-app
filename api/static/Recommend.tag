@@ -1,42 +1,33 @@
 <Recommend>
+    <div class="jumbotron">
+        <div class="container">
+            <h2>Wikipedia Translation Recommendations</h2>
+            <p>Select a language pair and seed article</p>
+            <form class="form-inline" role="form" autocomplete="off">
+                <div class="form-group">
+                    <select class="c-select form-control" name="source", placeholder='Source'>
+                        <option selected>Source Language</option>
+                        <option each={code in sources} value={code}>
+                            {code}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="c-select form-control" name="target">
+                        <option selected>Target Language</option>
+                        <option each={code in targets} value={code}>
+                            {code}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Seed Article (Optional)" name="seedArticle" />
+                </div>
+                <button type="button" class="btn btn-default" onclick={fetchArticles} >Submit</button>
+            </form>
+        </div>
+    </div>
     <div class="container">
-        <div class="row m-b-1 text-xs-center">
-            <h3>Articles Recommended for Translation</h3>
-        </div>
-        <div class="row m-b-1 text-xs-center">
-            <div class="col-sm-4 col-sm-offset-1 col-xs-6">
-                <h5>From</h5>
-                <select class="c-select form-control form-control-lg" name="source">
-                    <option each={code in sources} value={code}>
-                        {code}
-                    </option>
-                </select>
-            </div>
-            <div class="col-sm-2 hidden-xs-down">
-                <h1 class="display-3">&rightarrow;</h1>
-            </div>
-            <div class="col-sm-4 col-xs-6">
-                <h5>To</h5>
-                <select class="c-select form-control form-control-lg" name="target">
-                    <option each={code in targets} value={code}>
-                        {code}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <div class="row text-xs-center">
-            Articles Similar To (optional)
-        </div>
-        <div class="row m-b-3">
-            <div class="col-sm-8 col-sm-offset-2 input-group">
-                <input type="text" class="form-control" placeholder="seed article" name="seedArticle" />
-                <span class="input-group-btn">
-                    <button type="button" class="btn btn-secondary" onclick={fetchArticles}>
-                        Recommend
-                    </button>
-                </span>
-            </div>
-        </div>
         <div class="text-xs-center" if={fetching}>
             Preparing article recommendations...
         </div>
@@ -49,6 +40,7 @@
             <articles></articles>
         </div>
     </div>
+    
 
     <preview></preview>
 
