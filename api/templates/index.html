@@ -40,8 +40,10 @@
                 globalBlacklistKey: 'not.notable.blacklist',
 
                 campaign: 'article-recommender-1',
+                eventLoggerUrl: '{{ event_logger_url }}'
             };
         </script>
+        <script src="{{ url_for('static', filename='event_logger.js') }}"></script>
         <script src="{{ url_for('static', filename='main.js') }}"></script>
     </body>
 

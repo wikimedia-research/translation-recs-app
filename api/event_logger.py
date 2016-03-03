@@ -3,7 +3,8 @@ import urllib.parse
 import json
 import time
 
-URL = 'https://meta.wikimedia.org/beacon/event?'
+# URL = 'https://meta.wikimedia.org/beacon/event'
+URL = 'http://bits.beta.wmflabs.org/beacon/event'
 
 
 def log_api_request(source, target, seed=None, search=None):
@@ -16,15 +17,10 @@ def log_api_request(source, target, seed=None, search=None):
         event['searchAlgorithm'] = search
 
     payload = dict(schema='TranslationRecommendationAPIRequests',
-                   revision=15395417,
+                   revision=15405506,
                    wiki='metawiki',
                    event=event)
 
-    url = URL + urllib.parse.quote_plus(json.dumps(payload))
+    url = URL + '?' + urllib.parse.quote_plus(json.dumps(payload))
 
-    # print(json.dumps(payload, indent=2))
-
-    r = requests.get(url)
-
-    # print(r.status_code)
-    # print(json.dumps(dict(r.headers), indent=2))
+    requests.get(url)
