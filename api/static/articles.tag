@@ -5,16 +5,20 @@
     </div>
     <div class="list-group row">
         <div each={articles} class="col-sm-6 m-b-1" onmouseover={hoverIn} onmouseout={hoverOut}>
-            <div class="btn-group list-group-item p-a-0" style="height: 5rem;">
+            <div class="btn-group list-group-item p-a-0" style="height: 7rem;">
                 <button type="button" class="btn btn-secondary p-y-0 borderless" style="width: 90%; height: 100%;" onclick={preview}
                         data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>
-                    <div class="m-r-1 pull-xs-left" style="width: 50px; height: 100%">
+                    <div class="m-r-1 pull-xs-left" style="width: 90px; height: 100%">
                         <img class="img-rounded vertical-center" src={thumbnail} if={thumbnail}/>
                     </div>
-                    <h6 class="text-xs-left m-t-1 m-b-0 no-overflow"
+                    <h5 class="text-xs-left m-t-1 m-b-0 no-overflow"
                         style="height: 1.5rem;">
                         {title}
-                    </h6>
+                    </h5>
+                    <p class="text-xs-left m-t-0 m-b-0 no-overflow"
+                        style="height: 1.5rem;">
+                        {description}
+                    </p>
                     <div class="pull-xs-left">
                         <small class="text-muted">{pageviews} recent views</small>
                     </div>
@@ -42,7 +46,7 @@
         self.source = opts.source || 'no-source-language';
         self.target = opts.target || 'no-target-language';
 
-        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=50&format=json&prop=pageimages&titles=';
+        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=90&format=json&prop=pageimages&titles=';
 
         self.detail = function (article) {
             return $.ajax({
@@ -62,6 +66,27 @@
 
             });
         };
+
+        var descriptionQuery = 'https://wikidata.org/w/api.php?action=wbgetentities&format=json&props=descriptions&languages={source}&ids='
+        self.get_description = function(article) {
+            var url = descriptionQuery.replace('{source}', self.source) + article.wikidata_id
+            return $.ajax({
+                url: url,
+                dataType: 'jsonp',
+                contentType: 'application/json'
+            }).done(function (data) {
+                var id = Object.keys(data.entities)[0];
+                var descriptions = data.entities[id].descriptions;
+                if (Object.keys(descriptions).length == 0)
+                    return;
+                var lang = Object.keys(data.entities[id].descriptions)[0];
+                var description = data.entities[id].descriptions[lang].value;
+                article.description = description
+                self.update();
+
+            });
+        };
+
 
         self.remove = function (article, personal) {
 
@@ -115,9 +140,10 @@
         }
 
         // kick off the loading of the articles
-        var promises = self.articles.map(self.detail);
+        var promises = self.articles.map(self.detail).concat(self.articles.map(self.get_description));
         $.when.apply(this, promises).then(self.refresh);
 
+        //seems broken
         self.on('update', function () {
             // add tooltips for truncated article names
             $.each($('[data-toggle="popover"]'), function (index, item) {
