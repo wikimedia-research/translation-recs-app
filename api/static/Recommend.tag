@@ -1,5 +1,5 @@
 <Recommend>
-    <div class="jumbotron">
+    <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <h2>Wikipedia Translation Recommendations</h2>
             <p>Select a language pair and seed article</p>
