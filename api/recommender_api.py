@@ -38,9 +38,15 @@ def json_response(dat):
 
 @app.route('/')
 def home():
+    s = request.args.get('s')
+    t = request.args.get('t')
+    seed = request.args.get('seed')
     return render_template(
         'index.html',
         language_pairs=json.dumps(language_pairs),
+        s=s,
+        t=t,
+        seed=seed
     )
 
 

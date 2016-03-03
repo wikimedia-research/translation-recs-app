@@ -32,6 +32,9 @@
             // globals from server
             window.translationAppGlobals = {
                 languagePairs: JSON.parse('{{ language_pairs | safe }}'),
+                s: '{{ s }}',
+                t: '{{ t }}',
+                seed: '{{ seed if seed else '' }}',
 
                 personalBlacklistKey: 'personal.blacklist',
                 globalBlacklistKey: 'not.notable.blacklist',
