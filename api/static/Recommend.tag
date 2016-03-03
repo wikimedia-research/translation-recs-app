@@ -50,6 +50,9 @@
         self.languagePairs = window.translationAppGlobals.languagePairs;
         self.sources = self.languagePairs['source'].sort();
         self.targets = self.languagePairs['target'].sort();
+        self.defaultSource = window.translationAppGlobals.s;
+        self.defaultTarget = window.translationAppGlobals.t;
+        self.defaultSeed = window.translationAppGlobals.seed;
         self.fetching = false;
         self.starting = true;
         self.st_error = false;
@@ -107,6 +110,13 @@
         };
 
         self.on('mount', function () {
+            if (self.defaultSource in self.languagePairs) {
+                $('select[name=source]').val(self.defaultSource);
+            }
+            if (self.defaultTarget in self.languagePairs && self.defaultTarget != self.defaultSource) {
+                $('select[name=target]').val(self.defaultTarget);
+            }
+            $('input[name=seedArticle]').val(self.defaultSeed);
             //self.fetchArticles();
         });
 
