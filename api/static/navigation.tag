@@ -1,5 +1,5 @@
 <navigation>
-    <nav class="navbar navbar-dark bg-inverse">
+    <nav class="navbar navbar-full navbar-dark bg-inverse">
         <ul class="nav navbar-nav">
             <a each={ opts.items }
                class={ nav-item: true, nav-link: true, active: parent.selected === view }
