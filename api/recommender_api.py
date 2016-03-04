@@ -46,7 +46,8 @@ def home():
         language_pairs=json.dumps(language_pairs),
         s=s,
         t=t,
-        seed=seed
+        seed=seed,
+        event_logger_url=event_logger.URL
     )
 
 

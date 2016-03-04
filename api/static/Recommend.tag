@@ -5,8 +5,8 @@
             <p>Select a language pair and seed article</p>
             <form class="form-inline" role="form" autocomplete="off">
                 <div class="form-group">
-                    <select class="c-select form-control" name="source", placeholder='Source'>
-                        <option selected>Source Language</option>
+                    <select class="c-select form-control" name="source">
+                        <option>Source Language</option>
                         <option each={code in sources} value={code}>
                             {code}
                         </option>
@@ -14,7 +14,7 @@
                 </div>
                 <div class="form-group">
                     <select class="c-select form-control" name="target">
-                        <option selected>Target Language</option>
+                        <option>Target Language</option>
                         <option each={code in targets} value={code}>
                             {code}
                         </option>
@@ -56,7 +56,6 @@
         self.fetching = false;
         self.starting = true;
         self.st_error = false;
-
         
         self.fetchArticles = function () {
             
@@ -65,6 +64,7 @@
                 self.error = true;
                 return
             }
+
             self.error = false;
             self.starting = false;
             self.fetching = true;
@@ -72,9 +72,13 @@
 
             var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
 
+            var seed;
             if (this.seedArticle.value) {
                 url += '&article=' + this.seedArticle.value;
+                seed = this.seedArticle.value;
             }
+
+            logUIRequest(self.source.value, self.target.value, seed);
 
             $.ajax({
                 url: url
@@ -89,7 +93,6 @@
                 }
 
                 var articles = self.filter(data.articles);
-
 
                 riot.mount('articles', {
                     articles: articles,
@@ -110,10 +113,10 @@
         };
 
         self.on('mount', function () {
-            if (self.defaultSource in self.languagePairs) {
+            if ($.inArray(self.defaultSource, self.languagePairs['source']) !== -1) {
                 $('select[name=source]').val(self.defaultSource);
             }
-            if (self.defaultTarget in self.languagePairs && self.defaultTarget != self.defaultSource) {
+            if ($.inArray(self.defaultTarget, self.languagePairs['target']) !== -1) {
                 $('select[name=target]').val(self.defaultTarget);
             }
             $('input[name=seedArticle]').val(self.defaultSeed);
