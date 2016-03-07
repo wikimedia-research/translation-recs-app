@@ -35,12 +35,12 @@ var logUIRequest = function (
     logEvent(schema, revision, event);
 };
 
-var logFlagging = function (
+var logAction = function (
     pageTitle,
     action
 ) {
-    var schema = 'TranslationRecommendationFlagging';
-    var revision = 15405453;
+    var schema = 'TranslationRecommendationUserAction';
+    var revision = 15419947;
     var event = {
         'requestToken': getExistingRequestToken(),
         'pageTitle': pageTitle,

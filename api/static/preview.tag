@@ -44,7 +44,7 @@
                         <h4 class="m-y-0">></h4>
                     </button>
                     <div class="btn-group">
-                        <a role="button" class="btn btn-primary" target="_blank" href={translateLink}>Translate</a>
+                        <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction} href={translateLink}>Translate</a>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
@@ -152,6 +152,11 @@
                 self.show();
             }
         }
+
+        self.logCXAction = function() {
+            logAction(self.title, 'create_using_content_translation');
+            return true;
+        };
 
         showCreate (e) {
             riot.mount('create_article', {
