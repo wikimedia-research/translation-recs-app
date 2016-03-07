@@ -98,13 +98,13 @@
                 // store wikidata id without associating to source or target, so
                 // that this article can always be blacklisted, regardless of languages
                 blacklist[wikidataId] = true;
-                logFlagging(article.title, 'not_interested');
+                logAction(article.title, 'flag_not_interested');
             } else {
                 // store the wikidata id relative to the target, so that this article
                 // can be ignored regardless of source language
                 blacklist[self.target] = blacklist[self.target] || {};
                 blacklist[self.target][wikidataId] = true;
-                logFlagging(article.title, 'not_notable');
+                logAction(article.title, 'flag_not_notable');
             }
 
             store(blacklistKey, blacklist);
