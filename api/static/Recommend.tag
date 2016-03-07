@@ -74,7 +74,7 @@
 
             var seed;
             if (this.seedArticle.value) {
-                url += '&article=' + this.seedArticle.value;
+                url += '&article=' + encodeURIComponent(this.seedArticle.value);
                 seed = this.seedArticle.value;
             }
 
