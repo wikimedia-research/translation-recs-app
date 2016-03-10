@@ -32,10 +32,10 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-left">
                         <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            Remove, I am not interested
+                            Not interesting
                         </button>
                         <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            Remove, this is not notable for {opts.to} wikipedia
+                            Not notable for {opts.to} wikipedia
                         </button>
                     </div>
                     <button type="button" onclick={right}

@@ -26,6 +26,14 @@
     cursor: pointer;
 }
 
+.uls-search-label {
+    visibility: hidden;
+}
+
+.uls-medium {
+    width: 360px;
+}
+
 .suggestion-container {
     text-align: center;
 }
@@ -34,11 +42,8 @@
     height: 15.5rem;
     width: 16rem;
     border: 1px solid #ccc;
-    /*margin-bottom: 1rem;*/
     margin: auto 1rem;
-    /*margin-right: 1rem;*/
     display: inline-block;
-    /*float: left;*/
 }
 
 .suggestion.list-group-item {
@@ -66,7 +71,7 @@
     font-size: 1.5rem;
     margin: 0;
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 

@@ -7,6 +7,10 @@
         <meta http-equiv="x-ua-compatible" content="ie=edge">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.grid.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.lcd.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.compact.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
@@ -27,13 +31,19 @@
         <script src="{{ url_for('static', filename='bower_components/tether/dist/js/tether.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/store2/dist/store2.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.data.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.data.utils.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.lcd.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.languagefilter.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.regionfilter.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.core.js') }}"></script>
 
         <script>
             // globals from server
             window.translationAppGlobals = {
                 languagePairs: JSON.parse('{{ language_pairs | safe }}'),
-                s: '{{ s }}',
-                t: '{{ t }}',
+                s: '{{ s if s else '' }}',
+                t: '{{ t if t else '' }}',
                 seed: '{{ seed if seed else '' }}',
 
                 personalBlacklistKey: 'personal.blacklist',

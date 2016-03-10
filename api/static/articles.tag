@@ -18,7 +18,7 @@
                 <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown">&#x2691;</span>
                 <div class="dropdown-menu dropdown-menu-right">
                     <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                        Not interested
+                        Not interesting
                     </button>
                     <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
                         Not notable for {target} wikipedia
@@ -69,8 +69,7 @@
                 if (Object.keys(descriptions).length == 0)
                     return;
                 var lang = Object.keys(data.entities[id].descriptions)[0];
-                var description = data.entities[id].descriptions[lang].value;
-                article.description = description
+                article.description = data.entities[id].descriptions[lang].value;
                 self.update();
 
             });
@@ -133,7 +132,6 @@
         var promises = self.articles.map(self.detail).concat(self.articles.map(self.get_description));
         $.when.apply(this, promises).then(self.refresh);
 
-        //seems broken
         self.on('update', function () {
             // add tooltips for truncated article names
             $.each($('.suggestion-title'), function (index, item) {
