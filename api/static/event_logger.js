@@ -2,18 +2,20 @@ var logUIRequest = function (
     sourceLanguage,
     targetLanguage,
     seed,
+    origin,
     searchAlgorithm,
     userId,
     campaign,
     campaignCondition
 ) {
     var schema = 'TranslationRecommendationUIRequests';
-    var revision = 15405403;
+    var revision = 15428762;
     var event = {
         'timestamp': Math.floor(new Date().getTime() / 1000),
         'userAgent': navigator.userAgent,
         'sourceLanguage': sourceLanguage,
         'targetLanguage': targetLanguage,
+        'origin': origin,
         'userToken': getUserToken(),
         'requestToken': getNewRequestToken()
     };
