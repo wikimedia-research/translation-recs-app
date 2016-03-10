@@ -8,23 +8,15 @@
             <form>
                 <div class="row m-b-1">
                     <div class="col-xs-6 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3">
-                        <select class="c-select form-control form-control-lg" name="source">
-                            <option each={code in sources} value={code}>
-                                {code}
-                            </option>
-                        </select>
+                        <input type="button" class="btn btn-secondary btn-block" name="from" value="Source">
                     </div>
                     <div class="col-xs-6 col-sm-4 col-md-3">
-                        <select class="c-select form-control form-control-lg" name="target">
-                            <option each={code in targets} value={code}>
-                                {code}
-                            </option>
-                        </select>
+                        <input type="button" class="btn btn-secondary btn-block" name="to" value="Target">
                     </div>
                 </div>
                 <div class="row m-b-3">
                     <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 input-group">
-                        <input type="text" class="form-control form-control" placeholder="Seed article (optional)" name="seedArticle" />
+                        <input type="text" class="form-control form-control" placeholder="Seed article (optional)" name="seedArticle">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-secondary" onclick={fetchArticles}>
                                 Recommend
@@ -58,15 +50,13 @@
         self.defaultSource = window.translationAppGlobals.s;
         self.defaultTarget = window.translationAppGlobals.t;
         self.defaultSeed = window.translationAppGlobals.seed;
+        self.source = self.defaultSource || '';
+        self.target = self.defaultTarget || '';
         self.fetching = false;
         self.starting = true;
-        self.st_error = false;
-        
+
         self.fetchArticles = function () {
-            
-            if (self.source.value == self.target.value) {
-                self.error_msg = "Source and target languages must be different";
-                self.error = true;
+            if (!self.isInputValid()) {
                 return;
             }
 
@@ -75,7 +65,7 @@
             self.fetching = true;
             self.update();
 
-            var url = '/api?s=' + self.source.value + '&t=' + self.target.value;
+            var url = '/api?s=' + self.source + '&t=' + self.target;
 
             var seed;
             if (this.seedArticle.value) {
@@ -83,7 +73,7 @@
                 seed = this.seedArticle.value;
             }
 
-            logUIRequest(self.source.value, self.target.value, seed);
+            logUIRequest(self.source, self.target, seed);
 
             $.ajax({
                 url: url
@@ -101,10 +91,19 @@
 
                 riot.mount('articles', {
                     articles: articles,
-                    source: self.source.value,
-                    target: self.target.value
+                    source: self.source,
+                    target: self.target
                 });
             });
+        };
+
+        self.isInputValid = function () {
+            if (self.source == self.target) {
+                self.error_msg = "Source and target languages must be different";
+                self.error = true;
+                return false;
+            }
+            return true;
         };
 
         self.filter = function (articles) {
@@ -118,14 +117,70 @@
         };
 
         self.on('mount', function () {
-            if ($.inArray(self.defaultSource, self.languagePairs['source']) !== -1) {
-                $('select[name=source]').val(self.defaultSource);
+            var sourceSelector = $('input[name=from]');
+            var targetSelector = $('input[name=to]');
+            var uls = [];
+
+            sourceSelector.uls({
+                onSelect: function(language) {
+                    self.source = language;
+                    var languageName = $.uls.data.getAutonym(language);
+                    sourceSelector.val(languageName);
+                },
+                onReady: function() {
+                    uls.push(this);
+                    this.position = function () {
+                        var offset = sourceSelector.offset();
+                        return {
+                            top: offset.top + sourceSelector[0].offsetHeight,
+                            left: offset.left
+                        };
+                    };
+                },
+                compact: true,
+                menuWidth: 'medium'
+            });
+
+            targetSelector.uls({
+                onSelect: function(language) {
+                    self.target = language;
+                    var languageName = $.uls.data.getAutonym(language);
+                    targetSelector.val(languageName);
+                },
+                onReady: function() {
+                    uls.push(this);
+                    this.position = function () {
+                        var offset = targetSelector.offset();
+                        return {
+                            top: offset.top + targetSelector[0].offsetHeight,
+                            left: offset.left + targetSelector[0].offsetWidth - 360
+                        };
+                    };
+                },
+                compact: true,
+                menuWidth: 'medium'
+            });
+
+            var resizeTimer;
+            $(window).resize(function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function () {
+                    $.each(uls, function (index, item) {
+                        item.hide();
+                    });
+                }, 50);
+            });
+
+            if (self.source) {
+                sourceSelector.val($.uls.data.getAutonym(self.source));
             }
-            if ($.inArray(self.defaultTarget, self.languagePairs['target']) !== -1) {
-                $('select[name=target]').val(self.defaultTarget);
+            if (self.target) {
+                targetSelector.val($.uls.data.getAutonym(self.target));
             }
             $('input[name=seedArticle]').val(self.defaultSeed);
-            self.fetchArticles();
+            if (self.source && self.target) {
+                self.fetchArticles();
+            }
             self.update();
         });
 
