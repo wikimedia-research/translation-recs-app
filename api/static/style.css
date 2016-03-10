@@ -1,4 +1,4 @@
-.borderless.dropdown-toggle::after {
+.borderless.dropdown-toggle::after, .suggestion-flag.dropdown-toggle::after {
     content: none;
 }
 
@@ -8,14 +8,18 @@
     transform: translateY(-50%);
 }
 
-.no-overflow {
+.no-overflow, .suggestion-title, .suggestion-views {
     white-space: nowrap;
-    overflow-x: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .borderless {
     border: none;
+}
+
+.btn, .form-control, .modal-content, .dropdown-menu, .alert, .popover {
+    border-radius: 0;
 }
 
 .modal-lg {
@@ -24,6 +28,10 @@
 
 .nav-item {
     cursor: pointer;
+}
+
+.target-selector {
+    border-left: 0;
 }
 
 .uls-search-label {
@@ -56,6 +64,7 @@
     height: 8rem;
     border: none;
     background-size: contain;
+    background-color: #ddd;
     background-repeat: no-repeat;
     background-position: center center;
 }
@@ -70,9 +79,6 @@
     height: 2rem;
     font-size: 1.5rem;
     margin: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .suggestion-text {
@@ -92,9 +98,6 @@
     line-height: 2rem;
     font-size: .8rem;
     vertical-align: middle;
-    white-space: nowrap;
-    overflow-x: hidden;
-    text-overflow: ellipsis;
 }
 
 .suggestion-flag {
@@ -107,8 +110,3 @@
     cursor: pointer;
     float: right;
 }
-
-.suggestion-flag.dropdown-toggle::after {
-    content: none;
-}
-
