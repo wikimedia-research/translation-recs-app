@@ -1,29 +1,37 @@
 <Recommend>
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
-            <h2>Wikipedia Translation Recommendations</h2>
-            <p>Select a language pair and seed article</p>
-            <form class="form-inline" role="form" autocomplete="off">
-                <div class="form-group">
-                    <select class="c-select form-control" name="source">
-                        <option>Source Language</option>
-                        <option each={code in sources} value={code}>
-                            {code}
-                        </option>
-                    </select>
+            <div class="row m-b-1 text-xs-center">
+                <h2>Wikipedia Translation Recommendation</h2>
+                <p>Select a language pair and seed article</p>
+            </div>
+            <form>
+                <div class="row m-b-1">
+                    <div class="col-xs-6 col-sm-4 col-sm-offset-2 col-md-3 col-md-offset-3">
+                        <select class="c-select form-control form-control-lg" name="source">
+                            <option each={code in sources} value={code}>
+                                {code}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-xs-6 col-sm-4 col-md-3">
+                        <select class="c-select form-control form-control-lg" name="target">
+                            <option each={code in targets} value={code}>
+                                {code}
+                            </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <select class="c-select form-control" name="target">
-                        <option>Target Language</option>
-                        <option each={code in targets} value={code}>
-                            {code}
-                        </option>
-                    </select>
+                <div class="row m-b-3">
+                    <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3 input-group">
+                        <input type="text" class="form-control form-control" placeholder="Seed article (optional)" name="seedArticle" />
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-secondary" onclick={fetchArticles}>
+                                Recommend
+                            </button>
+                        </span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Seed Article (Optional)" name="seedArticle" />
-                </div>
-                <button type="button" class="btn btn-default" onclick={fetchArticles} >Submit</button>
             </form>
         </div>
     </div>
@@ -32,15 +40,12 @@
             Preparing article recommendations...
         </div>
         <div class="text-xs-center alert alert-danger" role="alert" if={error}>
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-            <span class="sr-only">Error:</span>
-            {error_msg} 
+            {error_msg}
         </div>
-        <div class={invisible: fetching || starting}>
+        <div class={invisible: fetching || starting || error}>
             <articles></articles>
         </div>
     </div>
-    
 
     <preview></preview>
 
@@ -60,9 +65,9 @@
         self.fetchArticles = function () {
             
             if (self.source.value == self.target.value) {
-                self.error_msg = "From and To languages must be different"
+                self.error_msg = "Source and target languages must be different";
                 self.error = true;
-                return
+                return;
             }
 
             self.error = false;
@@ -89,7 +94,7 @@
                 if (data.error) {
                     self.error = true;
                     self.error_msg = data.error;
-                    return
+                    return;
                 }
 
                 var articles = self.filter(data.articles);
@@ -120,7 +125,8 @@
                 $('select[name=target]').val(self.defaultTarget);
             }
             $('input[name=seedArticle]').val(self.defaultSeed);
-            //self.fetchArticles();
+            self.fetchArticles();
+            self.update();
         });
 
     </script>

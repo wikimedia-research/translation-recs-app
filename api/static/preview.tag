@@ -90,7 +90,7 @@
             self.articleLink = self.articleRoot + showing.linkTitle;
             self.previewUrl = previewRoot + showing.linkTitle;
 
-            self.setPreviewContent('Loading...');
+            self.showPreview('Loading...');
 
             $.get(self.previewUrl).done(function (data) {
                 // Make all links in preview (1) work and (2) open in new window
