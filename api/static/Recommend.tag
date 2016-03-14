@@ -5,7 +5,7 @@
                 <h2>Wikipedia Translation Recommendation</h2>
                 <p>Select a language pair and seed article</p>
             </div>
-            <form>
+            <form onsubmit={submitRequest}>
                 <div class="row m-b-1">
                     <div class="col-xs-6 col-sm-5 col-sm-offset-1 col-md-4 col-md-offset-2 p-r-0">
                         <input type="button" class="btn btn-block btn-secondary" name="from" value="Source">
@@ -18,7 +18,7 @@
                     <div class="col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 input-group">
                         <input type="text" class="form-control" placeholder="Seed article (optional)" name="seedArticle">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-secondary" onclick={submitRequest}>
+                            <button type="submit" class="btn btn-secondary">
                                 Recommend
                             </button>
                         </span>
@@ -55,6 +55,7 @@
         self.submitRequest = function () {
             self.origin = 'form_submit';
             self.fetchArticles();
+            return false;
         };
 
         self.fetchArticles = function () {
