@@ -143,6 +143,31 @@
             };
         };
 
+        self.searchAPI = function (query) {
+            var languageFilter = this;
+
+            $.ajax({
+                url: 'https://en.wikipedia.org/w/api.php',
+                data: {
+                    search: query,
+                    format: 'json',
+                    action: 'languagesearch'
+                },
+                dataType: 'jsonp',
+                contentType: 'application/json'
+            }).done(function (result) {
+                $.each(result.languagesearch, function (code, name) {
+                    if (languageFilter.resultCount === 0) {
+                        languageFilter.autofill(code, name);
+                    }
+                    if (languageFilter.render(code)) {
+                        languageFilter.resultCount++;
+                    }
+                });
+                languageFilter.resultHandler(query);
+            });
+        };
+
         self.activateULS = function (selector, onSelect, getPosition, languages) {
             selector.uls({
                 onSelect: onSelect,
@@ -151,6 +176,7 @@
                     this.position = getPosition;
                 },
                 languages: languages,
+                searchAPI: true, // this is set to true to simply trigger our hacky searchAPI
                 compact: true,
                 menuWidth: 'medium'
             });
@@ -166,6 +192,10 @@
             window.translationAppGlobals.languagePairs['target'].forEach(function (code) {
                 targetLanguages[code] = $.uls.data.getAutonym(code);
             });
+
+            // Use a more flushed out ajax call to wikipedia's api
+            // Otherwise, CORS stops the request
+            $.fn.languagefilter.Constructor.prototype.searchAPI = self.searchAPI;
 
             // build the selectors using the language lists
             self.sourceSelector = $('input[name=from]');
