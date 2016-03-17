@@ -30,10 +30,6 @@
     cursor: pointer;
 }
 
-.target-selector {
-    border-left: 0;
-}
-
 .uls-search-label {
     visibility: hidden;
 }
@@ -67,6 +63,10 @@
     background-color: #ddd;
     background-repeat: no-repeat;
     background-position: center center;
+}
+
+.suggestion-image:hover {
+    opacity: 0.8;
 }
 
 .suggestion-body {
@@ -109,4 +109,105 @@
     padding: 0 .5rem 0 .5rem;
     cursor: pointer;
     float: right;
+}
+
+.icon {
+    display: inline-block;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.icon-lightbulb {
+    background-image: url("images/lightbulb.svg");
+}
+
+.icon-expand {
+    background-image: url("images/expand.svg");
+    width: 1rem;
+}
+
+.title-display, .title-display-strong, .icon-title {
+    font-size: 2rem;
+    height: 2rem;
+    vertical-align: middle;
+}
+
+.icon-title {
+    width: 2rem;
+}
+
+.title-display {
+    font-weight: 300;
+}
+
+.title-display-strong {
+    font-weight: 500;
+}
+
+.selector-display, .icon-selector {
+    font-size: 1rem;
+    height: 2rem;
+    line-height: 2rem;
+    vertical-align: middle;
+}
+
+.source-selector {
+    border-right: 0;
+}
+
+.target-selector {
+    border-left: 0;
+}
+
+.source-selector, .target-selector {
+    padding: 0;
+}
+
+.source-selector:after, .source-selector:before {
+    content: ' ';
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-color: transparent transparent transparent #ffffff;
+    border-style: solid;
+    border-width: 1rem;
+    z-index: 100;
+}
+
+.source-selector:before {
+    top: 0;
+    border-color: transparent transparent transparent #ccc;
+    border-width: calc(1rem + 1px);
+}
+
+.seed-container {
+    background: #ddd;
+    border-color: #666 transparent transparent transparent;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.seed-input {
+    border: 0;
+    background-color: transparent;
+    color: #111;
+}
+
+.seed-input::-webkit-input-placeholder {
+    color: #666;
+}
+.seed-input:-moz-placeholder {
+    color: #666;
+    opacity: 1;
+}
+.seed-input::-moz-placeholder {
+    color: #666;
+    opacity: 1;
+}
+.seed-input:-ms-input-placeholder {
+    color: #666;
 }

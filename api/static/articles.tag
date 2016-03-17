@@ -1,28 +1,28 @@
 <articles>
-
-    <div class="row text-xs-center" if={ !articles || !articles.length }>
-        {articles['error']}
-    </div>
-    <div class="suggestion-container">
-        <div each={articles} class="suggestion list-group-item m-b-1">
-            <button type="button" class="suggestion-image" onclick={preview}
-                    style="background-image: url('{thumbnail}');">
-            </button>
-            <div class="suggestion-body">
-                <p class="suggestion-title"
-                   data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>{title}</p>
-                <p class="suggestion-text">{description}</p>
-            </div>
-            <div class="suggestion-footer">
-                <span class="suggestion-views text-muted">{pageviews} recent views</span>
-                <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown">&#x2691;</span>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                        Not interesting
+    <div class="row">
+        <div class="col-xs-12 col-md-10">
+            <div class="suggestion-container">
+                <div each={articles} class="suggestion list-group-item m-b-1">
+                    <button type="button" class="suggestion-image" onclick={preview}
+                            style="background-image: url('{thumbnail}');">
                     </button>
-                    <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                        Not notable for {target} wikipedia
-                    </button>
+                    <div class="suggestion-body">
+                        <p class="suggestion-title"
+                           data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>{title}</p>
+                        <p class="suggestion-text">{description}</p>
+                    </div>
+                    <div class="suggestion-footer">
+                        <span class="suggestion-views text-muted">{pageviews} recent views</span>
+                        <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown">&#x2691;</span>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                                Not interesting
+                            </button>
+                            <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                                Not notable for {target} wikipedia
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,8 +66,9 @@
             }).done(function (data) {
                 var id = Object.keys(data.entities)[0];
                 var descriptions = data.entities[id].descriptions;
-                if (Object.keys(descriptions).length == 0)
+                if (Object.keys(descriptions).length == 0) {
                     return;
+                }
                 var lang = Object.keys(data.entities[id].descriptions)[0];
                 article.description = data.entities[id].descriptions[lang].value;
                 self.update();
