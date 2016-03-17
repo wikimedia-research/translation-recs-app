@@ -1,12 +1,5 @@
 'use strict';
 
-var items = [
-    { view: 'Recommend' },
-    { view: 'About' }
-];
-
-riot.mount('navigation', { items: items });
-
 var page = document.getElementById('page');
 
 riot.route(function (view) {
@@ -17,3 +10,4 @@ riot.route(function (view) {
     riot.mount(page, view);
 });
 riot.route.start();
+riot.route('Recommend');
