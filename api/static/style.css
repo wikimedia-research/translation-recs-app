@@ -38,15 +38,11 @@
     width: 360px;
 }
 
-.suggestion-container {
-    text-align: center;
-}
-
 .suggestion {
     height: 15.5rem;
     width: 16rem;
     border: 1px solid #ccc;
-    margin: auto 1rem;
+    margin-right: 1rem;
     display: inline-block;
 }
 

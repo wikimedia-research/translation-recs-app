@@ -8,7 +8,6 @@
                     <span class="title-display-strong">Suggestions</span>
                 </div>
             </div>
-
             <div class="row m-b-1">
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-r-0">
                     <a type="button" class="btn btn-block btn-secondary source-selector" name="from">
@@ -34,7 +33,7 @@
     </form>
     <div class="container-fluid m-t-1">
         <div class="row">
-            <div class="col-xs-12 col-md-10">
+            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
                 <div class="text-xs-center alert alert-info" if={fetching}>
                     Preparing article recommendations...
                 </div>
@@ -146,10 +145,8 @@
 
         self.onSelectSource = function (code) {
             self.setSource(code);
-            if (self.isInputValid()) {
-                self.origin = 'language_select';
-                self.fetchArticles();
-            }
+            self.origin = 'language_select';
+            self.fetchArticles();
         };
 
         self.getSourceSelectorPosition = function () {
@@ -167,10 +164,8 @@
 
         self.onSelectTarget = function (code) {
             self.setTarget(code);
-            if (self.isInputValid()) {
-                self.origin = 'language_select';
-                self.fetchArticles();
-            }
+            self.origin = 'language_select';
+            self.fetchArticles();
         };
 
         self.getTargetSelectorPosition = function () {
