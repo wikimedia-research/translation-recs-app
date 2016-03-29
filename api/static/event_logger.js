@@ -9,7 +9,7 @@ var logUIRequest = function (
     campaignCondition
 ) {
     var schema = 'TranslationRecommendationUIRequests';
-    var revision = 15428762;
+    var revision = 15484897;
     var event = {
         'timestamp': Math.floor(new Date().getTime() / 1000),
         'userAgent': navigator.userAgent,
