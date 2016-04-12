@@ -2,10 +2,20 @@
     <form onsubmit={submitRequest}>
         <div class="container-fluid m-t-1">
             <div class="row m-b-1">
-                <div class="col-xs-12">
-                    <span class="icon icon-title icon-lightbulb"></span>
-                    <span class="title-display">Wikipedia</span>
-                    <span class="title-display-strong">Suggestions</span>
+                <div class="dropdown">
+                    <div class="col-xs-12">
+                        <span class="icon icon-title icon-lightbulb"></span>
+                        <span class="title-display">Wikipedia</span>
+                        <span class="title-display-strong">Suggestions</span>
+                        <span class="icon icon-title icon-menu dropdown-toggle"
+                              data-toggle="dropdown"></span>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <button class="dropdown-item" type="button"
+                                    data-toggle="modal" data-target="#howToModal">How to</button>
+                            <button class="dropdown-item" type="button"
+                                    data-toggle="modal" data-target="#aboutModal">About</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="row m-b-1">
@@ -44,6 +54,38 @@
         </div>
         <div class={invisible: fetching || error}>
             <articles></articles>
+        </div>
+    </div>
+
+    <div id="howToModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <h4 class="modal-title">&#x274c;</h4>
+                    </button>
+                    <h4 class="modal-title">How to</h4>
+                </div>
+                <div class="modal-body">
+                    This is how you do it
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <h4 class="modal-title">&#x274c;</h4>
+                    </button>
+                    <h4 class="modal-title">About</h4>
+                </div>
+                <div class="modal-body">
+                    This is stuff about the site
+                </div>
+            </div>
         </div>
     </div>
 
