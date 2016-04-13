@@ -36,7 +36,7 @@ def get_wikidata_dump(cp, day):
     wikidata_path  = os.path.join(cp.get('DEFAULT', 'hadoop_data_path'), 'wikidata')
     os.system('hadoop fs -rm -r -f %s' % wikidata_path)
     os.system('hadoop fs -mkdir %s' % wikidata_path)
-    url = 'http://dumps.wikimedia.org/other/wikidata/%s.json.gz' % day
+    url = 'http://dumps.wikimedia.org/wikidatawiki/entities/%s.json.gz' % day
     fname = cp.get('find_missing', 'wikidata_dump')
     ret = os.system("wget -O - %s | gunzip | hadoop fs -put - %s" % (url, fname))
     assert ret == 0, 'Loading Wikidata Dump Failed'
@@ -69,7 +69,6 @@ def get_WILLs(cp):
 def sqoop_tables(config, translation_directions_file):
     logger.info('Starting Sqoop tables')
     script = os.path.join(cp.get('DEFAULT', 'project_path'), 'model_building/find_missing/sqoop_production_tables.py')
-    db = 
 
     with open(args.translation_directions) as f:
       directions = json.load(f)
