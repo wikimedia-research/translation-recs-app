@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" href={isValid ? createRoot + targetTitle : '#'}>Create</a>
+                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + targetTitle : '#'}>Create</a>
                 </div>
             </div>
         </div>
@@ -104,6 +104,11 @@
             input.classList.add('form-control-success');
             input.parentElement.classList.add('has-success');
             self.update();
+        };
+
+        self.logCreateAction = function() {
+            logAction(self.title, 'create_from_scratch');
+            return true;
         };
 
         validateTitle (e) {

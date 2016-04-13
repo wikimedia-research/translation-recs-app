@@ -1,39 +1,26 @@
 <articles>
-
-    <div class="row text-xs-center" if={ !articles || !articles.length }>
-        {articles['error']}
-    </div>
-    <div class="list-group row">
-        <div each={articles} class="col-sm-6 m-b-1" onmouseover={hoverIn} onmouseout={hoverOut}>
-            <div class="btn-group list-group-item p-a-0" style="height: 7rem;">
-                <button type="button" class="btn btn-secondary p-y-0 borderless" style="width: 90%; height: 100%;" onclick={preview}
-                        data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>
-                    <div class="m-r-1 pull-xs-left" style="width: 90px; height: 100%">
-                        <img class="img-rounded vertical-center" src={thumbnail} if={thumbnail}/>
-                    </div>
-                    <h5 class="text-xs-left m-t-1 m-b-0 no-overflow"
-                        style="height: 1.5rem;">
-                        {title}
-                    </h5>
-                    <p class="text-xs-left m-t-0 m-b-0 no-overflow"
-                        style="height: 1.5rem;">
-                        {description}
-                    </p>
-                    <div class="pull-xs-left">
-                        <small class="text-muted">{pageviews} recent views</small>
-                    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div each={articles} class="suggestion list-group-item m-b-1">
+                <button type="button" class="suggestion-image" onclick={preview}
+                        style="background-image: url('{thumbnail}');">
                 </button>
-                <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-right" data-toggle="dropdown"
-                        style="width: 10%; height: 100%;">
-                    <span hidden={!hovering}>&#x2691;</span>
-                </button>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                        Remove, I am not interested
-                    </button>
-                    <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                        Remove, this is not notable for {target} wikipedia
-                    </button>
+                <div class="suggestion-body">
+                    <p class="suggestion-title"
+                       data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>{title}</p>
+                    <p class="suggestion-text">{description}</p>
+                </div>
+                <div class="suggestion-footer">
+                    <span class="suggestion-views text-muted">{pageviews} recent views</span>
+                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown">&#x2691;</span>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                            Not interesting
+                        </button>
+                        <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                            Not notable for {target} wikipedia
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,7 +33,7 @@
         self.source = opts.source || 'no-source-language';
         self.target = opts.target || 'no-target-language';
 
-        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=90&format=json&prop=pageimages&titles=';
+        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=256&format=json&prop=pageimages&titles=';
 
         self.detail = function (article) {
             return $.ajax({
@@ -77,11 +64,11 @@
             }).done(function (data) {
                 var id = Object.keys(data.entities)[0];
                 var descriptions = data.entities[id].descriptions;
-                if (Object.keys(descriptions).length == 0)
+                if (Object.keys(descriptions).length == 0) {
                     return;
+                }
                 var lang = Object.keys(data.entities[id].descriptions)[0];
-                var description = data.entities[id].descriptions[lang].value;
-                article.description = description
+                article.description = data.entities[id].descriptions[lang].value;
                 self.update();
 
             });
@@ -98,12 +85,13 @@
                 // store wikidata id without associating to source or target, so
                 // that this article can always be blacklisted, regardless of languages
                 blacklist[wikidataId] = true;
-
+                logAction(article.title, 'flag_not_interested');
             } else {
                 // store the wikidata id relative to the target, so that this article
                 // can be ignored regardless of source language
                 blacklist[self.target] = blacklist[self.target] || {};
                 blacklist[self.target][wikidataId] = true;
+                logAction(article.title, 'flag_not_notable');
             }
 
             store(blacklistKey, blacklist);
@@ -143,12 +131,10 @@
         var promises = self.articles.map(self.detail).concat(self.articles.map(self.get_description));
         $.when.apply(this, promises).then(self.refresh);
 
-        //seems broken
         self.on('update', function () {
             // add tooltips for truncated article names
-            $.each($('[data-toggle="popover"]'), function (index, item) {
-                var header = $(item)[0].getElementsByTagName('h6')[0];
-                if ($(header.scrollWidth)[0] > $(header.offsetWidth)[0]) {
+            $.each($('.suggestion-title'), function (index, item) {
+                if ($(item.scrollWidth)[0] > $(item.offsetWidth)[0]) {
                     $(item).popover({
                         template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>'
                     });

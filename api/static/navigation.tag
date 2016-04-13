@@ -1,10 +1,10 @@
 <navigation>
-    <nav class="navbar navbar-dark bg-inverse">
-        <ul class="nav navbar-nav">
+    <nav class="navbar navbar-full navbar-dark bg-inverse">
+        <div class="nav navbar-nav">
             <a each={ opts.items }
                class={ nav-item: true, nav-link: true, active: parent.selected === view }
                onclick={ parent.navigate }>{ view }</a>
-        </ul>
+        </div>
     </nav>
 
     <script>
