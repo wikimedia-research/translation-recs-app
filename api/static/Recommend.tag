@@ -6,7 +6,7 @@
                     <div class="col-xs-12">
                         <span class="icon icon-title icon-lightbulb"></span>
                         <span class="title-display">Wikipedia</span>
-                        <span class="title-display-strong">Suggestions</span>
+                        <span class="title-display-strong">GapFinder</span>
                         <span class="icon icon-title icon-menu dropdown-toggle"
                               data-toggle="dropdown"></span>
                         <div class="dropdown-menu dropdown-menu-right">
@@ -67,7 +67,14 @@
                     <h4 class="modal-title">How to</h4>
                 </div>
                 <div class="modal-body">
-                    This is how you do it
+                    GapFinder helps you discover articles that exist one language but are missing another.
+
+                    Start by selecting a source language and a target language. GapFinder will find trending articles in the source that  are missing in the target. 
+
+                    If you are interested in a particular topic area, provide a seed article in the source language, and GapFinder will find related articles missing in the target.
+
+                    Click on a card to take a closer look at a missing article to see if you would like to create it from scratch or translate it.
+
                 </div>
             </div>
         </div>
@@ -83,7 +90,18 @@
                     <h4 class="modal-title">About</h4>
                 </div>
                 <div class="modal-body">
-                    This is stuff about the site
+
+                We are a team of researchers and developers in the Wikimedia Foundation and Stanford University interested in identifying gaps of knowledge across the more than 160 active language editions of Wikipedia. <br><br>
+
+                Back in 2015, we started a project to identify missing content in Wikipedia, rank it by its importance, and recommend the ranked missing content to Wikipedia’s volunteer editors based on their interests as captured by their editor history. We ran an experiment in June 2015 in French Wikipedia where we showed that by emailing recommendations to volunteer editors we can triple the article creation rate in Wikipedia while maintaining the current level of quality in Wikipedia articles. If you are interested to learn more about that research, you can read more about it <a href = "http://arxiv.org/abs/1604.03235"> here</a>.<br><br>
+
+                Encouraged by the result of the experiment, we have developed Wikipedia GapFinder, an app that helps you find missing content in any language for which there is a Wikipedia edition. GapFinder can help you to easily find articles to create in the language of your choice. It also lets you personalize the recommendations by providing a seed article, an article that you would like to receive similar missing article recommendations. <br><br>
+
+                GapFinder is a research app at the moment. By using it, you will make more content available in your local language, and help us understand how we can improve the app. <br><br>
+
+
+                <h6>In the media: </h6>
+                <a href = "http://www.lemonde.fr/sciences/article/2016/01/11/wikipedia-la-connaissance-en-mutation_4845347_1650684.html"> Le Monde: Wikipédia, quinze ans de recherches </a>
                 </div>
             </div>
         </div>
