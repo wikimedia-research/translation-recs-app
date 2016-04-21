@@ -9,11 +9,15 @@
                         <span class="title-display-strong">GapFinder</span>
                         <span class="icon icon-title icon-menu dropdown-toggle"
                               data-toggle="dropdown"></span>
-                        <div class="dropdown-menu dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-right m-r-1">
                             <button class="dropdown-item" type="button"
                                     data-toggle="modal" data-target="#howToModal">How to</button>
                             <button class="dropdown-item" type="button"
                                     data-toggle="modal" data-target="#aboutModal">About</button>
+                            <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
+                               target="_blank">Feedback</a>
+                            <a class="dropdown-item" href="https://github.com/ewulczyn/translation-recs-app"
+                               target="_blank">Source code</a>
                         </div>
                     </div>
                 </div>
