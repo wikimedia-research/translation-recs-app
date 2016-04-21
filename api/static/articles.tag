@@ -12,7 +12,7 @@
                 </div>
                 <div class="suggestion-footer">
                     <span class="suggestion-views text-muted">{pageviews} recent views</span>
-                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown">&#x2691;</span>
+                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title="Flag this article...">&#x2691;</span>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
                             Not interesting
