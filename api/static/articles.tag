@@ -2,10 +2,10 @@
     <div class="row">
         <div class="col-xs-12">
             <div each={articles} class="suggestion list-group-item m-b-1">
-                <button type="button" class="suggestion-image" onclick={preview}
+                <div class="suggestion-image" onclick={preview}
                         style="background-image: url('{thumbnail}');">
-                </button>
-                <div class="suggestion-body">
+                </div>
+                <div class="suggestion-body" onclick={preview}>
                     <p class="suggestion-title"
                        data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>{title}</p>
                     <p class="suggestion-text">{description}</p>
