@@ -65,9 +65,10 @@
     background-color: #ddd;
     background-repeat: no-repeat;
     background-position: center center;
+    cursor: pointer;
 }
 
-.suggestion-image:hover {
+.suggestion-image:hover, .suggestion-body:hover {
     opacity: 0.8;
 }
 
@@ -75,6 +76,7 @@
     height: 5rem;
     padding-left: .5rem;
     text-align: left;
+    cursor: pointer;
 }
 
 .suggestion-title {
@@ -139,7 +141,7 @@
     background-color: #ccc;
 }
 
-.title-display, .title-display-strong, .icon-title {
+.title-display, .title-display-strong, .title-display-version, .icon-title {
     font-size: 2rem;
     height: 2rem;
     line-height: 3rem;
@@ -156,6 +158,11 @@
 
 .title-display-strong {
     font-weight: 600;
+}
+
+.title-display-version {
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 .selector-display, .icon-selector {
@@ -207,6 +214,10 @@
 .seed-input {
     border: 0;
     background-color: transparent;
+    background-image: url("images/search.svg");
+    background-repeat: no-repeat;
+    background-position: center left;
+    text-indent: 1rem;
     color: #111;
 }
 

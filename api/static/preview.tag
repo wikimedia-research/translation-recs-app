@@ -6,10 +6,12 @@
                     <div class="container-fluid">
                         <div class="row">
                             <h4 class="modal-title col-xs-8">{title}</h4>
-                            <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal">
+                            <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal"
+                                    title="Close">
                                 <h4 class="m-y-0">&#x274c;</h4>
                             </button>
-                            <a role="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" target="_blank" href={articleLink}>
+                            <a role="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" target="_blank" href={articleLink}
+                               title="Open this article in a new window">
                                 <h4 class="m-y-0">&#x2197;</h4>
                             </a>
                         </div>
@@ -24,10 +26,12 @@
                 <div class="modal-footer">
                     <button type="button" onclick={left}
                             class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
-                            disabled: showIndex === 0}>
+                            disabled: showIndex === 0}
+                            title="Previous article">
                         <h4 class="m-y-0"><</h4>
                     </button>
-                    <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-left" data-toggle="dropdown">
+                    <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-left" data-toggle="dropdown"
+                            title="Flag this article...">
                         <h4 class="m-y-0">&#x2691;</h4>
                     </button>
                     <div class="dropdown-menu dropdown-menu-left">
@@ -40,7 +44,8 @@
                     </div>
                     <button type="button" onclick={right}
                             class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
-                            disabled: showIndex > (articles.length - 2)}>
+                            disabled: showIndex > (articles.length - 2)}
+                            title="Next article">
                         <h4 class="m-y-0">></h4>
                     </button>
                     <div class="btn-group">
@@ -81,7 +86,7 @@
             }
         }
 
-        var previewRoot = 'https://rest.wikimedia.org/' + opts.from + '.wikipedia.org/v1/page/html/';
+        var previewRoot = 'https://' + opts.from + '.wikipedia.org/api/rest_v1/page/html/';
 
         self.show = function () {
             var showing = self.articles[self.showIndex];
