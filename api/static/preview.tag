@@ -86,7 +86,7 @@
             }
         }
 
-        var previewRoot = 'https://rest.wikimedia.org/' + opts.from + '.wikipedia.org/v1/page/html/';
+        var previewRoot = 'https://' + opts.from + '.wikipedia.org/api/rest_v1/page/html/';
 
         self.show = function () {
             var showing = self.articles[self.showIndex];
