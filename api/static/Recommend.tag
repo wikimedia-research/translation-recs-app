@@ -7,6 +7,7 @@
                         <span class="icon icon-title icon-lightbulb"></span>
                         <span class="title-display">Wikipedia</span>
                         <span class="title-display-strong">GapFinder</span>
+                        <span class="title-display-version">beta</span>
                         <span class="icon icon-title icon-menu dropdown-toggle"
                               data-toggle="dropdown"></span>
                         <div class="dropdown-menu dropdown-menu-right m-r-1">
@@ -40,7 +41,7 @@
         <div class="container-fluid seed-container">
             <div class="row">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control seed-input" placeholder="Seed article (optional)" name="seedArticle">
+                    <input type="text" class="form-control seed-input" placeholder="Search for articles to create" name="seedArticle">
                 </div>
             </div>
         </div>
