@@ -10,6 +10,7 @@ import concurrent.futures
 import math
 import itertools
 from pprint import pprint
+import random
 
 def search(s, seed, n, search_alg):
     """
@@ -89,6 +90,10 @@ def get_global_recommendations(s, t, n):
     Returns n most viewd articles yesterday in s missing in t
     """
     top_article_pv_dict = get_top_article_views(s)
+
+    # shuffle
+    top_article_pv_dict = OrderedDict(sorted(top_article_pv_dict.items(), key=lambda x: random.random()))
+
 
     if len(top_article_pv_dict) == 0:
         return None, "Could not get most popular articles for %s from pageview API. Try using a seed article." % s
