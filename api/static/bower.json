@@ -7,7 +7,8 @@
     "tether": "1.1.1",
     "riot": "~2.2.2",
     "store2": "~2.3.0",
-    "uls": "wikimedia/jquery.uls"
+    "uls": "wikimedia/jquery.uls",
+    "i18n": "wikimedia/jquery.i18n"
   },
   "license": "MIT"
 }
