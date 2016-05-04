@@ -1,4 +1,4 @@
-<preview>
+<gf-preview>
     <div id="previewModal" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <create_article></create_article>
+    <gf-create></gf-create>
 
     <script>
         var self = this;
@@ -164,7 +164,7 @@
         };
 
         showCreate (e) {
-            riot.mount('create_article', {
+            riot.mount('gf-create', {
                 title: self.title,
                 to: self.to,
                 from: self.from,
@@ -185,4 +185,4 @@
         });
     </script>
 
-</preview>
+</gf-preview>

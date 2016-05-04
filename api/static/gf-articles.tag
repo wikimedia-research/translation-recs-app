@@ -1,4 +1,4 @@
-<articles>
+<gf-articles>
     <div class="row">
         <div class="col-xs-12">
             <div each={articles} class="suggestion list-group-item m-b-1">
@@ -74,9 +74,7 @@
             });
         };
 
-
         self.remove = function (article, personal) {
-
             var blacklistKey = personal ? translationAppGlobals.personalBlacklistKey : translationAppGlobals.globalBlacklistKey,
                 blacklist = store(blacklistKey) || {},
                 wikidataId = article.wikidata_id;
@@ -110,7 +108,7 @@
         }
 
         preview (e) {
-            riot.mount('preview', {
+            riot.mount('gf-preview', {
                 articles: self.articles,
                 title: e.item.title,
                 from: self.source,
@@ -145,4 +143,4 @@
         });
     </script>
 
-</articles>
+</gf-articles>
