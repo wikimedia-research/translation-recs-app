@@ -1,4 +1,4 @@
-<create_article>
+<gf-create>
     <div id="createModal" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -120,4 +120,4 @@
 
     </script>
 
-</create_article>
+</gf-create>
