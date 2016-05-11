@@ -16,7 +16,7 @@
                                 data-toggle="modal" data-target="#aboutModal">About</button>
                         <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
                            target="_blank">Feedback</a>
-                        <a class="dropdown-item" href="https://github.com/ewulczyn/translation-recs-app"
+                        <a class="dropdown-item" href="https://github.com/wikimedia-research/translation-recs-app"
                            target="_blank">Source code</a>
                     </div>
                 </div>
