@@ -18,6 +18,8 @@
                            target="_blank">Feedback</a>
                         <a class="dropdown-item" href="https://github.com/wikimedia-research/translation-recs-app"
                            target="_blank">Source code</a>
+                        <a class="dropdown-item" href="https://wikimediafoundation.org/wiki/Recommendations_Tool_Privacy_Statement"
+                           target="_blank">Privacy statement</a>
                     </div>
                 </div>
             </div>

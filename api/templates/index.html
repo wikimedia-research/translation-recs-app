@@ -14,10 +14,12 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
     <body>
+        <gf-disclaimer></gf-disclaimer>
         <gf-title></gf-title>
         <gf-input></gf-input>
         <gf-preview></gf-preview>
 
+        <script src="{{ url_for('static', filename='gf-disclaimer.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='gf-title.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='gf-input.tag') }}" type="riot/tag"></script>
         <script src="{{ url_for('static', filename='gf-articles.tag') }}" type="riot/tag"></script>
@@ -53,7 +55,7 @@
                 eventLoggerUrl: '{{ event_logger_url }}'
             };
 
-            riot.mount('gf-title, gf-input');
+            riot.mount('gf-disclaimer, gf-title, gf-input');
         </script>
     </body>
 </html>
