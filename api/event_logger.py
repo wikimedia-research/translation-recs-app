@@ -22,4 +22,7 @@ def log_api_request(source, target, seed=None, search=None):
 
     url = URL + '?' + urllib.parse.quote_plus(json.dumps(payload))
 
-    requests.get(url)
+    try:
+        requests.get(url)
+    except requests.exceptions.RequestException:
+        pass
