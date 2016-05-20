@@ -68,8 +68,12 @@
     cursor: pointer;
 }
 
-.suggestion-image:hover, .suggestion-body:hover {
-    opacity: 0.8;
+.suggestion:hover{
+    border-color:#347BFF
+}
+
+.suggestion-flag:hover {
+    color:#347BFF
 }
 
 .suggestion-body {
