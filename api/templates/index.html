@@ -33,6 +33,14 @@
         <script src="{{ url_for('static', filename='bower_components/tether/dist/js/tether.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/store2/dist/store2.min.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.messagestore.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.fallbacks.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.parser.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.emitter.js') }}"></script>
+        <script src="{{ url_for('static', filename='bower_components/i18n/src/jquery.i18n.language.js') }}"></script>
+
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.data.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.data.utils.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.lcd.js') }}"></script>
@@ -52,10 +60,28 @@
                 globalBlacklistKey: 'not.notable.blacklist',
 
                 campaign: 'article-recommender-1',
-                eventLoggerUrl: '{{ event_logger_url }}'
+                eventLoggerUrl: '{{ event_logger_url }}',
+
+                i18nGapFinderPath: '{{ url_for('static', filename='i18n/') }}',
+                i18nUlsPath: '{{ url_for('static', filename='bower_components/uls/i18n/') }}'
             };
 
             riot.mount('gf-disclaimer, gf-title, gf-input');
+
+            function updateLanguage(language) {
+                var i18n = $.i18n();
+                i18n.load(window.translationAppGlobals.i18nUlsPath + language + '.json', language);
+                i18n.load(window.translationAppGlobals.i18nGapFinderPath + language + '.json', language).done(
+                        function () {
+                            i18n.locale = language;
+                            $('body').i18n();
+                        }
+                );
+            }
+
+            $(document).ready( function () {
+                updateLanguage('en');
+            });
         </script>
     </body>
 </html>

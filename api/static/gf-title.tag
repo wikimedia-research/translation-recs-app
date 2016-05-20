@@ -4,9 +4,9 @@
             <div class="dropdown">
                 <div class="col-xs-12">
                     <span class="icon icon-title icon-lightbulb"></span>
-                    <span class="title-display">Wikipedia</span>
-                    <span class="title-display-strong">GapFinder</span>
-                    <span class="title-display-version">beta</span>
+                    <span class="title-display" data-i18n="title-wikipedia">Wikipedia</span>
+                    <span class="title-display-strong" data-i18n="title-gapfinder">GapFinder</span>
+                    <span class="title-display-version" data-i18n="title-beta">beta</span>
                     <span class="icon icon-title icon-menu dropdown-toggle"
                           data-toggle="dropdown"></span>
                     <div class="dropdown-menu dropdown-menu-right m-r-1">
