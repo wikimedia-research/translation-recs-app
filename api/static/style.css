@@ -61,10 +61,11 @@
     width: 100%;
     height: 8rem;
     border: none;
-    background-size: contain;
+    background-size: cover;
     background-color: #ddd;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position-y: 33%;
+    background-position-x: center;
     cursor: pointer;
 }
 
