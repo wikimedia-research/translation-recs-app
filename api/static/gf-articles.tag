@@ -33,7 +33,7 @@
         self.source = opts.source || 'no-source-language';
         self.target = opts.target || 'no-target-language';
 
-        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=256&format=json&prop=pageimages&titles=';
+        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=512&format=json&prop=pageimages&titles=';
 
         self.detail = function (article) {
             return $.ajax({
