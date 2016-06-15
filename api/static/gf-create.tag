@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + targetTitle : '#'}>Create</a>
+                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + encodeURIComponent(targetTitle) : '#'}>Create</a>
                 </div>
             </div>
         </div>
