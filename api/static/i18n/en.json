@@ -19,7 +19,7 @@
 	"article-pageviews": "$1 recent {{PLURAL:$1|view|views}}",
 	"article-flag": "Flag this article...",
 	"article-flag-not-interesting": "Not interesting",
-	"article-flag-not-notable": "Not notable for $1 wikipedia",
+	"article-flag-not-notable": "Not notable for $1 Wikipedia",
 	"modal-close": "Close",
 	"modal-new-window": "Open this article in a new window",
 	"modal-previous": "Previous article",
