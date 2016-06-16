@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Nike"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Opas",
+	"menu-about": "Tietoja",
+	"menu-feedback": "Palaute",
+	"menu-source-code": "Lähdekoodi",
+	"selector-source": "Lähde",
+	"selector-target": "Kohde",
+	"search-placeholder": "Etsi luotavia artikkeleita",
+	"status-preparing": "Valmistellaan artikkelisuosituksia...",
+	"status-must-be-different": "Lähde- ja kohdekielen täytyy olla eri.",
+	"status-invalid-language": "Virheellinen lähde- tai kohdekieli",
+	"article-pageviews": "$1 {{PLURAL:$1|viimeaikainen katselu|viimeaikaista katselua}}",
+	"article-flag": "Merkitse tämä artikkeli...",
+	"article-flag-not-interesting": "Ei kiinnostava",
+	"article-flag-not-notable": "Ei merkittävä Wikipediassa ($1)",
+	"modal-close": "Sulje",
+	"modal-new-window": "Avaa tämä artikkeli uudessa ikkunassa",
+	"modal-previous": "Edellinen artikkeli",
+	"modal-next": "Seuraava artikkeli",
+	"modal-translate": "Käännä",
+	"modal-create-from-scratch": "Luo uusi tyhjästä",
+	"modal-loading": "Ladataan...",
+	"modal-preview-fail": "Ei Internet-yhteyttä",
+	"create-title": "Uusi artikkeli",
+	"create-title-input-placeholder": "Käännöksen otsikko",
+	"create-warning": "Varoitus!",
+	"create-action": "Luo",
+	"create-error-empty": "Otsikko ei saa olla tyhjä",
+	"create-error-invalid-character": "Virheellinen merkki otsikossa ( '|' )",
+	"create-error-exists": "Sivu on jo olemassa osoitteessa $1",
+	"create-error-invalid-page": "Sivu on virheellinen osoitteessa $1"
+}

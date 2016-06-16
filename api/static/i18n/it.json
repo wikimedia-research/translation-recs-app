@@ -1,0 +1,35 @@
+{
+	"@metadata": {
+		"authors": [
+			"Einreiher"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-beta": "beta",
+	"menu-how-to": "Come",
+	"menu-about": "Informazioni su",
+	"menu-feedback": "Feedback",
+	"menu-source-code": "Codice sorgente",
+	"selector-source": "Sorgente",
+	"selector-target": "Destinazione",
+	"search-placeholder": "Cerca articoli da redigere",
+	"status-must-be-different": "La lingua di partenza e quella di destinazione devono essere diverse.",
+	"status-invalid-language": "La lingua di partenza, quella di destinazione, oppure entrambe, non sono valide",
+	"article-pageviews": "$1 cronologia {{PLURAL:$1|view|views}}",
+	"article-flag": "Segnala questo articolo...",
+	"article-flag-not-interesting": "Non è interessante",
+	"article-flag-not-notable": "Non rilevante per $1 wikipedia",
+	"modal-close": "Chiudi",
+	"modal-new-window": "Apri questo articolo in una nuova finestra",
+	"modal-previous": "Articolo precedente",
+	"modal-next": "Prossimo articolo",
+	"modal-translate": "Traduci",
+	"modal-create-from-scratch": "Prepara da zero",
+	"create-title": "Nuovo articolo",
+	"create-title-input-placeholder": "Titolo della traduzione",
+	"create-warning": "Attenzione!",
+	"create-action": "Crea",
+	"create-error-empty": "È necessario specificare un titolo",
+	"create-error-exists": "Relativamente a $1 esiste già una pagina",
+	"create-error-invalid-page": "La pagina non è valida a $1"
+}

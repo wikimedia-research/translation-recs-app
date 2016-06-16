@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Purodha"
+		]
+	},
+	"title-wikipedia": "Wikkipehdija",
+	"menu-how-to": "Aanleijdong",
+	"menu-about": "Övver",
+	"menu-feedback": "Röckmälldonge",
+	"menu-source-code": "Et Quällprojramm",
+	"selector-source": "Quäll",
+	"selector-target": "Zihl",
+	"modal-close": "Zohmaache",
+	"modal-previous": "Vörrejje Atikel",
+	"modal-translate": "Övversäze",
+	"modal-create-from-scratch": "Vun nix uß schrihve",
+	"modal-loading": "aam Lahde&nbsp;…",
+	"create-title": "Neuje Atikel",
+	"create-warning": "Opjepaß!",
+	"create-action": "Aanlähje",
+	"create-error-empty": "De Övverschreff moß aanjejovve sinn."
+}

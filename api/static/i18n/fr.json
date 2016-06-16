@@ -1,0 +1,22 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kumkumuk",
+			"Yasten"
+		]
+	},
+	"title-wikipedia": "Wikipédia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "bêta",
+	"menu-about": "À propos",
+	"search-placeholder": "Rechercher des articles à créer",
+	"status-preparing": "Préparation des recommandations d'article...",
+	"status-must-be-different": "Les langues source et cible doivent être différentes",
+	"status-invalid-language": "Langue source ou cible invalide",
+	"modal-create-from-scratch": "Créer à partir de zéro",
+	"modal-loading": "Chargement...",
+	"create-title-input-placeholder": "Titre de la traduction",
+	"create-action": "Créer",
+	"create-error-exists": "Page déjà existante à $1",
+	"create-error-invalid-page": "Page invalide à $1"
+}

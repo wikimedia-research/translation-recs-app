@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chrumps"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"menu-about": "O stronie",
+	"menu-source-code": "Kod źródłowy",
+	"selector-source": "Źródło",
+	"selector-target": "Cel",
+	"status-invalid-language": "Nieprawidłowy język źródłowy lub docelowy",
+	"article-flag": "Oznacz ten artykuł...",
+	"modal-close": "Zamknij",
+	"modal-new-window": "Otwórz ten artykuł w nowym oknie",
+	"modal-previous": "Poprzedni artykuł",
+	"modal-next": "Następny artykuł",
+	"modal-loading": "Ładowanie...",
+	"create-title": "Nowy artykuł",
+	"create-warning": "Ostrzeżenie!",
+	"create-action": "Utwórz",
+	"create-error-empty": "Tytuł nie może być pusty",
+	"create-error-invalid-character": "Nieprawidłowy znak w tytule ('|')",
+	"create-error-exists": "Strona już istnieje pod $1"
+}
