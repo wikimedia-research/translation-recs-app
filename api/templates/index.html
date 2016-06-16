@@ -75,13 +75,10 @@
                         function () {
                             i18n.locale = language;
                             $('body').i18n();
+                            riot.update();
                         }
                 );
             }
-
-            $(document).ready( function () {
-                updateLanguage('en');
-            });
         </script>
     </body>
 </html>

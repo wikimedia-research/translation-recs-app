@@ -4,13 +4,13 @@
             <div class="row m-b-1">
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-r-0">
                     <a type="button" class="btn btn-block btn-secondary source-selector" name="from">
-                        <span class="selector-display">Source</span>
+                        <span class="selector-display">{$.i18n('selector-source')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-l-0">
                     <a type="button" class="btn btn-block btn-secondary target-selector" name="to">
-                        <span class="selector-display">Target</span>
+                        <span class="selector-display">{$.i18n('selector-target')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
@@ -19,7 +19,8 @@
         <div class="container-fluid seed-container">
             <div class="row">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control seed-input" placeholder="Search for articles to create" name="seedArticle">
+                    <input type="text" class="form-control seed-input"
+                           placeholder={ $.i18n('search-placeholder') } name="seedArticle">
                 </div>
             </div>
         </div>
@@ -27,11 +28,11 @@
     <div class="container-fluid m-t-1">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
-                <div class="text-xs-center alert alert-info" if={fetching}>
-                    Preparing article recommendations...
+                <div class="text-xs-center alert alert-info" data-i18n="status-preparing" if={fetching}>
+                    {$.i18n('status-preparing')}
                 </div>
-                <div class="text-xs-center alert alert-danger" if={error}>
-                    {error_msg}
+                <div class="text-xs-center alert alert-danger" data-i18n="{error_msg}" if={error}>
+                    {$.i18n(error_msg)}
                 </div>
             </div>
         </div>
@@ -110,10 +111,10 @@
 
         self.isInputValid = function () {
             if (self.source == self.target) {
-                self.error_msg = "Source and target languages must be different";
+                self.error_msg = 'status-must-be-different';
                 return false;
             } else if (!(self.source in self.sourceLanguages) || !(self.target in self.targetLanguages)){
-                self.error_msg = "Invalid source or target language";
+                self.error_msg = 'status-invalid-language';
                 return false;
             }
             return true;
@@ -131,6 +132,7 @@
 
         self.setSource = function (code) {
             self.source = code;
+            updateLanguage(self.source);
             self.sourceSelector.find('.selector-display').text($.uls.data.getAutonym(self.source));
         };
 

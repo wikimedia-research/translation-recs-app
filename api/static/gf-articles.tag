@@ -11,14 +11,14 @@
                     <p class="suggestion-text">{description}</p>
                 </div>
                 <div class="suggestion-footer">
-                    <span class="suggestion-views text-muted">{pageviews} recent views</span>
-                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title="Flag this article...">&#x2691;</span>
+                    <span class="suggestion-views text-muted">{$.i18n('article-pageviews', pageviews)}</span>
+                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title={$.i18n('article-flag')}>&#x2691;</span>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            Not interesting
+                            {$.i18n('article-flag-not-interesting')}
                         </button>
                         <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            Not notable for {target} wikipedia
+                            {$.i18n('article-flag-not-notable', target)}
                         </button>
                     </div>
                 </div>

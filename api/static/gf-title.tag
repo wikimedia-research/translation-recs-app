@@ -11,15 +11,15 @@
                           data-toggle="dropdown"></span>
                     <div class="dropdown-menu dropdown-menu-right m-r-1">
                         <button class="dropdown-item" type="button"
-                                data-toggle="modal" data-target="#howToModal">How to</button>
+                                data-toggle="modal" data-target="#howToModal" data-i18n="menu-how-to">How to</button>
                         <button class="dropdown-item" type="button"
-                                data-toggle="modal" data-target="#aboutModal">About</button>
+                                data-toggle="modal" data-target="#aboutModal" data-i18n="menu-about">About</button>
                         <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
-                           target="_blank">Feedback</a>
+                           target="_blank" data-i18n="menu-feedback">Feedback</a>
                         <a class="dropdown-item" href="https://github.com/wikimedia-research/translation-recs-app"
-                           target="_blank">Source code</a>
+                           target="_blank" data-i18n="menu-source-code">Source code</a>
                         <a class="dropdown-item" href="https://wikimediafoundation.org/wiki/Recommendations_Tool_Privacy_Statement"
-                           target="_blank">Privacy statement</a>
+                           target="_blank" data-i18n="menu-privacy-statement">Privacy statement</a>
                     </div>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                     <button type="button" class="close" data-dismiss="modal">
                         <h4 class="modal-title">&#x274c;</h4>
                     </button>
-                    <h4 class="modal-title">How to</h4>
+                    <h4 class="modal-title" data-i18n="menu-how-to">How to</h4>
                 </div>
                 <div class="modal-body">
                     <p>GapFinder helps you discover articles that exist one language but are missing another.
@@ -55,7 +55,7 @@
                     <button type="button" class="close" data-dismiss="modal">
                         <h4 class="modal-title">&#x274c;</h4>
                     </button>
-                    <h4 class="modal-title">About</h4>
+                    <h4 class="modal-title" data-i18n="menu-about">About</h4>
                 </div>
                 <div class="modal-body">
                     <p>We are a team of researchers, developers, and designers in the Wikimedia Foundation and Stanford University interested in identifying gaps of knowledge across the more than 160 active language editions of Wikipedia.
