@@ -45,7 +45,7 @@
                     page = data.query.pages[id];
 
                 article.id = id;
-                article.linkTitle = article.title;
+                article.linkTitle = encodeURIComponent(article.title);
                 article.title = page.title;
                 article.thumbnail = page.thumbnail ? page.thumbnail.source : null;
                 article.hovering = false;
