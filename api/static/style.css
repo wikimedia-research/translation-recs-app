@@ -68,11 +68,6 @@
     cursor: pointer;
 }
 
-.placeholder-image {
-    background-size: contain;
-    opacity: 0.1;
-}
-
 .suggestion:hover{
     border-color:#347BFF
 }

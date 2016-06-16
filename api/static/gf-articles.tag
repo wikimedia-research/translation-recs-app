@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-xs-12">
             <div each={articles} class="suggestion list-group-item m-b-1">
-                <div class="suggestion-image {placeholder}" onclick={preview}
+                <div class="suggestion-image" onclick={preview}
                         style="background-image: url('{thumbnail}');">
                 </div>
                 <div class="suggestion-body" onclick={preview}>
@@ -47,8 +47,7 @@
                 article.id = id;
                 article.linkTitle = article.title;
                 article.title = page.title;
-                article.thumbnail = page.thumbnail ? page.thumbnail.source : 'static/images/create.svg';
-                article.placeholder = page.thumbnail ? null : 'placeholder-image';
+                article.thumbnail = page.thumbnail ? page.thumbnail.source : 'static/images/lines.svg';
                 article.hovering = false;
                 self.update();
 
