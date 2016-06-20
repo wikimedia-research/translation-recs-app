@@ -12,6 +12,7 @@
 	"menu-about": "Text that links to the about page\n{{Identical|About}}",
 	"menu-feedback": "Text that links to the on-wiki talk page\n{{Identical|Feedback}}",
 	"menu-source-code": "Text that links to the GitHub repo\n{{Identical|Source code}}",
+	"menu-privacy-statement": "Text that links to the on-wiki privacy statement",
 	"selector-source": "Placeholder text for the language source selector dropdown\n{{Identical|Source}}",
 	"selector-target": "Placeholder text for the language target selector dropdown\n{{Identical|Target}}",
 	"search-placeholder": "Placeholder text for the search box to provide a seed article",
