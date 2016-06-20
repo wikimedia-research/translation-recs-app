@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"HalanTul",
+			"София"
+		]
+	},
+	"title-wikipedia": "Бикипиэдьийэ",
+	"title-beta": "бета-барыла",
+	"menu-how-to": "Хайдах",
+	"menu-about": "Бу туһунан",
+	"menu-feedback": "Ситимнэһии",
+	"menu-source-code": "Төрүт код",
+	"selector-source": "Хантан ылыллыбыта",
+	"selector-target": "Сыал-сорук",
+	"search-placeholder": "Саҥаны айарга ыстатыйаны көрдөө",
+	"status-preparing": "Ыстатыйалары мэктиэлииргэ бэлэмнээһин",
+	"status-invalid-language": "Төрүт матырыйаал биитэр тылы талыы туох эрэ алҕастаах",
+	"article-flag": "Бу ыстатыйаны бэлиэтээ...",
+	"article-flag-not-interesting": "Сэргээбэппин",
+	"modal-close": "Сап",
+	"modal-new-window": "Бу ыстатыйаны саҥа түннүккэ ас",
+	"modal-previous": "Иннинээҕи ыстатыйа",
+	"modal-next": "Кэлэр ыстатыйа",
+	"modal-translate": "Тылбаас",
+	"modal-create-from-scratch": "Саҥаттан суруй",
+	"modal-loading": "Киллэрии бара турар…",
+	"modal-preview-fail": "Интэриниэт холбоммотох",
+	"create-title": "Саҥа ыстатыйа",
+	"create-title-input-placeholder": "Тылбаастаммыт аат",
+	"create-warning": "Болҕойуҥ!",
+	"create-action": "Оҥоруу",
+	"create-error-empty": "Аата кураанах буолуо суостаах",
+	"create-error-invalid-character": "Ааттыырга туттуллубат бэлиэ ( '|' )",
+	"create-error-invalid-page": "$1 сирэй күүһүн сүтэрбит"
+}

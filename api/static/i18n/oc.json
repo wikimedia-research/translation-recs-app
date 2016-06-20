@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"Cedric31"
+		]
+	},
+	"title-wikipedia": "Wikipèdia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "bèta",
+	"menu-how-to": "Manual",
+	"menu-about": "A prepaus",
+	"menu-feedback": "Comentaris",
+	"menu-source-code": "Còdi font",
+	"selector-source": "Font",
+	"selector-target": "Cibla",
+	"search-placeholder": "Recercar d'articles de crear",
+	"status-invalid-language": "Lenga font o cibla invalida",
+	"article-pageviews": "$1 {{PLURAL:$1|consultacion recenta|consultacions recentas}}",
+	"modal-close": "Tampar",
+	"modal-previous": "Article precedent",
+	"modal-next": "Article seguent",
+	"modal-translate": "Traduire",
+	"modal-loading": "Cargament…",
+	"modal-preview-fail": "Pas d’Internet",
+	"create-title": "Article novèl",
+	"create-warning": "Atencion !",
+	"create-action": "Crear",
+	"create-error-invalid-page": "La pagina es pas valida a $1"
+}

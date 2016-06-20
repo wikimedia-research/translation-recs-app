@@ -1,0 +1,28 @@
+{
+	"@metadata": {
+		"authors": [
+			"Silovan"
+		]
+	},
+	"title-wikipedia": "ვიკიპედია",
+	"title-beta": "ბეტა",
+	"menu-how-to": "მუჭო",
+	"menu-about": "-შენი",
+	"menu-feedback": "წიმოხრსხუ",
+	"menu-source-code": "წყუშ კოდი",
+	"selector-target": "ოღანკე",
+	"article-flag-not-interesting": "ვა რე საინტერესო",
+	"modal-close": "კილუა",
+	"modal-new-window": "გონწყი თე სტატია ახალ ოსინთეს",
+	"modal-previous": "კინოხიანი სტატია",
+	"modal-next": "გეჸვენჯი სტატია",
+	"modal-translate": "თანგუა",
+	"modal-loading": "იხარგუაფუ...",
+	"modal-preview-fail": "ვა რე ინტერნეტი",
+	"create-title": "ახალი სტატია",
+	"create-title-input-placeholder": "თანგუაშ ჯოხოდვალა",
+	"create-warning": "ხვილაფა!",
+	"create-action": "დორსხუაფა",
+	"create-error-empty": "ჯოხოდვალა ცაიორი ოკო ვარდას",
+	"create-error-invalid-character": "ჩილათირი სიმბოლო ჯოხოდვალას ( '|' )"
+}

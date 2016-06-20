@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bjankuloski06"
+		]
+	},
+	"title-wikipedia": "Википедија —",
+	"title-gapfinder": "Пронаоѓач на празнини",
+	"title-beta": "бета",
+	"menu-how-to": "Упатство",
+	"menu-about": "За алатката",
+	"menu-feedback": "Мислења",
+	"menu-source-code": "Изворен код",
+	"selector-source": "Извор",
+	"selector-target": "Цел",
+	"search-placeholder": "Пребарајте статии за создавање",
+	"status-preparing": "Ги подготвувам препорачаните статии...",
+	"status-must-be-different": "Изворниот и целниот јазик мора да бидат различни",
+	"status-invalid-language": "Неважечки изворен или целен јазик",
+	"article-pageviews": "$1 {{PLURAL:$1|скорешна посета|скорешни посети}}",
+	"article-flag": "Обележи ја статијава...",
+	"article-flag-not-interesting": "Не е интересна",
+	"article-flag-not-notable": "Не е значајна за Википедија на $1",
+	"modal-close": "Затвори",
+	"modal-new-window": "Отвори ја статијава во нов прозорец",
+	"modal-previous": "Претходна статија",
+	"modal-next": "Следна статија",
+	"modal-translate": "Преведи",
+	"modal-create-from-scratch": "Создај од почеток",
+	"modal-loading": "Вчитувам...",
+	"modal-preview-fail": "Не сте на линија",
+	"create-title": "Нова статија",
+	"create-title-input-placeholder": "Наслов на преводот",
+	"create-warning": "Предупредување!",
+	"create-action": "Создај",
+	"create-error-empty": "Насловот не може да стои празен",
+	"create-error-invalid-character": "Неважечки знак во насловот ( „|“ )",
+	"create-error-exists": "Страницата веќе постои на $1",
+	"create-error-invalid-page": "Страницата е неважечка на $1"
+}

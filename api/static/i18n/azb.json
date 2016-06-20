@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Alp Er Tunqa"
+		]
+	},
+	"title-wikipedia": "ویکی‌پدیا",
+	"title-beta": "بتا",
+	"menu-how-to": "نئجه",
+	"menu-about": "گؤره",
+	"menu-feedback": "فیدبک",
+	"menu-source-code": "قایناق کوْد",
+	"selector-source": "قایناق",
+	"selector-target": "هدف",
+	"search-placeholder": "یاراتماق اوچون مقاله‌لری آختار",
+	"status-preparing": "مقاله تاپشیریقلاری حاضیرلانیر...",
+	"status-must-be-different": "قایناق ایله هدف دیللری فرقلی اولمالیدیر",
+	"status-invalid-language": "گئچرسیز قایناق یوخسا هدف دیل",
+	"article-flag": "بو مقاله‌نی علامتله...",
+	"article-flag-not-interesting": "جالب دئییل",
+	"modal-close": "باغلا",
+	"modal-new-window": "بو مقاله‌نی یئنی تبده آچ",
+	"modal-previous": "قاباقکی مقاله",
+	"modal-next": "سونراکی مقاله",
+	"modal-translate": "چئویر",
+	"modal-create-from-scratch": "قارالامادان یارات",
+	"modal-loading": "یوکلنیر...",
+	"modal-preview-fail": "اینترنت یوخدور",
+	"create-title": "یئنی مقاله",
+	"create-title-input-placeholder": "چئویرمه باشلیغی",
+	"create-warning": "ایخطار!",
+	"create-action": "یارات",
+	"create-error-empty": "باشلیق بوش اولمامالیدیر",
+	"create-error-exists": "صفحه ایندی $1-ده موجوددور.",
+	"create-error-invalid-page": "$1-ده صفحه گئچرلی دئییل"
+}

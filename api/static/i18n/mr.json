@@ -1,0 +1,39 @@
+{
+	"@metadata": {
+		"authors": [
+			"V.narsikar"
+		]
+	},
+	"title-wikipedia": "विकिपीडिया",
+	"title-gapfinder": "गॅपफाईंडर(अंतरालशोधक)",
+	"title-beta": "बीटा",
+	"menu-how-to": "कसे",
+	"menu-about": "च्या बद्दल",
+	"menu-feedback": "प्रतिक्रिया",
+	"menu-source-code": "स्रोत संकेत",
+	"selector-source": "स्रोत",
+	"selector-target": "लक्ष्य",
+	"search-placeholder": "निर्माण करावयाचे लेख शोधा",
+	"status-preparing": "लेख शिफारस तयार् करीत् आहे...",
+	"status-must-be-different": "स्रोत व लक्ष्य भाषा वेगळ्या असावयास हव्या",
+	"status-invalid-language": "अवैध स्रोत किंवा लक्ष्य भाषा",
+	"article-pageviews": "$1 अलीकडील {{PLURAL:$1|दृष्य|दृष्ये}}",
+	"article-flag": "या लेखास खूणपताका लावा...",
+	"article-flag-not-interesting": "आवडीचे नाही",
+	"article-flag-not-notable": "$1 विकिपीडियासाठी नोंद घेण्याजोगे नाही",
+	"modal-close": "बंद करा",
+	"modal-new-window": "नविन खिडकीत हा लेख उघडा",
+	"modal-previous": "पूर्वीचा लेख",
+	"modal-next": "पुढील लेख",
+	"modal-translate": "भाषांतर करा",
+	"modal-loading": "प्रभारण करीत आहे...",
+	"modal-preview-fail": "आंतरजाल नाही",
+	"create-title": "नविन लेख",
+	"create-title-input-placeholder": "भाषांतर शिर्षक",
+	"create-warning": "ताकीद!",
+	"create-action": "निर्मित करा",
+	"create-error-empty": "शीर्षक रिकामे नको",
+	"create-error-invalid-character": "शीर्षकात अवैध वर्ण ( '|' )",
+	"create-error-exists": "$1 वर हे पान पूर्वीच उपलब्ध आहे",
+	"create-error-invalid-page": "$1 वर पान अवैध आहे"
+}

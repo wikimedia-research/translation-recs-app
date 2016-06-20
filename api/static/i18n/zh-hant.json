@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kly",
+			"Liuxinyu970226"
+		]
+	},
+	"title-wikipedia": "維基百科",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "測試版",
+	"menu-how-to": "使用說明",
+	"menu-about": "關於",
+	"menu-feedback": "意見回饋",
+	"menu-source-code": "原始碼",
+	"selector-source": "來源語言",
+	"selector-target": "目的語言",
+	"search-placeholder": "搜尋條目以創建",
+	"status-preparing": "條目建議準備中…",
+	"status-must-be-different": "來源語言與目的語言不能相同",
+	"status-invalid-language": "無效的來源語言或目的語言",
+	"article-pageviews": "近期有$1次{{PLURAL:$1|瀏覽量|瀏覽量}}",
+	"article-flag": "標記此條目…",
+	"article-flag-not-interesting": "沒有興趣",
+	"article-flag-not-notable": "在$1維基百科上沒有關注度",
+	"modal-close": "關閉",
+	"modal-new-window": "以新視窗開啟此條目",
+	"modal-previous": "上一條目",
+	"modal-next": "下一條目",
+	"modal-translate": "翻譯",
+	"modal-create-from-scratch": "重新創建",
+	"modal-loading": "載入中…",
+	"modal-preview-fail": "網路無法連接",
+	"create-title": "新條目",
+	"create-title-input-placeholder": "翻譯標題",
+	"create-warning": "注意！",
+	"create-action": "建立條目",
+	"create-error-empty": "標題名稱不能為空",
+	"create-error-invalid-character": "標題裡存在無效字元「|」",
+	"create-error-exists": "頁面已存在於$1",
+	"create-error-invalid-page": "$1爲無效頁面"
+}

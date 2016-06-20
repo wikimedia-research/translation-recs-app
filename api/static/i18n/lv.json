@@ -1,0 +1,23 @@
+{
+	"@metadata": {
+		"authors": [
+			"Papuass"
+		]
+	},
+	"title-wikipedia": "Vikipēdija",
+	"title-beta": "beta",
+	"menu-about": "Par",
+	"menu-feedback": "Atsauksmes",
+	"selector-source": "Avots",
+	"selector-target": "Mērķis",
+	"modal-close": "Aizvērt",
+	"modal-previous": "Iepriekšējais raksts",
+	"modal-next": "Nākamais raksts",
+	"modal-translate": "Tulkot",
+	"modal-loading": "Ielādē…",
+	"modal-preview-fail": "Nav Interneta",
+	"create-title": "Jauns raksts",
+	"create-title-input-placeholder": "Tulkojuma nosaukums",
+	"create-warning": "Brīdinājums!",
+	"create-action": "Izveidot"
+}

@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Okras"
+		]
+	},
+	"title-wikipedia": "Википедия",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "бета-версия",
+	"menu-feedback": "Обратная связь",
+	"article-flag-not-interesting": "Не интересно",
+	"modal-close": "Закрыть",
+	"modal-new-window": "Открыть эту статью в новом окне",
+	"modal-previous": "Предыдущая статья",
+	"modal-next": "Следующая статья",
+	"modal-translate": "Перевести",
+	"modal-loading": "Загрузка…",
+	"create-title": "Новая статья",
+	"create-warning": "Внимание!",
+	"create-action": "Создать"
+}
