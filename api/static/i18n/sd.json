@@ -1,0 +1,36 @@
+{
+	"@metadata": {
+		"authors": [
+			"Mehtab ahmed"
+		]
+	},
+	"title-wikipedia": "وڪيپيڊيا",
+	"title-beta": "آزمائشي",
+	"menu-how-to": "ڪيئن",
+	"menu-about": "بابت",
+	"menu-feedback": "پذيرائي",
+	"menu-source-code": "سورس ڪوڊ",
+	"menu-privacy-statement": "ذاتيات بيان",
+	"selector-source": "ذريعو",
+	"selector-target": "نشانو",
+	"search-placeholder": "تخليق ڪرڻ لاءِ مضمون ڳوليو",
+	"status-preparing": "مضمون جون تجويزون تيار ڪندي...",
+	"status-must-be-different": "ذريعي واري ۽ نشاني واري ٻولي لازماََ مختلف ھجڻ گھرجن",
+	"status-invalid-language": "ناقابل قبول ذريعو جا گھربل ٻولي",
+	"article-flag": "ھن مضمون تي جھنڊو لڳايو...",
+	"article-flag-not-interesting": "دلچسپ ناھي",
+	"modal-close": "بند ڪريو",
+	"modal-new-window": "ھن مضمون کي نئين ونڊو ۾ کوليو",
+	"modal-previous": "پويون مضمون",
+	"modal-next": "اڳيون مضمون",
+	"modal-translate": "ترجمو ڪريو",
+	"modal-create-from-scratch": "نئين سري کان تخليق ڪريو",
+	"modal-loading": "اتاريندي...",
+	"modal-preview-fail": "انٽرنيٽ ناھي",
+	"create-title": "نئون مضمون",
+	"create-title-input-placeholder": "ترجماتي عنوان",
+	"create-warning": "چتاءُ!",
+	"create-action": "تخليق ڪريو",
+	"create-error-empty": "عنوان لازماََ خالي نہ ھجڻ گھرجي",
+	"create-error-exists": "صفحو $1 تي اڳ ئي وجود رکي ٿو"
+}

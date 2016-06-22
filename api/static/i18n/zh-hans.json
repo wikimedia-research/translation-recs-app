@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Yfdyh000"
 		]
 	},
 	"title-wikipedia": "维基百科",
@@ -11,6 +12,7 @@
 	"menu-about": "关于",
 	"menu-feedback": "反馈",
 	"menu-source-code": "源代码",
+	"menu-privacy-statement": "隐私声明",
 	"selector-source": "来源",
 	"selector-target": "目标",
 	"search-placeholder": "搜索条目以创建",

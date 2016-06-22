@@ -9,6 +9,7 @@
 	"title-beta": "ベータ",
 	"menu-feedback": "フィードバック",
 	"menu-source-code": "ソースコード",
+	"menu-privacy-statement": "プライバシーに関する名声",
 	"selector-source": "翻訳元の言語",
 	"selector-target": "翻訳先の言語",
 	"status-must-be-different": "翻訳元と翻訳先の言語を同じにすることはできません",

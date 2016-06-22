@@ -1,0 +1,31 @@
+{
+	"@metadata": {
+		"authors": [
+			"Medol"
+		]
+	},
+	"title-wikipedia": "Viquipèdia",
+	"title-beta": "beta",
+	"menu-feedback": "Comentaris",
+	"menu-source-code": "Codi font",
+	"menu-privacy-statement": "Declaració de privacitat",
+	"selector-source": "Font",
+	"search-placeholder": "Buscar articles per crear",
+	"status-preparing": "Preparant recomanacions per l'article...",
+	"article-flag-not-interesting": "No és interessant",
+	"article-flag-not-notable": "No destaca per $1 Viquipèdia",
+	"modal-close": "Tanca",
+	"modal-new-window": "Obrir aquest article en una finestra nova",
+	"modal-previous": "Article anterior",
+	"modal-next": "Article següent",
+	"modal-translate": "Traduir",
+	"modal-create-from-scratch": "Crear de zero",
+	"modal-loading": "S'està carregant...",
+	"modal-preview-fail": "No hi ha Internet",
+	"create-title": "Article nou",
+	"create-warning": "Compte!",
+	"create-action": "Crear",
+	"create-error-empty": "El títol no pot estar buit",
+	"create-error-invalid-character": "Caràcter invàlid al títol ('|')",
+	"create-error-exists": "La pàgina ja existeix a $1"
+}
