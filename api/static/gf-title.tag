@@ -36,7 +36,7 @@
                     <h4 class="modal-title" data-i18n="menu-how-to">How to</h4>
                 </div>
                 <div class="modal-body">
-                    <p>GapFinder helps you discover articles that exist one language but are missing another.
+                    <p>GapFinder helps you discover articles that exist in one language but are missing in another.
 
                     <p>Start by selecting a source language and a target language. GapFinder will find trending articles in the source that  are missing in the target.
 
