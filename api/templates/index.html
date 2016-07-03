@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.lcd.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='bower_components/uls/css/jquery.uls.compact.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='suggest-searches/wm-typeahead.css') }}">
     </head>
     <body>
         <gf-disclaimer></gf-disclaimer>
@@ -47,6 +48,10 @@
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.languagefilter.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.regionfilter.js') }}"></script>
         <script src="{{ url_for('static', filename='bower_components/uls/src/jquery.uls.core.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='suggest-searches/mediawiki.lite.js') }}"></script>
+        <script src="{{ url_for('static', filename='suggest-searches/polyfills.js') }}"></script>
+        <script src="{{ url_for('static', filename='suggest-searches/wm-typeahead.js') }}"></script>
 
         <script>
             // globals from server
