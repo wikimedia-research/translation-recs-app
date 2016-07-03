@@ -38,10 +38,6 @@ var WMTypeAhead = function ( appendTo, searchInput, callback ) {
         activeItem,
         callbackOnSelect = callback;
 
-
-
-    console.log(appendEl);
-
     // only create typeAheadEl once on page.
     if ( !typeAheadEl ) {
         typeAheadEl = document.createElement( 'div' );
@@ -363,6 +359,7 @@ var WMTypeAhead = function ( appendTo, searchInput, callback ) {
                 event.preventDefault();
                 var val = $.data(this, 'data');
                 callbackOnSelect(event, val);
+                clearTypeAhead();
             });
 
             // attaching hover events
