@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"Liuxinyu970226",
+			"Yfdyh000"
+		]
+	},
+	"title-wikipedia": "维基百科",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "测试",
+	"menu-how-to": "如何",
+	"menu-about": "关于",
+	"menu-feedback": "反馈",
+	"menu-source-code": "源代码",
+	"menu-privacy-statement": "隐私声明",
+	"selector-source": "来源",
+	"selector-target": "目标",
+	"search-placeholder": "搜索条目以创建",
+	"status-preparing": "正在准备条目建议...",
+	"status-must-be-different": "来源语言和目标语言必须不同",
+	"status-invalid-language": "无效的来源语言或目标语言",
+	"article-pageviews": "$1次最近{{PLURAL:$1|查看}}",
+	"article-flag": "标记此条目...",
+	"article-flag-not-interesting": "不感兴趣",
+	"article-flag-not-notable": "在$1维基百科上没有关注度",
+	"modal-close": "关闭",
+	"modal-new-window": "在新窗口打开此条目",
+	"modal-previous": "上一条目",
+	"modal-next": "下一条目",
+	"modal-translate": "翻译",
+	"modal-create-from-scratch": "从头开始创建",
+	"modal-loading": "正在载入...",
+	"modal-preview-fail": "无网络连接",
+	"create-title": "新条目",
+	"create-title-input-placeholder": "翻译标题",
+	"create-warning": "警告！",
+	"create-action": "创建",
+	"create-error-empty": "标题不允许为空",
+	"create-error-invalid-character": "标题中有无效字符（“|”）",
+	"create-error-exists": "页面已在$1存在",
+	"create-error-invalid-page": "页面在$1无效"
+}

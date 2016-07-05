@@ -1,0 +1,43 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kumkumuk",
+			"Yasten",
+			"Gomoko"
+		]
+	},
+	"title-wikipedia": "Wikipédia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "bêta",
+	"menu-how-to": "Manuel",
+	"menu-about": "À propos",
+	"menu-feedback": "Commentaires",
+	"menu-source-code": "Code source",
+	"menu-privacy-statement": "Déclaration de confidentialité",
+	"selector-source": "Source",
+	"selector-target": "Cible",
+	"search-placeholder": "Rechercher des articles à créer",
+	"status-preparing": "Préparation des recommandations d'article...",
+	"status-must-be-different": "Les langues source et cible doivent être différentes",
+	"status-invalid-language": "Langue source ou cible invalide",
+	"article-pageviews": "$1 {{PLURAL:$1|consultation récente|consultations récentes}}",
+	"article-flag": "Marquer cet article…",
+	"article-flag-not-interesting": "Sans intérêt",
+	"article-flag-not-notable": "Non notable pour Wikipédia $1",
+	"modal-close": "Fermer",
+	"modal-new-window": "Ouvrir cet article dans une nouvelle fenêtre",
+	"modal-previous": "Article précédent",
+	"modal-next": "Article suivant",
+	"modal-translate": "Traduire",
+	"modal-create-from-scratch": "Créer à partir de zéro",
+	"modal-loading": "Chargement...",
+	"modal-preview-fail": "Pas d’Internet",
+	"create-title": "Nouvel article",
+	"create-title-input-placeholder": "Titre de la traduction",
+	"create-warning": "Attention !",
+	"create-action": "Créer",
+	"create-error-empty": "Le titre ne doit pas être vide",
+	"create-error-invalid-character": "Caractère non valide dans le titre ('|')",
+	"create-error-exists": "Page déjà existante à $1",
+	"create-error-invalid-page": "Page invalide à $1"
+}

@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"Amire80",
+			"Liuxinyu970226"
+		]
+	},
+	"title-wikipedia": "The name 'Wikipedia'\n{{Identical|Wikipedia}}",
+	"title-gapfinder": "The title of the tool",
+	"title-beta": "Text signifying the tool is in a beta stage\n{{Identical|Beta}}",
+	"menu-how-to": "Text that links to the instructional page",
+	"menu-about": "Text that links to the about page\n{{Identical|About}}",
+	"menu-feedback": "Text that links to the on-wiki talk page\n{{Identical|Feedback}}",
+	"menu-source-code": "Text that links to the GitHub repo\n{{Identical|Source code}}",
+	"menu-privacy-statement": "Text that links to the on-wiki privacy statement",
+	"selector-source": "Placeholder text for the language source selector dropdown\n{{Identical|Source}}",
+	"selector-target": "Placeholder text for the language target selector dropdown\n{{Identical|Target}}",
+	"search-placeholder": "Placeholder text for the search box to provide a seed article",
+	"status-preparing": "Status message that indicates the list of recommendations are being prepared",
+	"status-must-be-different": "Message indicating the source and target languages must be different",
+	"status-invalid-language": "Message indicating that either the source or target language are invalid",
+	"article-pageviews": "Message indicating the number of recent pageviews an article has",
+	"article-flag": "Text describing the option to flag an article in one of many (currently 2) ways",
+	"article-flag-not-interesting": "Text describing the article as not being interesting to the user",
+	"article-flag-not-notable": "Text describing the article as not being notable for the target language's Wikipedia",
+	"modal-close": "Text describing a close action\n{{Identical|Close}}",
+	"modal-new-window": "Text describing opening the article in a new window",
+	"modal-previous": "Action that navigates to the previous article in the list of recommendations",
+	"modal-next": "Action that navigates to the next article in the list of recommendations",
+	"modal-translate": "Action that indicates the user will begin translating the article using the CX tool\n{{Identical|Translate}}",
+	"modal-create-from-scratch": "Action that indicates the user will begin creating the article from scratch",
+	"modal-loading": "Message that indicates the page is loading\n{{Identical|Loading}}",
+	"modal-preview-fail": "Message that indicates the article preview failed to load",
+	"create-title": "Title that indicates a new article is being created",
+	"create-title-input-placeholder": "Placeholder text that describes an article title",
+	"create-warning": "Text that is attention getting to alert the user to an error\n{{Identical|Warning}}",
+	"create-action": "Action that navigates the user to create the article on-wiki\n{{Identical|Create}}",
+	"create-error-empty": "Error message describing that the title must not be empty",
+	"create-error-invalid-character": "Error message describing an invalid character in the title",
+	"create-error-exists": "Error message describing that the article already exists at a url",
+	"create-error-invalid-page": "Error message describing that the article is invalid at a url"
+}

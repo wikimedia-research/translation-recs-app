@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kumkumuk"
+		]
+	},
+	"title-wikipedia": "Vikipedi",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Nasıl",
+	"menu-about": "Hakkında",
+	"menu-feedback": "Geri bildirim",
+	"menu-source-code": "Kaynak kodu",
+	"selector-source": "Kaynak",
+	"selector-target": "Hedef",
+	"search-placeholder": "Makale oluşturmak için arayın",
+	"status-preparing": "Makale hazırlama önerileri...",
+	"status-must-be-different": "Kaynak Dili ve hedef dili farklı olmalı",
+	"status-invalid-language": "Geçersiz kaynak veya hedef dil",
+	"article-pageviews": "$1 son {{PLURAL:$1|görünüm|görünümler}}",
+	"article-flag": "Bu makaleyi işaretle...",
+	"article-flag-not-interesting": "İlginç değil",
+	"article-flag-not-notable": "$1 wikipedi için önemli değil",
+	"modal-close": "Kapat",
+	"modal-new-window": "Bu makaleyi yeni bir sekmede açın",
+	"modal-previous": "Önceki makale",
+	"modal-next": "Sonraki makale",
+	"modal-translate": "Çevir",
+	"modal-create-from-scratch": "Sıfırdan yarat",
+	"modal-loading": "Yükleniyor...",
+	"modal-preview-fail": "İnternet yok",
+	"create-title": "Yeni Makale",
+	"create-title-input-placeholder": "Çeviri başlığı",
+	"create-warning": "Uyarılar!",
+	"create-action": "Oluştur",
+	"create-error-empty": "Başlık alanı boş bırakılanaz",
+	"create-error-invalid-character": "( '|' ) başlığında geçersiz karakter",
+	"create-error-exists": "$1 isimli bir sayfa zaten var",
+	"create-error-invalid-page": "$1 sayfası geçersiz"
+}

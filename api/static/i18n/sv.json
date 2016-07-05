@@ -1,0 +1,40 @@
+{
+	"@metadata": {
+		"authors": [
+			"WikiPhoenix"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Instruktioner",
+	"menu-about": "Om",
+	"menu-feedback": "Återkoppling",
+	"menu-source-code": "Källkod",
+	"menu-privacy-statement": "Integritetspolicy",
+	"selector-source": "Källa",
+	"selector-target": "Mål",
+	"search-placeholder": "Sök artiklar att skapa",
+	"status-preparing": "Förbereder artikelrekommendationer...",
+	"status-must-be-different": "Käll- och målspråken måste vara olika",
+	"status-invalid-language": "Ogiltigt käll- eller målspråk",
+	"article-pageviews": "$1 {{PLURAL:$1|nyligt besök|nyliga besök}}",
+	"article-flag": "Flagga denna artikel...",
+	"article-flag-not-interesting": "Inte intressant",
+	"modal-close": "Stäng",
+	"modal-new-window": "Öppna denna artikel i ett nytt fönster",
+	"modal-previous": "Föregående artikel",
+	"modal-next": "Nästa artikel",
+	"modal-translate": "Översätt",
+	"modal-create-from-scratch": "Skapa från grunden",
+	"modal-loading": "Läser in...",
+	"modal-preview-fail": "Ingen Internet",
+	"create-title": "Ny artikel",
+	"create-title-input-placeholder": "Översättningstitel",
+	"create-warning": "Varning!",
+	"create-action": "Skapa",
+	"create-error-empty": "Titeln får inte vara tom",
+	"create-error-invalid-character": "Ogiltigt tecken i titeln ('|')",
+	"create-error-exists": "Sidan finns redan på $1",
+	"create-error-invalid-page": "Sidan är ogiltig på $1"
+}

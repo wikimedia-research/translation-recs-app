@@ -61,15 +61,19 @@
     width: 100%;
     height: 8rem;
     border: none;
-    background-size: contain;
-    background-color: #ddd;
+    background-size: cover;
     background-repeat: no-repeat;
-    background-position: center center;
+    background-position-y: 33%;
+    background-position-x: center;
     cursor: pointer;
 }
 
-.suggestion-image:hover, .suggestion-body:hover {
-    opacity: 0.8;
+.suggestion:hover{
+    border-color:#347BFF
+}
+
+.suggestion-flag:hover {
+    color:#347BFF
 }
 
 .suggestion-body {

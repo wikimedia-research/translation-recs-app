@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Metalhead64"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "Beta",
+	"menu-how-to": "Anleitung",
+	"menu-about": "Über",
+	"menu-feedback": "Rückmeldung",
+	"menu-source-code": "Quellcode",
+	"menu-privacy-statement": "Erklärung zum Datenschutz",
+	"selector-source": "Quelle",
+	"selector-target": "Ziel",
+	"search-placeholder": "Nach Artikeln zur Erstellung suchen",
+	"status-preparing": "Bereite Artikelempfehlungen vor …",
+	"status-must-be-different": "Die Quell- und Zielsprachen müssen unterschiedlich sein",
+	"status-invalid-language": "Ungültige Quell- oder Zielsprache",
+	"article-pageviews": "{{PLURAL:$1|Ein Aufruf|$1 Aufrufe}} in letzter Zeit",
+	"article-flag": "Diesen Artikel markieren …",
+	"article-flag-not-interesting": "Nicht interessant",
+	"article-flag-not-notable": "Nicht relevant für die $1 Wikipedia",
+	"modal-close": "Schließen",
+	"modal-new-window": "Diesen Artikel in einem neuen Fenster öffnen",
+	"modal-previous": "Vorheriger Artikel",
+	"modal-next": "Nächster Artikel",
+	"modal-translate": "Übersetzen",
+	"modal-create-from-scratch": "Aus Entwurf erstellen",
+	"modal-loading": "Lade …",
+	"modal-preview-fail": "Kein Internet",
+	"create-title": "Neuer Artikel",
+	"create-title-input-placeholder": "Übersetzungstitel",
+	"create-warning": "Warnung!",
+	"create-action": "Erstellen",
+	"create-error-empty": "Der Titel darf nicht leer sein",
+	"create-error-invalid-character": "Ungültiges Zeichen im Titel („|“)",
+	"create-error-exists": "Seite ist bei $1 bereits vorhanden",
+	"create-error-invalid-page": "Seite ist bei $1 ungültig"
+}

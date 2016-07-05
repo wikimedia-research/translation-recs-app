@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Macofe"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Manual",
+	"menu-about": "Acerca de",
+	"menu-feedback": "Comentarios",
+	"menu-source-code": "Código fuente",
+	"menu-privacy-statement": "Declaración de privacidad",
+	"selector-source": "Fuente",
+	"selector-target": "Destino",
+	"search-placeholder": "Busca artículos que crear",
+	"status-preparing": "Preparando recomendaciones de artículos...",
+	"status-must-be-different": "Los idiomas de origen y destino deben ser diferentes",
+	"status-invalid-language": "El idioma origen o destino no es válido",
+	"article-pageviews": "$1 {{PLURAL:$1|visita reciente|visitas recientes}}",
+	"article-flag": "Marcar este artículo...",
+	"article-flag-not-interesting": "No es interesante",
+	"article-flag-not-notable": "No es relevante para la Wikipedia en $1",
+	"modal-close": "Cerrar",
+	"modal-new-window": "Abrir este artículo en una ventana nueva",
+	"modal-previous": "Artículo anterior",
+	"modal-next": "Próximo artículo",
+	"modal-translate": "Traducir",
+	"modal-create-from-scratch": "Crear desde cero",
+	"modal-loading": "Cargando...",
+	"modal-preview-fail": "No hay Internet",
+	"create-title": "Artículo nuevo",
+	"create-title-input-placeholder": "Título de la traducción",
+	"create-warning": "Advertencia",
+	"create-action": "Crear",
+	"create-error-empty": "El título no debe estar vacío",
+	"create-error-invalid-character": "Carácter no válido en el título ( '|' )",
+	"create-error-exists": "Ya existe la página en $1",
+	"create-error-invalid-page": "La página no es válida en $1"
+}

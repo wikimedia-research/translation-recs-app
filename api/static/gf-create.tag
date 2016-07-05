@@ -1,11 +1,11 @@
-<create_article>
+<gf-create>
     <div id="createModal" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="container-fluid">
                         <div class="row">
-                            <h4 class="modal-title col-xs-8">New Article</h4>
+                            <h4 class="modal-title col-xs-8">{$.i18n('create-title')}</h4>
                             <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal">
                                 <h4 class="m-y-0">&#x274c;</h4>
                             </button>
@@ -15,14 +15,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input id="targetTitle" type="text" class="form-control" placeholder="Translation title" oninput={validateTitle}>
+                        <input id="targetTitle" type="text" class="form-control" placeholder="{$.i18n('create-title-input-placeholder')}" oninput={validateTitle}>
                     </div>
                     <div class={alert: true, invisible: errorMessage === '', alert-danger: true} role="alert">
-                        <strong>Warning!</strong> {errorMessage}<a class="alert-link" target="_blank" href={errorLink}>{errorLink}</a>.
+                        <strong>{$.i18n('create-warning')}</strong> {errorMessage} <a class="alert-link" target="_blank" href={errorLink}>{errorLink}</a>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + targetTitle : '#'}>Create</a>
+                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + encodeURIComponent(targetTitle) : '#'}>{$.i18n('create-action')}</a>
                 </div>
             </div>
         </div>
@@ -48,11 +48,11 @@
             var targetTitle = $('#targetTitle')[0].value;
 
             if ( targetTitle === '' ) {
-                self.setInvalid('Title must not be empty', '');
+                self.setInvalid($.i18n('create-error-empty'), '');
                 return;
             }
             if ( /\|/.test(targetTitle) ) {
-                self.setInvalid('Invalid character in title ( "|" )', '');
+                self.setInvalid($.i18n('create-error-invalid-character'), '');
                 return;
             }
 
@@ -74,11 +74,11 @@
                     self.targetTitle = title;
                     self.setValid();
                 } else {
-                    self.setInvalid('Page already exists at ', self.existsLinkRoot + title);
+                    self.setInvalid($.i18n('create-error-exists', '"' + title + '"'), self.existsLinkRoot + title);
                 }
 
                 if ( response.query.pages[pageid].invalid !== undefined ) {
-                    self.setInvalid('Page is invalid at ', self.existsLinkRoot + title);
+                    self.setInvalid($.i18n('create-error-invalid', '"' + title + '"'), self.existsLinkRoot + title);
                 }
             });
         };
@@ -120,4 +120,4 @@
 
     </script>
 
-</create_article>
+</gf-create>

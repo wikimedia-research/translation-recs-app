@@ -1,0 +1,34 @@
+{
+	"@metadata": {
+		"authors": [
+			"Robby"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "Beta",
+	"menu-how-to": "Wéi et geet",
+	"menu-about": "Iwwer",
+	"menu-feedback": "Feedback",
+	"menu-source-code": "Quellcode",
+	"selector-source": "Quell",
+	"selector-target": "Zil",
+	"article-flag": "Dësen Artikel markéieren …",
+	"article-flag-not-interesting": "Net interessant",
+	"article-flag-not-notable": "Net relevant fir Wikipedia op $1",
+	"modal-close": "Zoumaachen",
+	"modal-new-window": "Dësen Artikel an enger neier Fënster opmaachen",
+	"modal-previous": "Viregen Artikel",
+	"modal-next": "Nächsten Artikel",
+	"modal-translate": "Iwwersetzen",
+	"modal-create-from-scratch": "Vun null ufänken",
+	"modal-loading": "Lueden...",
+	"modal-preview-fail": "Keen Internet",
+	"create-title": "Neien Artikel",
+	"create-title-input-placeholder": "Iwwersetzungstitel",
+	"create-warning": "Warnung!",
+	"create-action": "Uleeën",
+	"create-error-empty": "Den Titel däerf net eidel sinn",
+	"create-error-exists": "Säit gëtt et schonn op $1",
+	"create-error-invalid-page": "Säit ass net valabel op $1"
+}

@@ -1,38 +1,16 @@
-<Recommend>
+<gf-input>
     <form onsubmit={submitRequest}>
         <div class="container-fluid m-t-1">
             <div class="row m-b-1">
-                <div class="dropdown">
-                    <div class="col-xs-12">
-                        <span class="icon icon-title icon-lightbulb"></span>
-                        <span class="title-display">Wikipedia</span>
-                        <span class="title-display-strong">GapFinder</span>
-                        <span class="title-display-version">beta</span>
-                        <span class="icon icon-title icon-menu dropdown-toggle"
-                              data-toggle="dropdown"></span>
-                        <div class="dropdown-menu dropdown-menu-right m-r-1">
-                            <button class="dropdown-item" type="button"
-                                    data-toggle="modal" data-target="#howToModal">How to</button>
-                            <button class="dropdown-item" type="button"
-                                    data-toggle="modal" data-target="#aboutModal">About</button>
-                            <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
-                               target="_blank">Feedback</a>
-                            <a class="dropdown-item" href="https://github.com/ewulczyn/translation-recs-app"
-                               target="_blank">Source code</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row m-b-1">
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-r-0">
                     <a type="button" class="btn btn-block btn-secondary source-selector" name="from">
-                        <span class="selector-display">Source</span>
+                        <span class="selector-display">{$.i18n('selector-source')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-l-0">
                     <a type="button" class="btn btn-block btn-secondary target-selector" name="to">
-                        <span class="selector-display">Target</span>
+                        <span class="selector-display">{$.i18n('selector-target')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
@@ -41,7 +19,8 @@
         <div class="container-fluid seed-container">
             <div class="row">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control seed-input" placeholder="Search for articles to create" name="seedArticle">
+                    <input type="text" class="form-control seed-input"
+                           placeholder={ $.i18n('search-placeholder') } name="seedArticle">
                 </div>
             </div>
         </div>
@@ -49,74 +28,18 @@
     <div class="container-fluid m-t-1">
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
-                <div class="text-xs-center alert alert-info" if={fetching}>
-                    Preparing article recommendations...
+                <div class="text-xs-center alert alert-info" data-i18n="status-preparing" if={fetching}>
+                    {$.i18n('status-preparing')}
                 </div>
-                <div class="text-xs-center alert alert-danger" if={error}>
-                    {error_msg}
+                <div class="text-xs-center alert alert-danger" data-i18n="{error_msg}" if={error}>
+                    {$.i18n(error_msg)}
                 </div>
             </div>
         </div>
         <div class={invisible: fetching || error}>
-            <articles></articles>
+            <gf-articles></gf-articles>
         </div>
     </div>
-
-    <div id="howToModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <h4 class="modal-title">&#x274c;</h4>
-                    </button>
-                    <h4 class="modal-title">How to</h4>
-                </div>
-                <div class="modal-body">
-                    <p>GapFinder helps you discover articles that exist one language but are missing another.
-
-                    <p>Start by selecting a source language and a target language. GapFinder will find trending articles in the source that  are missing in the target.
-
-                    <p>If you are interested in a particular topic area, provide a seed article in the source language, and GapFinder will find related articles missing in the target.
-
-                    <p>Click on a card to take a closer look at a missing article to see if you would like to create it from scratch or translate it.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="aboutModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <h4 class="modal-title">&#x274c;</h4>
-                    </button>
-                    <h4 class="modal-title">About</h4>
-                </div>
-                <div class="modal-body">
-                    <p>We are a team of researchers, developers, and designers in the Wikimedia Foundation and Stanford University interested in identifying gaps of knowledge across the more than 160 active language editions of Wikipedia.
-
-                    <p>Back in 2015, we started a project to identify missing content in Wikipedia, rank it by its importance, and recommend the ranked missing content to Wikipedia’s volunteer editors based on their interests as captured by their editor history. We ran an experiment in June 2015 in French Wikipedia where we showed that by emailing recommendations to volunteer editors we can triple the article creation rate in Wikipedia while maintaining the current level of quality in Wikipedia articles. If you are interested to learn more about that research, you can read more about it <a href = "http://arxiv.org/abs/1604.03235"> here</a>.
-
-                    <p>Encouraged by the result of the experiment, we have developed Wikipedia GapFinder, an app that helps you find missing content in any language for which there is a Wikipedia edition. GapFinder can help you to easily find articles to create in the language of your choice. It also lets you personalize the recommendations by providing a seed article, an article that you would like to receive similar missing article recommendations.
-
-                    <p>GapFinder is a research app at the moment. By using it, you will make more content available in your local language, and help us understand how we can improve the app. Please share your feedback on <a href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool" target="_blank">the tool's talk page</a>.
-
-                    <h6>In the media:</h6>
-                        <ul>
-                            <li>
-                                <a href="http://www.lemonde.fr/sciences/article/2016/01/11/wikipedia-la-connaissance-en-mutation_4845347_1650684.html" target="_blank"> Le Monde: Wikipédia, quinze ans de recherches</a>
-                            </li>
-                            <li>
-                                <a href="https://news.stanford.edu/2016/04/14/stanford-wikimedia-researchers-create-tool-boost-article-creation-local-language-wikipedias/" target="_blank">Stanford and Wikimedia researchers create a tool to boost article creation in local language Wikipedias</a>
-                            </li>
-                        </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <preview></preview>
 
     <script>
         var self = this;
@@ -177,7 +100,7 @@
                     self.error = true;
                     self.update();
                 } else {
-                    riot.mount('articles', {
+                    riot.mount('gf-articles', {
                         articles: articles,
                         source: self.source,
                         target: self.target
@@ -188,10 +111,10 @@
 
         self.isInputValid = function () {
             if (self.source == self.target) {
-                self.error_msg = "Source and target languages must be different";
+                self.error_msg = 'status-must-be-different';
                 return false;
             } else if (!(self.source in self.sourceLanguages) || !(self.target in self.targetLanguages)){
-                self.error_msg = "Invalid source or target language";
+                self.error_msg = 'status-invalid-language';
                 return false;
             }
             return true;
@@ -209,6 +132,7 @@
 
         self.setSource = function (code) {
             self.source = code;
+            updateLanguage(self.source);
             self.sourceSelector.find('.selector-display').text($.uls.data.getAutonym(self.source));
         };
 
@@ -358,4 +282,4 @@
         };
 
     </script>
-</Recommend>
+</gf-input>

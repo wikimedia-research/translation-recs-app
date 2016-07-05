@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Elisardojm"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Manual",
+	"menu-about": "Acerca de",
+	"menu-feedback": "Comentarios",
+	"menu-source-code": "Código fonte",
+	"menu-privacy-statement": "Declaración de privacidade",
+	"selector-source": "Fonte",
+	"selector-target": "Destino",
+	"search-placeholder": "Buscar artigos para crear",
+	"status-preparing": "Preparando recomendacións de artigos...",
+	"status-must-be-different": "As linguas de orixe e destino deben ser diferentes",
+	"status-invalid-language": "A lingua orixe ou destino non é válida",
+	"article-pageviews": "$1 {{PLURAL:$1|visita recente|visitas recentes}}",
+	"article-flag": "Marcar este artigo...",
+	"article-flag-not-interesting": "Non interesante",
+	"article-flag-not-notable": "Non notable para Wikipedia $1",
+	"modal-close": "Pechar",
+	"modal-new-window": "Abrir este artigo nunha ventana nova",
+	"modal-previous": "Artigo anterior",
+	"modal-next": "Seguinte artigo",
+	"modal-translate": "Traducir",
+	"modal-create-from-scratch": "Crear desde cero",
+	"modal-loading": "Cargando...",
+	"modal-preview-fail": "No hai Internet",
+	"create-title": "Artigo novo",
+	"create-title-input-placeholder": "Título da tradución",
+	"create-warning": "Advertenciaǃ",
+	"create-action": "Crear",
+	"create-error-empty": "O título non debe estar baleiro",
+	"create-error-invalid-character": "Caracter non válido no título ( '|' )",
+	"create-error-exists": "Xa existe a páxina en $1",
+	"create-error-invalid-page": "A páxina non é válida en $1"
+}

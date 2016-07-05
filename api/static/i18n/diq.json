@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Kumkumuk"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Ke seni",
+	"menu-about": "Heqa",
+	"menu-feedback": "Peydrışten",
+	"menu-source-code": "Çıme Kode",
+	"menu-privacy-statement": "Şerta Nımnayışi",
+	"selector-source": "Çıme",
+	"selector-target": "Menzil",
+	"search-placeholder": "Qandê wesiqe vıraştışi cı geyre",
+	"status-preparing": "Wesibyaye Meqaleyê benê hazır...",
+	"status-must-be-different": "Çıme u menzil zıwani zey pê niyê",
+	"status-invalid-language": "Çıme yana menzil zıwan nêvineya",
+	"article-pageviews": "$1 peyên {{PLURAL:$1|vinayış|vinayışi}}",
+	"article-flag": "Desmala ena wesiqe...",
+	"article-flag-not-interesting": "Eleqeyın niyo",
+	"article-flag-not-notable": "$1 qandé Wikipedia muhim niyo",
+	"modal-close": "Racın",
+	"modal-new-window": "Meqaley yu pencera da newiye de ake",
+	"modal-previous": "Meqaleyo verên",
+	"modal-next": "Meqaleyo peyên",
+	"modal-translate": "Açarne",
+	"modal-create-from-scratch": "Sıfır ra vıraze",
+	"modal-loading": "Bar beno...",
+	"modal-preview-fail": "İnternet çıno",
+	"create-title": "Meqaleyo newe",
+	"create-title-input-placeholder": "Sernamey açarnayışi",
+	"create-warning": "İqaz!",
+	"create-action": "Vıraze",
+	"create-error-empty": "Sernami veng meverdê",
+	"create-error-invalid-character": "Sername de xırab karakter ('|')",
+	"create-error-exists": "Pela $1 xora est a",
+	"create-error-invalid-page": "Pela $1 çıni ya"
+}

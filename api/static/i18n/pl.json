@@ -1,0 +1,32 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chrumps"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-about": "O stronie",
+	"menu-feedback": "Opinie",
+	"menu-source-code": "Kod źródłowy",
+	"selector-source": "Źródło",
+	"selector-target": "Cel",
+	"status-must-be-different": "Język źródłowy i docelowy musi być różny",
+	"status-invalid-language": "Nieprawidłowy język źródłowy lub docelowy",
+	"article-flag": "Oznacz ten artykuł...",
+	"article-flag-not-interesting": "Nieinteresujący",
+	"modal-close": "Zamknij",
+	"modal-new-window": "Otwórz ten artykuł w nowym oknie",
+	"modal-previous": "Poprzedni artykuł",
+	"modal-next": "Następny artykuł",
+	"modal-loading": "Ładowanie...",
+	"modal-preview-fail": "Brak połączenia z Internetem",
+	"create-title": "Nowy artykuł",
+	"create-title-input-placeholder": "Tytuł tłumaczenia",
+	"create-warning": "Ostrzeżenie!",
+	"create-action": "Utwórz",
+	"create-error-empty": "Tytuł nie może być pusty",
+	"create-error-invalid-character": "Nieprawidłowy znak w tytule ('|')",
+	"create-error-exists": "Strona już istnieje pod $1"
+}

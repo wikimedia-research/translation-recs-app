@@ -1,4 +1,4 @@
-<articles>
+<gf-articles>
     <div class="row">
         <div class="col-xs-12">
             <div each={articles} class="suggestion list-group-item m-b-1">
@@ -11,14 +11,14 @@
                     <p class="suggestion-text">{description}</p>
                 </div>
                 <div class="suggestion-footer">
-                    <span class="suggestion-views text-muted">{pageviews} recent views</span>
-                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title="Flag this article...">&#x2691;</span>
+                    <span class="suggestion-views text-muted">{$.i18n('article-pageviews', pageviews)}</span>
+                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title={$.i18n('article-flag')}>&#x2691;</span>
                     <div class="dropdown-menu dropdown-menu-right">
                         <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            Not interesting
+                            {$.i18n('article-flag-not-interesting')}
                         </button>
                         <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            Not notable for {target} wikipedia
+                            {$.i18n('article-flag-not-notable', target)}
                         </button>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
         self.source = opts.source || 'no-source-language';
         self.target = opts.target || 'no-target-language';
 
-        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=256&format=json&prop=pageimages&titles=';
+        var thumbQuery = 'https://{source}.wikipedia.org/w/api.php?action=query&pithumbsize=512&format=json&prop=pageimages&titles=';
 
         self.detail = function (article) {
             return $.ajax({
@@ -45,9 +45,9 @@
                     page = data.query.pages[id];
 
                 article.id = id;
-                article.linkTitle = article.title;
+                article.linkTitle = encodeURIComponent(article.title);
                 article.title = page.title;
-                article.thumbnail = page.thumbnail ? page.thumbnail.source : null;
+                article.thumbnail = page.thumbnail ? page.thumbnail.source : 'static/images/lines.svg';
                 article.hovering = false;
                 self.update();
 
@@ -74,9 +74,7 @@
             });
         };
 
-
         self.remove = function (article, personal) {
-
             var blacklistKey = personal ? translationAppGlobals.personalBlacklistKey : translationAppGlobals.globalBlacklistKey,
                 blacklist = store(blacklistKey) || {},
                 wikidataId = article.wikidata_id;
@@ -110,7 +108,7 @@
         }
 
         preview (e) {
-            riot.mount('preview', {
+            riot.mount('gf-preview', {
                 articles: self.articles,
                 title: e.item.title,
                 from: self.source,
@@ -145,4 +143,4 @@
         });
     </script>
 
-</articles>
+</gf-articles>

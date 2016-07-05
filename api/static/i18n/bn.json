@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Aftabuzzaman"
+		]
+	},
+	"title-wikipedia": "উইকিপিডিয়া",
+	"title-gapfinder": "গ্যাপফাইন্ডার",
+	"title-beta": "বেটা",
+	"menu-how-to": "কিভাবে",
+	"menu-about": "সম্পর্কে",
+	"menu-feedback": "প্রতিক্রিয়া",
+	"menu-source-code": "উত্স কোড",
+	"menu-privacy-statement": "গোপনীয়তার বিবৃতি",
+	"selector-source": "উত্স",
+	"selector-target": "লক্ষ্য",
+	"search-placeholder": "নিবন্ধ তৈরি করার জন্য সন্ধান করুন",
+	"status-preparing": "নিবন্ধ সুপারিশ প্রস্তুত করা হচ্ছে...",
+	"status-must-be-different": "উত্স এবং লক্ষ্য ভাষা অবশ্যই আলাদা হতে হবে",
+	"status-invalid-language": "অবৈধ উৎস অথবা লক্ষ্য ভাষা",
+	"article-pageviews": "$1টি সাম্প্রতিক {{PLURAL:$1|দর্শন}}",
+	"article-flag": "এই নিবন্ধটি পতাকাঙ্কিত করুন...",
+	"article-flag-not-interesting": "আগ্রহী নই",
+	"article-flag-not-notable": "$1 উইকিপিডিয়ার জন্য উল্লেখযোগ্য নয়",
+	"modal-close": "বন্ধ করুন",
+	"modal-new-window": "একটি নতুন উইন্ডোতে এই নিবন্ধটি খুলুন",
+	"modal-previous": "পূর্ববর্তী নিবন্ধ",
+	"modal-next": "পরবর্তী নিবন্ধ",
+	"modal-translate": "অনুবাদ করুন",
+	"modal-create-from-scratch": "গোড়া থেকে তৈরি করুন",
+	"modal-loading": "লোড হচ্ছে...",
+	"modal-preview-fail": "কোন ইন্টারনেট নেই",
+	"create-title": "নতুন নিবন্ধ",
+	"create-title-input-placeholder": "অনুবাদ শিরোনাম",
+	"create-warning": "সতর্কীকরণ!",
+	"create-action": "তৈরি করুন",
+	"create-error-empty": "শিরোনাম খালি রাখা যাবে না",
+	"create-error-invalid-character": "শিরোনাম অবৈধ অক্ষর রয়েছে ( '|' )",
+	"create-error-exists": "$1-এ পাতা ইতিমধ্যেই বিদ্যমান",
+	"create-error-invalid-page": "$1-এ পাতা অবৈধ"
+}

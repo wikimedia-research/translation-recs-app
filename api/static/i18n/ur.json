@@ -1,0 +1,38 @@
+{
+	"@metadata": {
+		"authors": [
+			"امین اکبر"
+		]
+	},
+	"title-wikipedia": "ویکیپیڈیا",
+	"title-beta": "آزمائشی",
+	"menu-how-to": " کیسے ہو",
+	"menu-about": "بارے میں",
+	"menu-feedback": "فیڈ بیک",
+	"menu-source-code": "سورس کوڈ",
+	"selector-source": "ذریعہ",
+	"selector-target": "ہدف",
+	"search-placeholder": "تخلیق کرنے کے لیےمضمون تلاش کریں",
+	"status-preparing": "مضمون کی تجاویز تیار ہو رہی ہیں",
+	"status-must-be-different": "ذریعہ اور ہدف زبانیں لازمی مختلف ہوں",
+	"status-invalid-language": "غلط ذریعہ(سورس) یا مطلوبہ (ٹارگٹ) زبان",
+	"article-pageviews": "$1 حالیہ {{PLURAL:$1|منظر|مناظر}}",
+	"article-flag-not-interesting": "دلچسپ نہیں ہے",
+	"article-flag-not-notable": "$1 ویکیپیڈیا کے لیے معروف نہیں",
+	"modal-close": "بند",
+	"modal-new-window": "اس مضمون کو نئی کھڑکی میں کھولیں",
+	"modal-previous": "پچھلا مضمون",
+	"modal-next": "اگلا مضمون",
+	"modal-translate": "ترجمہ کریں",
+	"modal-create-from-scratch": "شروع سے تخلیق کریں",
+	"modal-loading": "لوڈ ہو رہا ہے...",
+	"modal-preview-fail": "انٹرنیٹ نہیں ہے",
+	"create-title": "نیا مضمون",
+	"create-title-input-placeholder": "ترجمے کا عنوان",
+	"create-warning": "انتباہ!",
+	"create-action": "تخلیق کریں",
+	"create-error-empty": "عنوان خالی نہیں چھوڑا جا سکتا",
+	"create-error-invalid-character": "عنوان میں غلط حروف ( '|' )",
+	"create-error-exists": "صفحہ پہلے ہی $1 پر موجود ہے",
+	"create-error-invalid-page": "$1 پر صفحہ نادرست ہے"
+}

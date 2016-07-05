@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Siebrand"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Hoe",
+	"menu-about": "Over",
+	"menu-feedback": "Terugkoppeling",
+	"menu-source-code": "Broncode",
+	"menu-privacy-statement": "Privacyverklaring",
+	"selector-source": "Bron",
+	"selector-target": "Doel",
+	"search-placeholder": "Zoeken naar pagina's om aan te maken",
+	"status-preparing": "Pagina-aanbevelingen worden voorbereid...",
+	"status-must-be-different": "Bron en doeltalen moeten verschillen",
+	"status-invalid-language": "Ongeldige bron- of doeltaal",
+	"article-pageviews": "$1 recente {{PLURAL:$1|weergave|weergaven}}",
+	"article-flag": "Pagina markeren als...",
+	"article-flag-not-interesting": "Niet interessant",
+	"article-flag-not-notable": "Niet encyclopediewaardig voor de Wikipedia in het $1",
+	"modal-close": "Sluiten",
+	"modal-new-window": "Pagina in een nieuw venster openen",
+	"modal-previous": "Vorige pagina",
+	"modal-next": "Volgende pagina",
+	"modal-translate": "Vertalen",
+	"modal-create-from-scratch": "Nieuwe pagina beginnen",
+	"modal-loading": "Bezig met laden…",
+	"modal-preview-fail": "Geen Internet",
+	"create-title": "Nieuwe pagina",
+	"create-title-input-placeholder": "Vertaling paginanaam",
+	"create-warning": "Waarschuwing!",
+	"create-action": "Aanmaken",
+	"create-error-empty": "De paginanaam mag niet leeg zijn",
+	"create-error-invalid-character": "Ongeldig teken in de naam ('|')",
+	"create-error-exists": "De pagina bestaat al $1",
+	"create-error-invalid-page": "Pagina is ongeldig op $1"
+}

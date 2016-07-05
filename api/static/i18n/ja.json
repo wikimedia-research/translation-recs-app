@@ -1,0 +1,30 @@
+{
+	"@metadata": {
+		"authors": [
+			"Otokoume"
+		]
+	},
+	"title-wikipedia": "ウィキペディア",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "ベータ",
+	"menu-feedback": "フィードバック",
+	"menu-source-code": "ソースコード",
+	"menu-privacy-statement": "プライバシーに関する名声",
+	"selector-source": "翻訳元の言語",
+	"selector-target": "翻訳先の言語",
+	"status-must-be-different": "翻訳元と翻訳先の言語を同じにすることはできません",
+	"status-invalid-language": "翻訳元または翻訳先の言語が不正です",
+	"article-pageviews": "$1回の{{PLURAL:$1|閲覧}}",
+	"modal-close": "閉じる",
+	"modal-new-window": "新しいウインドウでこの記事を開きます",
+	"modal-previous": "前の記事",
+	"modal-translate": "翻訳",
+	"modal-loading": "読み込み中...",
+	"modal-preview-fail": "インターネット接続がありません",
+	"create-title-input-placeholder": "翻訳のタイトル",
+	"create-warning": "警告！",
+	"create-action": "作成",
+	"create-error-empty": "タイトルを空白にすることはできません",
+	"create-error-invalid-character": "タイトルに不正な文字があります (「 | 」)",
+	"create-error-exists": "ページは既に $1 として存在しています"
+}

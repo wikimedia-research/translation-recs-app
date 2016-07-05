@@ -1,4 +1,4 @@
-<preview>
+<gf-preview>
     <div id="previewModal" class="modal fade" role="dialog" tabindex="-1">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -7,11 +7,11 @@
                         <div class="row">
                             <h4 class="modal-title col-xs-8">{title}</h4>
                             <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal"
-                                    title="Close">
+                                    title="{$.i18n('modal-close')}">
                                 <h4 class="m-y-0">&#x274c;</h4>
                             </button>
                             <a role="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" target="_blank" href={articleLink}
-                               title="Open this article in a new window">
+                               title="{$.i18n('modal-new-window')}">
                                 <h4 class="m-y-0">&#x2197;</h4>
                             </a>
                         </div>
@@ -27,34 +27,34 @@
                     <button type="button" onclick={left}
                             class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
                             disabled: showIndex === 0}
-                            title="Previous article">
+                            title="{$.i18n('modal-previous')}">
                         <h4 class="m-y-0"><</h4>
                     </button>
                     <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-left" data-toggle="dropdown"
-                            title="Flag this article...">
+                            title="{$.i18n('article-flag')}">
                         <h4 class="m-y-0">&#x2691;</h4>
                     </button>
                     <div class="dropdown-menu dropdown-menu-left">
                         <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            Not interesting
+                            {$.i18n('article-flag-not-interesting')}
                         </button>
                         <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            Not notable for {opts.to} wikipedia
+                            {$.i18n('article-flag-not-notable', opts.to)}
                         </button>
                     </div>
                     <button type="button" onclick={right}
                             class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
                             disabled: showIndex > (articles.length - 2)}
-                            title="Next article">
+                            title="{$.i18n('modal-next')}">
                         <h4 class="m-y-0">></h4>
                     </button>
                     <div class="btn-group">
-                        <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction} href={translateLink}>Translate</a>
+                        <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction} href={translateLink}>{$.i18n('modal-translate')}</a>
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <button class="btn dropdown-item" data-dismiss="modal" onclick={showCreate}>Create from scratch</button>
+                            <button class="btn dropdown-item" data-dismiss="modal" onclick={showCreate}>{$.i18n('modal-create-from-scratch')}</button>
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
         </div>
     </div>
 
-    <create_article></create_article>
+    <gf-create></gf-create>
 
     <script>
         var self = this;
@@ -106,7 +106,7 @@
                 data = data.replace('</head>', '<style type="text/css">.mw-body {margin: 0; border: none; padding: 0;}</style></head>');
                 self.showPreview(data);
             }).fail(function (data) {
-                self.showPreview('No Internet');
+                self.showPreview($.i18n('modal-preview-fail'));
             });
         };
 
@@ -164,7 +164,7 @@
         };
 
         showCreate (e) {
-            riot.mount('create_article', {
+            riot.mount('gf-create', {
                 title: self.title,
                 to: self.to,
                 from: self.from,
@@ -185,4 +185,4 @@
         });
     </script>
 
-</preview>
+</gf-preview>

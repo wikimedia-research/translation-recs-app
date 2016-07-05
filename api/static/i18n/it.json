@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Einreiher",
+			"Beta16"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Come",
+	"menu-about": "Informazioni su",
+	"menu-feedback": "Feedback",
+	"menu-source-code": "Codice sorgente",
+	"selector-source": "Sorgente",
+	"selector-target": "Destinazione",
+	"search-placeholder": "Cerca voci da creare",
+	"status-preparing": "Preparazione suggerimenti voci...",
+	"status-must-be-different": "La lingua di partenza e quella di destinazione devono essere diverse.",
+	"status-invalid-language": "La lingua di partenza, quella di destinazione, oppure entrambe, non sono valide",
+	"article-pageviews": "$1 {{PLURAL:$1|visita recente|visite recenti}}",
+	"article-flag": "Segnala questa voce...",
+	"article-flag-not-interesting": "Non è interessante",
+	"article-flag-not-notable": "Non rilevante per Wikipedia in $1",
+	"modal-close": "Chiudi",
+	"modal-new-window": "Apri questa voce in una nuova finestra",
+	"modal-previous": "Voce precedente",
+	"modal-next": "Prossima voce",
+	"modal-translate": "Traduci",
+	"modal-create-from-scratch": "Prepara da zero",
+	"modal-loading": "Caricamento in corso...",
+	"modal-preview-fail": "Nessun accesso ad Internet",
+	"create-title": "Nuova voce",
+	"create-title-input-placeholder": "Titolo della traduzione",
+	"create-warning": "Attenzione!",
+	"create-action": "Crea",
+	"create-error-empty": "Il titolo non può essere vuoto",
+	"create-error-invalid-character": "Carattere non valido nel titolo ( '|' )",
+	"create-error-exists": "Relativamente a $1 esiste già una pagina",
+	"create-error-invalid-page": "La pagina non è valida a $1"
+}

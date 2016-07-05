@@ -3,8 +3,7 @@ import urllib.parse
 import json
 import time
 
-# URL = 'https://meta.wikimedia.org/beacon/event'
-URL = 'http://bits.beta.wmflabs.org/beacon/event'
+URL = 'https://meta.wikimedia.org/beacon/event'
 
 
 def log_api_request(source, target, seed=None, search=None):
@@ -23,4 +22,7 @@ def log_api_request(source, target, seed=None, search=None):
 
     url = URL + '?' + urllib.parse.quote_plus(json.dumps(payload))
 
-    requests.get(url)
+    try:
+        requests.get(url)
+    except requests.exceptions.RequestException:
+        pass

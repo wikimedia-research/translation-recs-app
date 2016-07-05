@@ -1,0 +1,42 @@
+{
+	"@metadata": {
+		"authors": [
+			"Amire80",
+			"Guycn2"
+		]
+	},
+	"title-wikipedia": "ויקיפדיה",
+	"title-gapfinder": "מוצא הפערים",
+	"title-beta": "בטא",
+	"menu-how-to": "איך",
+	"menu-about": "אודות",
+	"menu-feedback": "משוב",
+	"menu-source-code": "קוד מקור",
+	"menu-privacy-statement": "הצהרת פרטיות",
+	"selector-source": "מקור",
+	"selector-target": "יעד",
+	"search-placeholder": "חיפוש ערכים ליצירה",
+	"status-preparing": "הכנת המלצות ערכים...",
+	"status-must-be-different": "שפות המקור והיעד צריכות להיות שונות",
+	"status-invalid-language": "שפת מקור או שפת יעד אינה תקינה",
+	"article-pageviews": "{{PLURAL:$1|הצגה אחת|$1 הצגות}} לאחרונה",
+	"article-flag": "סימון הערך הזה...",
+	"article-flag-not-interesting": "לא מעניין",
+	"article-flag-not-notable": "לא בעל חשיבות בשביל ויקיפדיה ב־$1",
+	"modal-close": "סגירה",
+	"modal-new-window": "פתיחת הערך הזה בחלון חדש",
+	"modal-previous": "הערך הקודם",
+	"modal-next": "הערך הבא",
+	"modal-translate": "תרגום",
+	"modal-create-from-scratch": "יצירה מאפס",
+	"modal-loading": "טוען...",
+	"modal-preview-fail": "אין גישה לאינטרנט",
+	"create-title": "ערך חדש",
+	"create-title-input-placeholder": "כותרת התרגום",
+	"create-warning": "אזהרה!",
+	"create-action": "יצירה",
+	"create-error-empty": "הכותרת לא יכולה להיות ריקה",
+	"create-error-invalid-character": "תו לא תקין בכותרת ( '|' )",
+	"create-error-exists": "הדף ב־$1 כבר קיים",
+	"create-error-invalid-page": "הדף ב־$1 אינו תקין"
+}
