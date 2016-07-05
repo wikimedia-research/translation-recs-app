@@ -13,8 +13,8 @@ currentdir = os.path.dirname(
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from recommendation_lib.api_based_rec import get_seeded_recommendations, get_global_recommendations
-from api import event_logger
+from lib.api_based_rec import get_seeded_recommendations, get_global_recommendations
+from lib import event_logger
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
