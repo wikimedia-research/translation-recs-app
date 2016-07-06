@@ -399,15 +399,18 @@ var WMTypeAhead = function ( appendTo, searchInput, callback ) {
             toggleActiveClass( activeItem, suggestionItems );
 
         }
-        if ( keycode === 13 && activeItem ) {
+        if ( keycode === 13 ) {
+            if (activeItem) {
 
-            if ( e.preventDefault ) {
-                e.preventDefault();
-            } else {
-                ( e.returnValue = false );
+                if ( e.preventDefault ) {
+                    e.preventDefault();
+                } else {
+                    ( e.returnValue = false );
+                }
+                activeItem.children[ 0 ].click();
+                activeItem = null;
             }
-
-            activeItem.children[ 0 ].click();
+            clearTypeAhead();
         }
     }
 
