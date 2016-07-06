@@ -1,4 +1,4 @@
-**Article Creation API**
+**Wikipdia GapFinder API**
 ----
   Given an source and target wiki, the API provides source articles missing in the target.
 

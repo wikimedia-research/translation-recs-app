@@ -13,8 +13,11 @@ currentdir = os.path.dirname(
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from lib.api_based_rec import get_seeded_recommendations, get_global_recommendations
+from lib.filters import MissingFilter, DisambiguationFilter, apply_filters_chunkwise
+from lib.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
+from lib.pageviews import PageviewGetter
 from lib import event_logger
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -53,57 +56,119 @@ def home():
 
 @app.route('/api')
 def get_recommendations():
+
     t1 = time.time()
+    args = parse_args(request)
 
-    # required args
-    s = request.args.get('s')
-    t = request.args.get('t')
+    language_error = validate_language_pairs(args)
+    if language_error:
+        json_response({'error': language_error})
+
+
+    recs = recommend(
+        args['s'],
+        args['t'],
+        args['finder'],
+        seed = args['article'],
+        n_recs = args['n'],
+        pageviews = args['pageviews']
+    )
+
+
+    event_logger.log_api_request(
+        source=args['s'],
+        target=args['t'],
+        seed=args['article'],
+        search=args['search']
+    )
+
+
+    t2 = time.time()
+    print('Total:', t2-t1)
+
+    return json_response({'articles': recs})
+
+
+def validate_language_pairs(args):
+    """
+    Make sure s=!t and that both s and t
+    are valid language codes
+    """
+    s = args['s']
+    t = args['t']
+
     # make sure language codes are valid
-    ret = {'articles': []}
     if s not in language_pairs['source'] or t not in language_pairs['target']:
-        ret['error'] = 'Invalid source or target language'
-        return json_response(ret)
+        return 'Invalid source or target language'
     if s == t:
-        ret['error'] = 'Source is equal to target language'
-        return json_response(ret)
+        return 'Source is equal to target language'
 
-    # optional args with defaults
-    n_default = 12
-    n = request.args.get('n', n_default)
+
+def parse_args(request):
+    """
+    Parse api query parameters 
+    """
+    n = request.args.get('n')
     try:
-        n = min(int(n), 25)
+        n = min(int(n), 24)
     except:
-        n = n_default
+        n = 12
 
-    search_default = 'morelike'
-    search = request.args.get('search', search_default)
-    if search not in ('google', 'wiki', 'morelike'):
-        search = search_default
+    # Get search algorithm
+    finder_map = {
+        'morelike': MorelikeCandidateFinder,
+    }
 
-    pageviews = request.args.get('pageviews', 'true')
+    if not request.args.get('article'):
+        search = 'mostpopular'
+        finder = PageviewCandidateFinder
+    else:
+        search = request.args.get('search')
+        if search not in ('morelike',):
+            search = 'morelike'
+        finder = finder_map[search]
+  
+
+    # determine if client wants pageviews
+    pageviews = request.args.get('pageviews')
     if pageviews == 'false':
         pageviews = False
     else:
         pageviews = True
 
-    article = request.args.get('article')
 
-    if article:
-        recs, error = get_seeded_recommendations(s, t, article, n, pageviews, search)
-        event_logger.log_api_request(source=s, target=t, seed=article, search=search)
-    else:
-        recs, error = get_global_recommendations(s, t, n)
-        event_logger.log_api_request(source=s, target=t)
+    args = {
+                's': request.args.get('s'),
+                't': request.args.get('t'),
+                'article': request.args.get('article', ''),
+                'n': n,
+                'search' : search,
+                'finder': finder,
+                'pageviews': pageviews,
+            }
 
-    if recs:
-        ret['articles'] = recs
-    if error:
-        ret['error'] = error
+    return args
 
-    t2 = time.time()
-    print('Total:', t2-t1)
 
-    return json_response(ret)
+def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_candidates = 500):
+    """
+    1. Use finder to select a set of candidate articles
+    2. Filter out candidates that are not missing, are disambiguation pages, etc
+    3. get pageview info for each passing candidate if desired
+    """
+    recs = []
+    for seed in seed.split('|'):
+        recs += finder().get_candidates(s, seed, max_candidates)
+    recs = sorted(recs, key = lambda x: x.rank)
+
+    recs = apply_filters_chunkwise(s, t, recs, n_recs)
+
+
+    if pageviews:
+        recs = PageviewGetter().get(s, recs)
+
+    recs = sorted(recs, key = lambda x: x.rank)
+    return [{'title': r.title, 'pageviews':r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
 
 
 @app.after_request
@@ -116,5 +181,4 @@ def after_request(response):
 
 if __name__ == '__main__':
     event_logger.URL = 'http://localhost/beacon/event'
-    app.run(host='0.0.0.0', debug=True)
-
+    app.run(host='0.0.0.0')
