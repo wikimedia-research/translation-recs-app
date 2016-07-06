@@ -24,19 +24,15 @@ var WMTypeAhead = function ( appendTo, searchInput, callback ) {
 
     var typeAheadID = 'typeahead-suggestions',
         typeAheadEl = document.getElementById( typeAheadID ), // type-ahead DOM element.
-        // appendEl = document.getElementById( appendTo ),
-        // searchEl = document.getElementById( searchInput ),
-
-        appendEl = $(appendTo)[0], //document.getElementById( appendTo ),
-        searchEl = $(searchInput)[0],  //document.getElementById( searchInput ),
-
+        appendEl = $(appendTo)[0],
+        searchEl = $(searchInput)[0],
         thumbnailSize = getDevicePixelRatio() * 80,
         maxSearchResults = 6,
         searchLang,
         searchString,
         typeAheadItems,
-        activeItem,
-        callbackOnSelect = callback;
+        activeItem;
+
 
     // only create typeAheadEl once on page.
     if ( !typeAheadEl ) {
@@ -358,7 +354,7 @@ var WMTypeAhead = function ( appendTo, searchInput, callback ) {
             $('.suggestion-link').click(function(event){
                 event.preventDefault();
                 var val = $.data(this, 'data');
-                callbackOnSelect(event, val);
+                callback(event, val);
                 clearTypeAhead();
             });
 
