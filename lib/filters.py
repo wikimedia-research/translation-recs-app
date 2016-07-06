@@ -2,10 +2,28 @@ import itertools
 import requests
 import concurrent.futures
 
+class Filter():
+    """
+    Filter interface
+    """
+    def filter(self, s, t, articles):
+        """
+        filter down article list
+        """
+        return []
+
 
 class MissingFilter():
-
+    """
+    Class for filtering out which articles from 
+    source language s already exist in target language t
+    using Wikidata sitelinks
+    """
     def query_wikidata_sitelinks(self, s, titles):
+        """
+        Query Wikidata API for the sitelinks for each
+        article in titles.
+        """
 
         api = 'https://www.wikidata.org/w/api.php'
 
@@ -26,6 +44,11 @@ class MissingFilter():
 
 
     def parse_wikidata_sitelinks_data(self, s, t, data):
+        """
+        Given sitelinks data, return a dict mapping from
+        article titles to Wikidata ids for the articles in s
+        missing in t
+        """
 
         title_id_dict = {}
         swiki = '%swiki' % s
@@ -48,6 +71,10 @@ class MissingFilter():
 
 
     def filter_subset(self, s, t, articles):
+        """
+        Remove articles in s that already exist in t
+        using Wikidata sitelinks from the Wikidata API
+        """
 
         d = {a.title:a for a in articles}
         titles = [a.title for a in articles]
@@ -66,6 +93,10 @@ class MissingFilter():
 
 
     def filter(self, s, t, articles):
+        """
+        Wrapper to do filtering on chunks of
+        articles concurrently
+        """
 
         with concurrent.futures.ThreadPoolExecutor(10) as executor:
             chunk_size = 10
@@ -78,6 +109,10 @@ class MissingFilter():
 
 
 class DisambiguationFilter():
+    """
+    Utility class for filtering out disambiguation
+    pages using the Mediawiki API
+    """
 
     def query_disambiguation_pages(self, s, titles):
 
@@ -114,7 +149,7 @@ class DisambiguationFilter():
 
         return disambiguation_pages
 
-    def filter(self, s, articles):
+    def filter(self, s, t, articles):
         titles = [a.title for a in articles]
         data = self.query_disambiguation_pages(s, titles)
         disambiguation_pages = self.parse_disambiguation_page_data(data)
@@ -122,16 +157,42 @@ class DisambiguationFilter():
 
 
 
+class TitleFilter():
+    """
+    Utility class for filtering out
+    articles based on properties of the title alone
+    """
+    def title_passes(self, title):
+
+            if ':' in title:
+                return False 
+            if title.startswith('List'):
+                return False
+            return True
+
+    def filter(self, s, t, articles):
+
+        return [a for a in articles if self.title_passes(a.title)]
+
+
 def apply_filters_chunkwise(s, t, candidates, n_recs, step = 50):
+
+    """
+    Since filtering is expensive, we want to filter a large list
+    of candidates in chunks until we get the desired number of
+    passing articles
+    """
     filtered_candidates = []
-    indices = list(zip(range(0, len(candidates) - step, step), range(step, len(candidates), step)))
-    
+    m = len(candidates)
+    indices = list(zip(range(0, m - step, step), range(step, m, step)))
+
     # filter candidates in chunks, stop once we reach n_recs
     for start, stop in indices:
         print('Filtering Next Chunk')
         subset = candidates[start:stop]
         subset = MissingFilter().filter(s, t, subset)
-        subset = DisambiguationFilter().filter(s, subset)
+        subset = DisambiguationFilter().filter(s, t, subset)
+        subset = TitleFilter().filter(s, t, subset)
         filtered_candidates += subset
         if len(filtered_candidates) >= n_recs:
             break

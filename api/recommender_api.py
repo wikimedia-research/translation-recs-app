@@ -90,7 +90,10 @@ def get_recommendations():
 
 
 def validate_language_pairs(args):
-
+    """
+    Make sure s=!t and that both s and t
+    are valid language codes
+    """
     s = args['s']
     t = args['t']
 
@@ -102,8 +105,9 @@ def validate_language_pairs(args):
 
 
 def parse_args(request):
-
-    # Get number of recommendations
+    """
+    Parse api query parameters 
+    """
     n = request.args.get('n')
     try:
         n = min(int(n), 24)
@@ -146,9 +150,12 @@ def parse_args(request):
     return args
 
 
-
 def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_candidates = 500):
-
+    """
+    1. Use finder to select a set of candidate articles
+    2. Filter out candidates that are not missing, are disambiguation pages, etc
+    3. get pageview info for each passing candidate if desired
+    """
     recs = []
     for seed in seed.split('|'):
         recs += finder().get_candidates(s, seed, max_candidates)
@@ -156,12 +163,12 @@ def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_cand
 
     recs = apply_filters_chunkwise(s, t, recs, n_recs)
 
+
     if pageviews:
         recs = PageviewGetter().get(s, recs)
 
     recs = sorted(recs, key = lambda x: x.rank)
     return [{'title': r.title, 'pageviews':r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
-
 
 
 @app.after_request

@@ -5,7 +5,7 @@ from dateutil import relativedelta
 
 class Article:
     """
-    Struct containing meta data for an article
+    Struct containing meta-data for an article
     """
     def __init__(self, title):
         self.title = title
@@ -14,14 +14,28 @@ class Article:
         self.pageviews = None
 
 
+
+class CandidateFinder():
+    """
+    CandidateFinder interface
+    """
+    def get_candidates(self, s, seed, n):
+        """
+        get list candidate source language articles
+        using seed (optional)
+        """
+        return []
+
+
+
 class PageviewCandidateFinder():
     """
-    Utility Class for getting the most popular articles in a Wikipedia
+    Utility Class for getting a list of the  most 
+    popular articles in a source  Wikipedia.
     """
-    
     def query_pageviews(self, s):
         """
-        Query pageview API for the most popular articles and parse results
+        Query pageview API and parse results
         """
         dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
         query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
@@ -30,8 +44,7 @@ class PageviewCandidateFinder():
 
         try:
             for d in data['items'][0]['articles']:
-                if 'article' in d and ':' not in d['article'] and not d['article'].startswith('List'):
-                    article_pv_tuples.append((d['article'], d['views']))
+                article_pv_tuples.append((d['article'], d['views']))
         except:
             print("Could not get most popular articles for %s from pageview API. Try using a seed article." % s)
 
@@ -40,9 +53,8 @@ class PageviewCandidateFinder():
 
     def get_candidates(self, s, seed, n):
         """
-        Return the n most viewed articles
+        Wrap top articles in a list of Article objects
         """
-
         articles = []
         article_pv_tuples = sorted(self.query_pageviews(s), key=lambda x: random.random())
 
@@ -55,9 +67,17 @@ class PageviewCandidateFinder():
 
 
 class MorelikeCandidateFinder():
-
+    """
+    Utility class for getting articles that are similar to
+    a given seed article in a source Wikipedia via "morelike"
+    search
+    """
     def get_morelike_candidates(self, s, query, n):
-        #get an actual article from seed
+        """
+        Perform a "morelike" search via the Mediawiki search API. 
+        First map the query to an article via standard search,
+        and then get a list of related articles via morelike search
+        """
         seed_list = wiki_search(s, query, 1)
 
         if seed_list: # we have an article seed
@@ -68,7 +88,7 @@ class MorelikeCandidateFinder():
             if results:
                 results.insert(0, seed)
                 print('Succesfull Morelike Search')
-                return results, None
+                return results
             else:
                 print('Failed Morelike Search. Reverting to standard search')
                 return wiki_search(s, query, n)
@@ -77,7 +97,9 @@ class MorelikeCandidateFinder():
 
 
     def get_candidates(self, s, seed, n):
-
+        """
+        Wrap morelike search results into a list of articles
+        """
         results = self.get_morelike_candidates(s, seed, n)
 
         articles = []
@@ -92,7 +114,7 @@ class MorelikeCandidateFinder():
 
 def wiki_search(s, seed, n, morelike=False):
     """
-    Query wiki search for articles related to seed
+    A client to the Mediawiki search API
     """
     if morelike:
         seed = 'morelike:' + seed

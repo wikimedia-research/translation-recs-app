@@ -6,9 +6,8 @@ from dateutil import relativedelta
 class PageviewGetter():
     """
     Utility Class for getting article pageview counts
+    via the pageview API
     """
-
-
     def helper(self, s, article):
         """
         Get pageview counts for a single article from pageview api
@@ -32,7 +31,6 @@ class PageviewGetter():
         """
         Get pageview counts for a list of articles in parallel
         """
-
         with concurrent.futures.ThreadPoolExecutor(10) as executor:
             f = lambda args: self.helper(*args)
             return list(executor.map(f, [(s, a) for a in articles]))
