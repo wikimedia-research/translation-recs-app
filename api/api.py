@@ -62,7 +62,7 @@ def get_recommendations():
 
     language_error = validate_language_pairs(args)
     if language_error:
-        json_response({'error': language_error})
+        return json_response({'error': language_error})
 
 
     recs = recommend(
@@ -73,6 +73,10 @@ def get_recommendations():
         n_recs = args['n'],
         pageviews = args['pageviews']
     )
+
+    if len(recs) == 0:
+        msg = 'Sorry, failed to get recommendations'
+        return json_response({'error': msg})
 
 
     event_logger.log_api_request(
@@ -156,13 +160,13 @@ def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_cand
     2. Filter out candidates that are not missing, are disambiguation pages, etc
     3. get pageview info for each passing candidate if desired
     """
+
     recs = []
     for seed in seed.split('|'):
         recs += finder().get_candidates(s, seed, max_candidates)
     recs = sorted(recs, key = lambda x: x.rank)
 
     recs = apply_filters_chunkwise(s, t, recs, n_recs)
-
 
     if pageviews:
         recs = PageviewGetter().get(s, recs)
