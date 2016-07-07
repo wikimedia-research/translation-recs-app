@@ -1,5 +1,4 @@
 flask
-sklearn
-pandas
 requests
 futures
+numpy

@@ -1,9 +1,0 @@
-en|Apple|Q1
-en|Bannana|Q2
-en|Pear|Q3
-en|Strawberry|Q4
-en|Peach|Q5
-en|Nectarine|Q6
-en|Cherry|Q7
-en|Pineapple|Q8
-en|Melon|Q9
