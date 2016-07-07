@@ -16,10 +16,10 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid seed-container">
+        <div class="container-fluid seed-container" id="seed-container">
             <div class="row">
                 <div class="col-xs-12">
-                    <input type="text" class="form-control seed-input"
+                    <input type="text" autocomplete=off class="form-control seed-input"
                            placeholder={ $.i18n('search-placeholder') } name="seedArticle">
                 </div>
             </div>
@@ -139,6 +139,7 @@
         self.onSelectSource = function (code) {
             self.setSource(code);
             self.origin = 'language_select';
+            $('input[name=seedArticle]').val('');
             self.fetchArticles();
         };
 
@@ -243,7 +244,25 @@
             if (self.source && self.target) {
                 self.fetchArticles();
             }
+
+            //search feedback/suggestion
+            self.suggestSearches();
         });
+
+        self.suggestSearches = function () {
+            //TODO:
+            //    1. not sure why adding id attribute in the text input field breaks things
+            //    2. using addEvent below. Could have used jquery.
+            var callbackOnSelect = function(event, val) {
+                $('input[name=seedArticle]').val(val.title);
+                self.fetchArticles();
+            };
+
+            var typeAhead = new WMTypeAhead('#seed-container', 'input[name=seedArticle]', callbackOnSelect);
+            addEvent($('input[name=seedArticle]')[0], 'input',  function(){
+                typeAhead.query(this.value, self.source);
+            });
+        };
 
         self.populateDefaults = function (sourceLanguages, targetLanguages) {
             if (window.translationAppGlobals.s in sourceLanguages) {
