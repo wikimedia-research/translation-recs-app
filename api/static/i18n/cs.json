@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dvorapa"
+		]
+	},
+	"title-wikipedia": "Wikipedie",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Jak na to",
+	"menu-about": "O GapFinderu",
+	"menu-feedback": "Zpětná vazba",
+	"menu-source-code": "Zdrojový kód",
+	"menu-privacy-statement": "Prohlášení o ochraně osobních údajů",
+	"selector-source": "Zdroj",
+	"selector-target": "Cíl",
+	"search-placeholder": "Hledat články k vytvoření",
+	"status-preparing": "Doporučené články se připravují...",
+	"status-must-be-different": "Zdrojový a cílový jazyk se musí lišit",
+	"status-invalid-language": "Neplatný zdroj cílového jazyka",
+	"article-pageviews": "{{PLURAL:$1|Nedávno navštíveno}} $1×",
+	"article-flag": "Označte tento článek...",
+	"article-flag-not-interesting": "Nezajímavé",
+	"article-flag-not-notable": "Nedostatečně významný pro $1 Wikipedii",
+	"modal-close": "Zavřít",
+	"modal-new-window": "Otevřít tento článek v novém okně",
+	"modal-previous": "Předchozí článek",
+	"modal-next": "Následující článek",
+	"modal-translate": "Přeložit",
+	"modal-create-from-scratch": "Vytvořit prázdný",
+	"modal-loading": "Načítání...",
+	"modal-preview-fail": "Internet nedostupný",
+	"create-title": "Nový článek",
+	"create-title-input-placeholder": "Budoucí název článku",
+	"create-warning": "Varování!",
+	"create-action": "Vytvořit",
+	"create-error-empty": "Název nesmí být prázdný",
+	"create-error-invalid-character": "Neplatný znak v názvu ( '|' )",
+	"create-error-exists": "Stránka již existuje pod názvem $1",
+	"create-error-invalid-page": "Stránka na adrese $1 je neplatná"
+}

@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Bluegram"
+		]
+	},
+	"title-beta": "Beta",
+	"menu-about": "เกี่ยวกับ",
+	"menu-feedback": "คำติชม",
+	"selector-source": "แหล่งที่มา",
+	"selector-target": "เป้าหมาย",
+	"article-flag-not-interesting": "ไม่สนใจ",
+	"modal-close": "ปิด",
+	"modal-next": "หัวข้อต่อไป",
+	"modal-translate": "แปล",
+	"modal-loading": "กำลังโหลด...",
+	"modal-preview-fail": "ไม่มีการเชื่อมต่ออินเตอร์เน็ต",
+	"create-title": "หัวข้อใหม่",
+	"create-warning": "คำเตือน!",
+	"create-action": "สร้าง"
+}

@@ -1,0 +1,29 @@
+{
+	"@metadata": {
+		"authors": [
+			"Zygimantus"
+		]
+	},
+	"title-wikipedia": "Vikipedija",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Kaip",
+	"menu-about": "Apie",
+	"menu-feedback": "Atsiliepimas",
+	"menu-source-code": "Programinis kodas",
+	"selector-source": "Šaltinis",
+	"search-placeholder": "Ieškoti straipsnių kūrimui",
+	"status-preparing": "Rengiamos straipsnių rekomendacijos...",
+	"article-flag-not-interesting": "Neįdomu",
+	"modal-close": "Uždaryti",
+	"modal-previous": "Ankstesnis straipsnis",
+	"modal-next": "Kitas straipsnis",
+	"modal-translate": "Versti",
+	"modal-loading": "Įkeliama…",
+	"create-title": "Naujas straipsnis",
+	"create-title-input-placeholder": "Vertimo pavadinimas",
+	"create-warning": "Dėmesio!",
+	"create-action": "Sukurti",
+	"create-error-empty": "Pavadinimas neturi būti tuščias",
+	"create-error-exists": "Puslapis $1 jau egzistuoja"
+}

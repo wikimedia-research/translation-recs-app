@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Namo"
+		]
+	},
+	"title-wikipedia": "ویکی‌پدیا",
+	"title-gapfinder": "گپ‌فایندر",
+	"title-beta": "آزمایشی",
+	"menu-how-to": "چطور",
+	"menu-about": "درباره",
+	"menu-feedback": "بازخورد",
+	"menu-source-code": "کد منبع",
+	"menu-privacy-statement": "اعلامیهٔ حریم خصوصی",
+	"selector-source": "منبع",
+	"selector-target": "هدف",
+	"search-placeholder": "جستجو برای ایجاد مقاله",
+	"status-preparing": "در حال آماده‌سازی توصیه‌های مقاله...",
+	"status-must-be-different": "زبان مبدا و مقصد باید متفاوت باشد",
+	"status-invalid-language": "زبان مبدا یا مقصد نامعتبر است",
+	"article-pageviews": "$1 {{PLURAL:$1|بازدید|بازدید}}",
+	"article-flag": "پرچم‌گذاری این مقاله...",
+	"article-flag-not-interesting": "جالب نیست",
+	"article-flag-not-notable": "برای ویکی‌پدیای $1 جالب توجه نیست",
+	"modal-close": "بستن",
+	"modal-new-window": "این مقاله را در پنجره جدید باز کن",
+	"modal-previous": "مقاله قبلی",
+	"modal-next": "مقاله بعدی",
+	"modal-translate": "ترجمه",
+	"modal-create-from-scratch": "ترجمه از اول",
+	"modal-loading": "در حال بارگیری...",
+	"modal-preview-fail": "عدم اتصال به اینترنت",
+	"create-title": "مقاله جدید",
+	"create-title-input-placeholder": "عنوان ترجمه",
+	"create-warning": "هشدار!",
+	"create-action": "ایجاد",
+	"create-error-empty": "عنوان نباید خالی باشد",
+	"create-error-invalid-character": "نویسه نامعتبر در عنوان ( '|' )",
+	"create-error-exists": "صفحه هم‌اکنون در $1 موجود است",
+	"create-error-invalid-page": "صفحه در $1 نامعتبر است"
+}
