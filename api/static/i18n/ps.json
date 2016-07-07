@@ -1,0 +1,21 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ahmed-Najib-Biabani-Ibrahimkhel"
+		]
+	},
+	"title-wikipedia": "ويکيپېډيا",
+	"title-beta": "بيټا",
+	"menu-how-to": "څنگه",
+	"menu-about": "په اړه",
+	"menu-source-code": "د سرچينې کوډ",
+	"selector-source": "سرچينه",
+	"selector-target": "موخه",
+	"modal-close": "تړل",
+	"modal-translate": "ژباړل",
+	"modal-loading": "رابرسېرېږي...",
+	"create-title": "نوې ليکنه",
+	"create-title-input-placeholder": "د ژباړې سرليک",
+	"create-warning": "گواښنه!",
+	"create-action": "جوړول"
+}

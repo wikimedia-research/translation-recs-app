@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Ykhwong"
+		]
+	},
+	"title-wikipedia": "위키백과",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "베타",
+	"menu-how-to": "사용법",
+	"menu-about": "정보",
+	"menu-feedback": "피드백",
+	"menu-source-code": "소스 코드",
+	"menu-privacy-statement": "개인정보 설명",
+	"selector-source": "원본 언어",
+	"selector-target": "대상 언어",
+	"search-placeholder": "만들 글 찾기",
+	"status-preparing": "추천할 글을 준비하고 있습니다...",
+	"status-must-be-different": "원본과 대상 언어는 달라야 합니다",
+	"status-invalid-language": "유효하지 않은 출처 또는 대상 언어입니다",
+	"article-pageviews": "$1건의 최근 {{PLURAL:$1|뷰|뷰}}",
+	"article-flag": "이 글을 표시...",
+	"article-flag-not-interesting": "관심을 두지 않습니다",
+	"article-flag-not-notable": "$1 위키백과의 등재 기준에 맞지 않습니다",
+	"modal-close": "닫기",
+	"modal-new-window": "이 글을 새 창에서 열기",
+	"modal-previous": "이전 글",
+	"modal-next": "다음 글",
+	"modal-translate": "번역하기",
+	"modal-create-from-scratch": "처음부터 만들기",
+	"modal-loading": "불러오는 중...",
+	"modal-preview-fail": "인터넷 없음",
+	"create-title": "새 문서",
+	"create-title-input-placeholder": "번역 제목",
+	"create-warning": "경고!",
+	"create-action": "만들기",
+	"create-error-empty": "제목은 비어있으면 안 됩니다",
+	"create-error-invalid-character": "제목에 잘못된 문자가 있습니다 ('|')",
+	"create-error-exists": "문서가 이미 $1에 존재합니다",
+	"create-error-invalid-page": "문서가 $1에서 유효하지 않습니다"
+}

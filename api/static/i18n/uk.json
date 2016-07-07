@@ -1,0 +1,26 @@
+{
+	"@metadata": {
+		"authors": [
+			"Green Zero"
+		]
+	},
+	"title-wikipedia": "Вікіпедія",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "бета-версія",
+	"menu-how-to": "Інструкція",
+	"menu-about": "Про проект",
+	"menu-feedback": "Зворотний зв'язок",
+	"menu-source-code": "Початковий код",
+	"selector-source": "Джерело",
+	"search-placeholder": "Пошук статей для створення",
+	"article-flag-not-interesting": "Не цікаво",
+	"modal-close": "Закрити",
+	"modal-new-window": "Відкрити цю статтю у новому вікні",
+	"modal-previous": "Попередня стаття",
+	"modal-next": "Наступна стаття",
+	"modal-translate": "Перекласти",
+	"modal-loading": "Завантаження…",
+	"create-title": "Нова стаття",
+	"create-warning": "Увага!",
+	"create-action": "Створити"
+}

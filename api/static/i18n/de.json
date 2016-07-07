@@ -37,5 +37,5 @@
 	"create-error-empty": "Der Titel darf nicht leer sein",
 	"create-error-invalid-character": "Ungültiges Zeichen im Titel („|“)",
 	"create-error-exists": "Seite ist bei $1 bereits vorhanden",
-	"create-error-invalid-page": "Seite ist bei $1 ungültig"
+	"create-error-invalid-page": "Die Seite mit der URL $1 ist ungültig"
 }

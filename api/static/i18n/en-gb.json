@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Chase me ladies, I'm the Cavalry"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "How to",
+	"menu-about": "About",
+	"menu-feedback": "Feedback",
+	"menu-source-code": "Source code",
+	"menu-privacy-statement": "Privacy statement",
+	"selector-source": "Source",
+	"selector-target": "Target",
+	"search-placeholder": "Search for articles to create",
+	"status-preparing": "Preparing article recommendations...",
+	"status-must-be-different": "Source and target languages must be different",
+	"status-invalid-language": "Invalid source or target language",
+	"article-pageviews": "$1 recent {{PLURAL:$1|view|views}}",
+	"article-flag": "Flag this article...",
+	"article-flag-not-interesting": "Not interesting",
+	"article-flag-not-notable": "Not notable for $1 Wikipedia",
+	"modal-close": "Close",
+	"modal-new-window": "Open this article in a new window",
+	"modal-previous": "Previous article",
+	"modal-next": "Next article",
+	"modal-translate": "Translate",
+	"modal-create-from-scratch": "Create from scratch",
+	"modal-loading": "Loading...",
+	"modal-preview-fail": "Failed to load",
+	"create-title": "New Article",
+	"create-title-input-placeholder": "Translation title",
+	"create-warning": "Warning!",
+	"create-action": "Create",
+	"create-error-empty": "Title must not be empty",
+	"create-error-invalid-character": "Invalid character in title ( '|' )",
+	"create-error-exists": "Page already exists at $1",
+	"create-error-invalid-page": "Page is invalid at $1"
+}

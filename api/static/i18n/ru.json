@@ -1,14 +1,15 @@
 {
 	"@metadata": {
 		"authors": [
-			"Okras"
+			"Okras",
+			"Mailman"
 		]
 	},
 	"title-wikipedia": "Википедия",
 	"title-gapfinder": "GapFinder",
 	"title-beta": "бета-версия",
 	"menu-feedback": "Обратная связь",
-	"article-flag-not-interesting": "Не интересно",
+	"article-flag-not-interesting": "Не интересует",
 	"modal-close": "Закрыть",
 	"modal-new-window": "Открыть эту статью в новом окне",
 	"modal-previous": "Предыдущая статья",
