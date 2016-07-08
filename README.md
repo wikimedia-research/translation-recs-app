@@ -58,7 +58,7 @@
 
   To start the api, execute
   ```
-  python api/recommender_api.py 
+  python api/api.py 
   ```
 
   Then navigate here to see the UI:
