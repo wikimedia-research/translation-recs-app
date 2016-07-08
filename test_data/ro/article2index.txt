@@ -1,9 +1,0 @@
-ro|Apple|Q1
-ro|Bannana|Q2
-ro|Pear|Q3
-ro|Strawberry|Q4
-ro|Peach|Q5
-ro|Nectarine|Q6
-ro|Cherry|Q7
-ro|Pineapple|Q8
-ro|Melon|Q9
