@@ -1,7 +1,7 @@
 import requests
-import concurrent.futures
 from datetime import datetime
 from dateutil import relativedelta
+from lib.utils import thread_function
 
 class PageviewGetter():
     """
@@ -31,6 +31,5 @@ class PageviewGetter():
         """
         Get pageview counts for a list of articles in parallel
         """
-        with concurrent.futures.ThreadPoolExecutor(10) as executor:
-            f = lambda args: self.helper(*args)
-            return list(executor.map(f, [(s, a) for a in articles]))
+        args_list = [(s, a) for a in articles]
+        return thread_function(self.helper, args_list, n_threads = 10)

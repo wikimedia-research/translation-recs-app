@@ -2,17 +2,7 @@ import requests
 import random
 from datetime import datetime
 from dateutil import relativedelta
-
-class Article:
-    """
-    Struct containing meta-data for an article
-    """
-    def __init__(self, title):
-        self.title = title
-        self.wikidata_id = None
-        self.rank = None
-        self.pageviews = None
-
+from lib.utils import Article, thread_function, chunk_list
 
 
 class CandidateFinder():
@@ -25,7 +15,6 @@ class CandidateFinder():
         using seed (optional)
         """
         return []
-
 
 
 class PageviewCandidateFinder():
@@ -80,20 +69,21 @@ class MorelikeCandidateFinder():
         """
         seed_list = wiki_search(s, query, 1)
 
-        if seed_list: # we have an article seed
-            seed = seed_list[0]
-            if seed != query:
-                print('Query: %s  Article: %s' % (query, seed))
-            results = wiki_search(s, seed, n, morelike=True)
-            if results:
-                results.insert(0, seed)
-                print('Succesfull Morelike Search')
-                return results
-            else:
-                print('Failed Morelike Search. Reverting to standard search')
-                return wiki_search(s, query, n)
-        else:
+        if len(seed_list) == 0:
+            print('Seed does not map to an article')
             return []
+
+        seed = seed_list[0]
+        if seed != query:
+            print('Query: %s  Article: %s' % (query, seed))
+        results = wiki_search(s, seed, n, morelike=True)
+        if results:
+            results.insert(0, seed)
+            print('Succesfull Morelike Search')
+            return results
+        else:
+            print('Failed Morelike Search. Reverting to standard search')
+            return wiki_search(s, query, n)
 
 
     def get_candidates(self, s, seed, n):
@@ -109,7 +99,7 @@ class MorelikeCandidateFinder():
             a.rank = i
             articles.append(a)
 
-        return articles
+        return articles[:n]
 
 
 def wiki_search(s, seed, n, morelike=False):

@@ -31,6 +31,11 @@ app.debug = args.debug
 
 language_pairs = requests.get('https://cxserver.wikimedia.org/v1/languagepairs').json()
 
+finder_map = {
+    'morelike': MorelikeCandidateFinder(),
+    'mostpopular': PageviewCandidateFinder(),
+}
+
 
 def json_response(dat):
     resp = Response(response=json.dumps(dat),
@@ -119,18 +124,14 @@ def parse_args(request):
         n = 12
 
     # Get search algorithm
-    finder_map = {
-        'morelike': MorelikeCandidateFinder,
-    }
 
     if not request.args.get('article'):
         search = 'mostpopular'
-        finder = PageviewCandidateFinder
     else:
         search = request.args.get('search')
         if search not in ('morelike',):
             search = 'morelike'
-        finder = finder_map[search]
+    finder = finder_map[search]
   
 
     # determine if client wants pageviews
@@ -163,7 +164,7 @@ def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_cand
 
     recs = []
     for seed in seed.split('|'):
-        recs += finder().get_candidates(s, seed, max_candidates)
+        recs += finder.get_candidates(s, seed, max_candidates)
     recs = sorted(recs, key = lambda x: x.rank)
 
     recs = apply_filters_chunkwise(s, t, recs, n_recs)
