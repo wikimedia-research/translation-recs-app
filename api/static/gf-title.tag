@@ -7,7 +7,7 @@
                     <span class="title-display" data-i18n="title-wikipedia">Wikipedia</span>
                     <span class="title-display-strong" data-i18n="title-gapfinder">GapFinder</span>
                     <span class="title-display-version" data-i18n="title-beta">beta</span>
-                    <span class="icon icon-title icon-menu dropdown-toggle"
+                    <span class="icon icon-title icon-menu dropdown-toggle" style="cursor:pointer"
                           data-toggle="dropdown"></span>
                     <div class="dropdown-menu dropdown-menu-right m-r-1">
                         <button class="dropdown-item" type="button"
