@@ -131,6 +131,9 @@
         };
 
         self.setSource = function (code) {
+            if (code == undefined) {
+                code = 'en';
+            }
             self.source = code;
             updateLanguage(self.source);
             self.sourceSelector.find('.selector-display').text($.uls.data.getAutonym(self.source));
