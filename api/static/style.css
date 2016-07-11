@@ -139,6 +139,7 @@
     background-image: url("images/menu.svg");
     margin-top: .5rem;
     float: right;
+    cursor:pointer; /* http://stackoverflow.com/a/25760476/48625 */
 }
 
 .icon-menu:hover {
