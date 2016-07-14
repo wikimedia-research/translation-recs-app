@@ -1,19 +1,27 @@
 import itertools
 import requests
-import concurrent.futures
+from lib.utils import thread_function, chunk_list
 
 class Filter():
     """
     Filter interface
     """
-    def filter(self, s, t, articles):
-        """
-        filter down article list
-        """
+
+    def filter_subset(self, s, t, articles):
         return []
 
+    def filter(self, s, t, articles):
+        """
+        Wrapper to do filtering on chunks of
+        articles concurrently
+        """
+        chunks = chunk_list(articles, 10)
+        args_list = [(s, t, chunk) for chunk in chunks]
+        results = thread_function(self.filter_subset, args_list)
+        return list(itertools.chain.from_iterable(results))
 
-class MissingFilter():
+
+class MissingFilter(Filter):
     """
     Class for filtering out which articles from 
     source language s already exist in target language t
@@ -92,23 +100,8 @@ class MissingFilter():
         return filtered_articles
 
 
-    def filter(self, s, t, articles):
-        """
-        Wrapper to do filtering on chunks of
-        articles concurrently
-        """
 
-        with concurrent.futures.ThreadPoolExecutor(10) as executor:
-            chunk_size = 10
-            chunks = [articles[i:i+chunk_size] for i in range(0, len(articles), chunk_size)]
-            f = lambda args: self.filter_subset(*args)
-            args_list = [(s, t, chunk) for chunk in chunks]
-            results = executor.map(f, args_list)
-            return list(itertools.chain.from_iterable(list(results)))
-
-
-
-class DisambiguationFilter():
+class DisambiguationFilter(Filter):
     """
     Utility class for filtering out disambiguation
     pages using the Mediawiki API
@@ -149,7 +142,8 @@ class DisambiguationFilter():
 
         return disambiguation_pages
 
-    def filter(self, s, t, articles):
+
+    def filter_subset(self, s, t, articles):
         titles = [a.title for a in articles]
         data = self.query_disambiguation_pages(s, titles)
         disambiguation_pages = self.parse_disambiguation_page_data(data)
@@ -157,7 +151,7 @@ class DisambiguationFilter():
 
 
 
-class TitleFilter():
+class TitleFilter(Filter):
     """
     Utility class for filtering out
     articles based on properties of the title alone
@@ -171,11 +165,14 @@ class TitleFilter():
             return True
 
     def filter(self, s, t, articles):
-
+        """
+        No need to thread this one
+        """
         return [a for a in articles if self.title_passes(a.title)]
 
 
-def apply_filters_chunkwise(s, t, candidates, n_recs, step = 50):
+
+def apply_filters_chunkwise(s, t, candidates, n_recs, step = 100):
 
     """
     Since filtering is expensive, we want to filter a large list
@@ -184,7 +181,8 @@ def apply_filters_chunkwise(s, t, candidates, n_recs, step = 50):
     """
     filtered_candidates = []
     m = len(candidates)
-    indices = list(zip(range(0, m - step, step), range(step, m, step)))
+
+    indices = [(i, i+step) for i in range(0, m, step)]
 
     # filter candidates in chunks, stop once we reach n_recs
     for start, stop in indices:
