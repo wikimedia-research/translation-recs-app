@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Zygimantus"
+			"Zygimantus",
+			"Eitvys200"
 		]
 	},
 	"title-wikipedia": "Vikipedija",
@@ -20,10 +21,10 @@
 	"modal-next": "Kitas straipsnis",
 	"modal-translate": "Versti",
 	"modal-loading": "Įkeliama…",
-	"create-title": "Naujas straipsnis",
+	"create-title": "Naujas Straipsnis",
 	"create-title-input-placeholder": "Vertimo pavadinimas",
 	"create-warning": "Dėmesio!",
 	"create-action": "Sukurti",
-	"create-error-empty": "Pavadinimas neturi būti tuščias",
+	"create-error-empty": "Pavadinimas negali būti tuščias",
 	"create-error-exists": "Puslapis $1 jau egzistuoja"
 }
