@@ -1,0 +1,19 @@
+{
+	"@metadata": {
+		"authors": [
+			"George Animal"
+		]
+	},
+	"title-wikipedia": "Wîkîpediya",
+	"title-beta": "beta",
+	"menu-source-code": "Koda çavkanîye",
+	"selector-source": "Çavkanî",
+	"modal-close": "Bigre",
+	"modal-translate": "Wergerîne",
+	"modal-loading": "Tê barkirin...",
+	"modal-preview-fail": "Înternet tune ye",
+	"create-title": "Gotara nû",
+	"create-title-input-placeholder": "Sernavê wergerê",
+	"create-warning": "Hişyarî!",
+	"create-action": "Çêke"
+}
