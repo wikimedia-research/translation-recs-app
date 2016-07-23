@@ -1,0 +1,84 @@
+swagger: '2.0'
+
+info:
+  version: "1"
+  title: Wikimedia Recommendation API
+  description: |
+    This API provides personalized recommendations for a variety
+    of use cases
+  contact:
+    name: '#wikimedia-research'
+    url: http://freenode.net
+
+paths:
+  /api:
+    get:
+      description: |
+        Gets `Article` objects of source articles that
+        are missing in the target
+      parameters:
+        -
+          name: s
+          in: query
+          description: Source wiki project language code
+          required: true
+          type: string
+        -
+          name: t
+          in: query
+          description: Target wiki project language code
+          required: true
+          type: string
+        -
+          name: n
+          in: query
+          description: Number of recommendations to fetch
+          required: false
+          type: integer
+          format: int32
+          maximum: 24
+          default: 12
+        -
+          name: article
+          in: query
+          description: Seed article for personalized recommendations
+          required: false
+          type: string
+          format: '"|" separated list'
+        -
+          name: pageviews
+          in: query
+          description: Whether to include pageview counts
+          required: false
+          type: boolean
+          default: true
+        -
+          name: search
+          in: query
+          description: Which search algorithm to use
+          required: false
+          type: string
+          enum:
+            - morelike
+          default: morelike
+      responses:
+        200:
+          description: Successful response
+          schema:
+            title: Articles
+            type: object
+            required:
+              - articles
+            properties:
+              articles:
+                type: array
+                items:
+                  title: Article
+                  type: object
+                  properties:
+                    pageviews:
+                      type: integer
+                    title:
+                      type: string
+                    wikidata_id:
+                      type: string
