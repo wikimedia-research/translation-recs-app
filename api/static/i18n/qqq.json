@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Amire80",
-			"Liuxinyu970226"
+			"Liuxinyu970226",
+			"Purodha"
 		]
 	},
 	"title-wikipedia": "The name 'Wikipedia'\n{{Identical|Wikipedia}}",
@@ -19,7 +20,7 @@
 	"status-preparing": "Status message that indicates the list of recommendations are being prepared",
 	"status-must-be-different": "Message indicating the source and target languages must be different",
 	"status-invalid-language": "Message indicating that either the source or target language are invalid",
-	"article-pageviews": "Message indicating the number of recent pageviews an article has",
+	"article-pageviews": "Message indicating the number of recent pageviews an article has.\nBegin the message with an upper case character if your language capitalizes the beginnnings of sentences.",
 	"article-flag": "Text describing the option to flag an article in one of many (currently 2) ways",
 	"article-flag-not-interesting": "Text describing the article as not being interesting to the user",
 	"article-flag-not-notable": "Text describing the article as not being notable for the target language's Wikipedia",

@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Rodrigo codignoli"
+		]
+	},
+	"title-wikipedia": "Wikipédia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Manual",
+	"menu-about": "Sobre",
+	"menu-feedback": "Feedback",
+	"menu-source-code": "Código-fonte",
+	"menu-privacy-statement": "Declaração de privacidade",
+	"selector-source": "Fonte",
+	"selector-target": "Alvo",
+	"search-placeholder": "Procurar artigos para criar",
+	"status-preparing": "Preparando recomendações de artigo...",
+	"status-must-be-different": "Idiomas de origem e de criação devem ser diferentes",
+	"status-invalid-language": "Idioma de origem ou destino inválido",
+	"article-pageviews": "$1 recente {{PLURAL:$1|view|views}}",
+	"article-flag": "Sinalizar este artigo...",
+	"article-flag-not-interesting": "Não é interessante",
+	"article-flag-not-notable": "Sem notoriedade para a Wikipédia em $1",
+	"modal-close": "Fechar",
+	"modal-new-window": "Abrir este artigo em uma nova janela",
+	"modal-previous": "Artigo anterior",
+	"modal-next": "Proximo artigo",
+	"modal-translate": "Traduzir",
+	"modal-create-from-scratch": "Criar do zero",
+	"modal-loading": "Carregando...",
+	"modal-preview-fail": "Sem Internet",
+	"create-title": "Novo artigo",
+	"create-title-input-placeholder": "Título da tradução",
+	"create-warning": "Aviso!",
+	"create-action": "Criar",
+	"create-error-empty": "O título não pode estar em branco",
+	"create-error-invalid-character": "Carácter inválido no título ( '|' )",
+	"create-error-exists": "A página já existe em $1",
+	"create-error-invalid-page": "Página inválida em $1"
+}
