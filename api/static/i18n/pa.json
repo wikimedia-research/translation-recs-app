@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Tow"
+		]
+	},
+	"title-wikipedia": "ਵਿਕੀਪੀਡੀਆ",
+	"title-gapfinder": "ਗੈਪਮਾਈਨਡਰ",
+	"title-beta": "ਬੀਟਾ",
+	"menu-how-to": "ਕਿਵੇੰ ਕਰੀਏ",
+	"menu-about": "ਬਾਰੇ",
+	"menu-feedback": "ਫ਼ੀਡਬੈਕ",
+	"menu-source-code": "ਸਰੋਤ ਕੋਡ",
+	"menu-privacy-statement": "ਪਰਦਾ ਜਾਣਕਾਰੀ",
+	"selector-source": "ਸਰੋਤ",
+	"selector-target": "ਲਕਸ਼",
+	"search-placeholder": "ਬਨਾਉਣ ਲਈ ਲੇਖ ਲੱਭੋ",
+	"status-preparing": "ਲੇਖ ਿਸਫ਼ਾਰਿਸ਼ਾੰ ਤਿਆਰ ਕੀਤੀਆੰ ਜਾ ਰੇਹੀਆੰ ਹਨ...",
+	"status-must-be-different": "ਸਰੋਤ ਅਤੇ ਲਕਸ਼ ਭਾਸ਼ਾਵਾੰ ਵੱਖਰੀਆੰ ਹੋਣੀਆੰ ਚਾਹੀਦੀਆੰ ਹਨ",
+	"status-invalid-language": "ਗਲਤ ਸਰੋਤ ਜਾੰ ਲਕਸ਼ ਭਾਸ਼ਾ",
+	"article-pageviews": "$1 ਹਾਲੇ {{PLURAL:$1|ਦਰਸ਼ਨ|ਦਰਸ਼ਨ}}",
+	"article-flag": "ਇਸ ਲੇਖ ਨੂੰ ਝੰਡਾ ਲਾਓ...",
+	"article-flag-not-interesting": "ਦਿਲਚਸਪ ਨਹੀੰ",
+	"article-flag-not-notable": "$1 ਵਿਕੀਪੀਡੀਆ ਲਈ ਅਨੂਠਾ ਨਹੀੰ",
+	"modal-close": "ਬੰਦ ਕਰੋ",
+	"modal-new-window": "ਇਸ ਲੇਖ ਨੂੰ ਇੱਕ ਨਵੀੰ ਵਿੰਡੋ ਵਿੱਚ ਖੋਲ੍ਹੋ",
+	"modal-previous": "ਪਿਛਲਾ ਲੇਖ",
+	"modal-next": "ਅਗਲਾ ਲੇਖ",
+	"modal-translate": "ਤਰਜਮਾ ਕਰੋ",
+	"modal-create-from-scratch": "ਸ਼ੁਰੂ ਤੋੰ ਬਣਾਓ",
+	"modal-loading": "ਲੋਡ ਕੀਤਾ ਜਾ ਰਿਹਾ ਹੈ...",
+	"modal-preview-fail": "ਕੋਈ ਇੰਟਰਨੈੱਟ ਨਹੀੰ",
+	"create-title": "ਨਵਾੰ ਲੇਖ",
+	"create-title-input-placeholder": "ਅਨੁਵਾਦ ਸਿਰਲੇਖ",
+	"create-warning": "ਖ਼ਬਰਦਾਰ!",
+	"create-action": "ਬਣਾਓ",
+	"create-error-empty": "ਸਿਰਲੇਖ ਖਾਲੀ ਨਹੀੰ ਹੋਣਾ ਚਾਹੀਦਾ",
+	"create-error-invalid-character": "ਸਿਰਲੇਖ ਵਿੱਚ ਗਲਤ ਅੱਖਰ ( '|' )",
+	"create-error-exists": "ਸਫਾ $1 'ਤੇ ਪਹਿਲਾੰ ਹੀ ਮੌਜੂਦ ਹੈ",
+	"create-error-invalid-page": "ਸਫਾ $1 'ਤੇ ਗਲਤ ਹੈ"
+}
