@@ -1,13 +1,16 @@
 import requests
 from datetime import datetime
 from dateutil import relativedelta
-from lib.utils import thread_function
 
-class PageviewGetter():
+from recommendation.api.utils import thread_function
+
+
+class PageviewGetter:
     """
     Utility Class for getting article pageview counts
     via the pageview API
     """
+
     def helper(self, s, article):
         """
         Get pageview counts for a single article from pageview api
@@ -26,10 +29,9 @@ class PageviewGetter():
         article.pageviews = pageviews
         return article
 
-
     def get(self, s, articles):
         """
         Get pageview counts for a list of articles in parallel
         """
         args_list = [(s, a) for a in articles]
-        return thread_function(self.helper, args_list, n_threads = 10)
+        return thread_function(self.helper, args_list, n_threads=10)
