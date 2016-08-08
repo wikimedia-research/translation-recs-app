@@ -2,10 +2,9 @@ import json
 import requests
 from flask import Blueprint, render_template, request
 
-from recommendation.lib import event_logger
+from recommendation.utils import event_logger
 
-
-gapfinder = Blueprint('gapfinder', __name__, template_folder='templates')
+gapfinder = Blueprint('gapfinder', __name__, template_folder='templates', static_folder='static', static_url_path='/static/gapfinder')
 
 language_pairs = requests.get('https://cxserver.wikimedia.org/v1/languagepairs').json()
 

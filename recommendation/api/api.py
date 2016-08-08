@@ -1,22 +1,12 @@
-import os
-import sys
-import inspect
 import json
-import argparse
 import requests
 import time
-from flask import Blueprint, render_template, request, Response
+from flask import Blueprint, request, Response
 
-currentdir = os.path.dirname(
-    os.path.abspath(inspect.getfile(inspect.currentframe()))
-)
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir)
-
-from recommendation.lib.filters import MissingFilter, DisambiguationFilter, apply_filters_chunkwise
-from recommendation.lib.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
-from recommendation.lib.pageviews import PageviewGetter
-from recommendation.lib import event_logger
+from recommendation.api.filters import apply_filters_chunkwise
+from recommendation.api.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
+from recommendation.api.pageviews import PageviewGetter
+from recommendation.utils import event_logger
 
 api = Blueprint('api', __name__)
 
@@ -48,9 +38,9 @@ def get_recommendations():
         args['s'],
         args['t'],
         args['finder'],
-        seed = args['article'],
-        n_recs = args['n'],
-        pageviews = args['pageviews']
+        seed=args['article'],
+        n_recs=args['n'],
+        pageviews=args['pageviews']
     )
 
     if len(recs) == 0:
@@ -65,7 +55,7 @@ def get_recommendations():
     )
 
     t2 = time.time()
-    print('Total:', t2-t1)
+    print('Total:', t2 - t1)
 
     return json_response({'articles': recs})
 
@@ -96,7 +86,6 @@ def parse_args(request):
         n = 12
 
     # Get search algorithm
-
     if not request.args.get('article'):
         search = 'mostpopular'
     else:
@@ -112,21 +101,20 @@ def parse_args(request):
     else:
         pageviews = True
 
-
     args = {
-                's': request.args.get('s'),
-                't': request.args.get('t'),
-                'article': request.args.get('article', ''),
-                'n': n,
-                'search' : search,
-                'finder': finder,
-                'pageviews': pageviews,
-            }
+        's': request.args.get('s'),
+        't': request.args.get('t'),
+        'article': request.args.get('article', ''),
+        'n': n,
+        'search': search,
+        'finder': finder,
+        'pageviews': pageviews,
+    }
 
     return args
 
 
-def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_candidates = 500):
+def recommend(s, t, finder, seed=None, n_recs=10, pageviews=True, max_candidates=500):
     """
     1. Use finder to select a set of candidate articles
     2. Filter out candidates that are not missing, are disambiguation pages, etc
@@ -136,15 +124,15 @@ def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_cand
     recs = []
     for seed in seed.split('|'):
         recs += finder.get_candidates(s, seed, max_candidates)
-    recs = sorted(recs, key = lambda x: x.rank)
+    recs = sorted(recs, key=lambda x: x.rank)
 
     recs = apply_filters_chunkwise(s, t, recs, n_recs)
 
     if pageviews:
         recs = PageviewGetter().get(s, recs)
 
-    recs = sorted(recs, key = lambda x: x.rank)
-    return [{'title': r.title, 'pageviews':r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
+    recs = sorted(recs, key=lambda x: x.rank)
+    return [{'title': r.title, 'pageviews': r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
 
 
 @api.after_request

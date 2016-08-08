@@ -1,8 +1,10 @@
 import itertools
 import requests
-from lib.utils import thread_function, chunk_list
 
-class Filter():
+from recommendation.api.utils import thread_function, chunk_list
+
+
+class Filter:
     """
     Filter interface
     """
@@ -27,6 +29,7 @@ class MissingFilter(Filter):
     source language s already exist in target language t
     using Wikidata sitelinks
     """
+
     def query_wikidata_sitelinks(self, s, titles):
         """
         Query Wikidata API for the sitelinks for each
@@ -36,20 +39,19 @@ class MissingFilter(Filter):
         api = 'https://www.wikidata.org/w/api.php'
 
         params = {
-                    'action': 'wbgetentities',
-                    'sites': '%swiki' % s,
-                    'titles': '|'.join(titles),
-                    'props': 'sitelinks/urls',
-                    'format': 'json',
-                    }
+            'action': 'wbgetentities',
+            'sites': '%swiki' % s,
+            'titles': '|'.join(titles),
+            'props': 'sitelinks/urls',
+            'format': 'json',
+        }
         response = requests.get(api, params=params)
-            
+
         if response:
             return response.json()
         else:
             print('Bad Wikidata API response')
             return {}
-
 
     def parse_wikidata_sitelinks_data(self, s, t, data):
         """
@@ -63,7 +65,7 @@ class MissingFilter(Filter):
         twiki = '%swiki' % t
 
         if 'entities' not in data:
-            print ('None of the titles have a Wikidata Item')
+            print('None of the titles have a Wikidata Item')
             return title_id_dict
 
         for k, v in data['entities'].items():
@@ -77,18 +79,17 @@ class MissingFilter(Filter):
 
         return title_id_dict
 
-
     def filter_subset(self, s, t, articles):
         """
         Remove articles in s that already exist in t
         using Wikidata sitelinks from the Wikidata API
         """
 
-        d = {a.title:a for a in articles}
+        d = {a.title: a for a in articles}
         titles = [a.title for a in articles]
 
         data = self.query_wikidata_sitelinks(s, titles)
-        title_id_dict =  self.parse_wikidata_sitelinks_data(s, t, data)
+        title_id_dict = self.parse_wikidata_sitelinks_data(s, t, data)
 
         filtered_articles = []
 
@@ -98,7 +99,6 @@ class MissingFilter(Filter):
             filtered_articles.append(article)
 
         return filtered_articles
-
 
 
 class DisambiguationFilter(Filter):
@@ -112,20 +112,19 @@ class DisambiguationFilter(Filter):
         api = 'https://%s.wikipedia.org/w/api.php' % s
 
         params = {
-                    'action': 'query',
-                    'prop': 'pageprops',
-                    'pprop': 'disambiguation',
-                    'titles': '|'.join(titles),
-                    'format': 'json',
-                    }
+            'action': 'query',
+            'prop': 'pageprops',
+            'pprop': 'disambiguation',
+            'titles': '|'.join(titles),
+            'format': 'json',
+        }
         response = requests.get(api, params=params)
-            
+
         if response:
             return response.json()
         else:
             print('Bad Disambiguation API response')
             return {}
-
 
     def parse_disambiguation_page_data(self, data):
 
@@ -135,13 +134,12 @@ class DisambiguationFilter(Filter):
             print('Error finding disambiguation pages')
             return set()
 
-        for k,v in data['query']['pages'].items():
+        for k, v in data['query']['pages'].items():
             if 'pageprops' in v and 'disambiguation' in v['pageprops']:
                 title = v['title'].replace(' ', '_')
                 disambiguation_pages.add(title)
 
         return disambiguation_pages
-
 
     def filter_subset(self, s, t, articles):
         titles = [a.title for a in articles]
@@ -150,19 +148,19 @@ class DisambiguationFilter(Filter):
         return [a for a in articles if a.title not in disambiguation_pages]
 
 
-
 class TitleFilter(Filter):
     """
     Utility class for filtering out
     articles based on properties of the title alone
     """
+
     def title_passes(self, title):
 
-            if ':' in title:
-                return False 
-            if title.startswith('List'):
-                return False
-            return True
+        if ':' in title:
+            return False
+        if title.startswith('List'):
+            return False
+        return True
 
     def filter(self, s, t, articles):
         """
@@ -171,9 +169,7 @@ class TitleFilter(Filter):
         return [a for a in articles if self.title_passes(a.title)]
 
 
-
-def apply_filters_chunkwise(s, t, candidates, n_recs, step = 100):
-
+def apply_filters_chunkwise(s, t, candidates, n_recs, step=100):
     """
     Since filtering is expensive, we want to filter a large list
     of candidates in chunks until we get the desired number of
@@ -182,7 +178,7 @@ def apply_filters_chunkwise(s, t, candidates, n_recs, step = 100):
     filtered_candidates = []
     m = len(candidates)
 
-    indices = [(i, i+step) for i in range(0, m, step)]
+    indices = [(i, i + step) for i in range(0, m, step)]
 
     # filter candidates in chunks, stop once we reach n_recs
     for start, stop in indices:
