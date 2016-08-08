@@ -5,7 +5,7 @@ import json
 import argparse
 import requests
 import time
-from flask import Flask, render_template, request, Response
+from flask import Blueprint, render_template, request, Response
 
 currentdir = os.path.dirname(
     os.path.abspath(inspect.getfile(inspect.currentframe()))
@@ -13,21 +13,12 @@ currentdir = os.path.dirname(
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
-from lib.filters import MissingFilter, DisambiguationFilter, apply_filters_chunkwise
-from lib.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
-from lib.pageviews import PageviewGetter
-from lib import event_logger
+from recommendation.lib.filters import MissingFilter, DisambiguationFilter, apply_filters_chunkwise
+from recommendation.lib.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
+from recommendation.lib.pageviews import PageviewGetter
+from recommendation.lib import event_logger
 
-
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '--debug', required=False, action='store_true',
-    help='run in debug mode'
-)
-args = parser.parse_args()
-
-app = Flask(__name__)
-app.debug = args.debug
+api = Blueprint('api', __name__)
 
 language_pairs = requests.get('https://cxserver.wikimedia.org/v1/languagepairs').json()
 
@@ -44,31 +35,14 @@ def json_response(dat):
     return resp
 
 
-@app.route('/')
-def home():
-    s = request.args.get('s')
-    t = request.args.get('t')
-    seed = request.args.get('seed')
-    return render_template(
-        'index.html',
-        language_pairs=json.dumps(language_pairs),
-        s=s,
-        t=t,
-        seed=seed,
-        event_logger_url=event_logger.URL
-    )
-
-
-@app.route('/api')
+@api.route('/')
 def get_recommendations():
-
     t1 = time.time()
     args = parse_args(request)
 
     language_error = validate_language_pairs(args)
     if language_error:
         return json_response({'error': language_error})
-
 
     recs = recommend(
         args['s'],
@@ -83,14 +57,12 @@ def get_recommendations():
         msg = 'Sorry, failed to get recommendations'
         return json_response({'error': msg})
 
-
     event_logger.log_api_request(
         source=args['s'],
         target=args['t'],
         seed=args['article'],
         search=args['search']
     )
-
 
     t2 = time.time()
     print('Total:', t2-t1)
@@ -132,7 +104,6 @@ def parse_args(request):
         if search not in ('morelike',):
             search = 'morelike'
     finder = finder_map[search]
-  
 
     # determine if client wants pageviews
     pageviews = request.args.get('pageviews')
@@ -176,14 +147,9 @@ def recommend(s, t, finder, seed = None, n_recs = 10, pageviews = True, max_cand
     return [{'title': r.title, 'pageviews':r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
 
 
-@app.after_request
+@api.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
-
-
-if __name__ == '__main__':
-    event_logger.URL = 'http://localhost/beacon/event'
-    app.run(host='0.0.0.0')
