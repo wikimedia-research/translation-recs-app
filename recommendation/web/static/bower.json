@@ -1,5 +1,5 @@
 {
-  "name": "article-recommendation",
+  "name": "recommendation",
   "version": "0.0.1",
   "description": "",
   "dependencies": {
@@ -10,5 +10,5 @@
     "uls": "https://github.com/wikimedia/jquery.uls.git#1e8c2168f6b68556184c09eaecf2a4dcff8d8dca",
     "i18n": "wikimedia/jquery.i18n"
   },
-  "license": "MIT"
+  "license": "Apache 2.0"
 }

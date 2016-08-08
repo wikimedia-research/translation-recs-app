@@ -3,7 +3,7 @@
 *.sublime-workspace
 
 # External dependencies
-bower_components
+eower_components
 
 # Compiled source #
 ###################
@@ -32,6 +32,7 @@ bower_components
 *.xml
 *.json
 !**/i18n/*.json
+!**/static/bower.json
 *.tsv
 *.csv
 *.txt
@@ -113,4 +114,6 @@ docs/_build/
 
 # PyBuilder
 target/
-data/
+
+# IDEA
+.idea
