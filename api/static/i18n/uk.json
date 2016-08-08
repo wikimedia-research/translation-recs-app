@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"Green Zero"
+			"Green Zero",
+			"Piramidion"
 		]
 	},
 	"title-wikipedia": "Вікіпедія",
@@ -11,7 +12,9 @@
 	"menu-about": "Про проект",
 	"menu-feedback": "Зворотний зв'язок",
 	"menu-source-code": "Початковий код",
+	"menu-privacy-statement": "Заява про конфіденційність",
 	"selector-source": "Джерело",
+	"selector-target": "Ціль",
 	"search-placeholder": "Пошук статей для створення",
 	"article-flag-not-interesting": "Не цікаво",
 	"modal-close": "Закрити",
