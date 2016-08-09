@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/wikimedia-research/translation-recs-app.svg?branch=master)](https://travis-ci.org/wikimedia-research/translation-recs-app)
+[![Coverage Status](https://coveralls.io/repos/github/wikimedia-research/translation-recs-app/badge.svg?branch=master)](https://coveralls.io/github/wikimedia-research/translation-recs-app)
+
 **Article Creation API**
 ----
   Given an source and target wiki, the API provides source articles missing in the target.
