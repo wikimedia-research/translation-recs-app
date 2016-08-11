@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>GapFinder</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+        <link rel="stylesheet" href="{{ url_for('.static', filename='bower_components/bootstrap/dist/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='bower_components/uls/css/jquery.uls.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='bower_components/uls/css/jquery.uls.grid.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='bower_components/uls/css/jquery.uls.lcd.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='bower_components/uls/css/jquery.uls.compact.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='style.css') }}">
+        <link rel="stylesheet" href="{{ url_for('.static', filename='suggest-searches/wm-typeahead.css') }}">
+    </head>
+    <body>
+        <gf-disclaimer></gf-disclaimer>
+        <gf-title></gf-title>
+        <gf-input></gf-input>
+        <gf-preview></gf-preview>
+
+        <script src="{{ url_for('.static', filename='gf-disclaimer.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('.static', filename='gf-title.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('.static', filename='gf-input.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('.static', filename='gf-articles.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('.static', filename='gf-preview.tag') }}" type="riot/tag"></script>
+        <script src="{{ url_for('.static', filename='gf-create.tag') }}" type="riot/tag"></script>
+
+        <script src="{{ url_for('.static', filename='event_logger.js') }}"></script>
+
+        <script src="{{ url_for('.static', filename='bower_components/riot/riot+compiler.min.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/tether/dist/js/tether.min.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/store2/dist/store2.min.js') }}"></script>
+
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.messagestore.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.fallbacks.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.parser.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.emitter.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/i18n/src/jquery.i18n.language.js') }}"></script>
+
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.data.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.data.utils.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.lcd.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.languagefilter.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.regionfilter.js') }}"></script>
+        <script src="{{ url_for('.static', filename='bower_components/uls/src/jquery.uls.core.js') }}"></script>
+
+        <script src="{{ url_for('.static', filename='suggest-searches/mediawiki.lite.js') }}"></script>
+        <script src="{{ url_for('.static', filename='suggest-searches/polyfills.js') }}"></script>
+        <script src="{{ url_for('.static', filename='suggest-searches/wm-typeahead.js') }}"></script>
+
+        <script>
+            // globals from server
+            window.translationAppGlobals = {
+                languagePairs: JSON.parse('{{ language_pairs | safe }}'),
+                s: '{{ s if s else '' }}',
+                t: '{{ t if t else '' }}',
+                seed: '{{ seed if seed else '' }}',
+
+                personalBlacklistKey: 'personal.blacklist',
+                globalBlacklistKey: 'not.notable.blacklist',
+
+                campaign: 'article-recommender-1',
+                eventLoggerUrl: '{{ event_logger_url }}',
+
+                i18nGapFinderPath: '{{ url_for('.static', filename='i18n/') }}',
+                i18nUlsPath: '{{ url_for('.static', filename='bower_components/uls/i18n/') }}'
+            };
+
+            riot.mount('gf-disclaimer, gf-title, gf-input');
+
+            function updateLanguage(language) {
+                var i18n = $.i18n();
+                i18n.load(window.translationAppGlobals.i18nUlsPath + language + '.json', language);
+                i18n.load(window.translationAppGlobals.i18nGapFinderPath + language + '.json', language).done(
+                        function () {
+                            i18n.locale = language;
+                            $('body').i18n();
+                            riot.update();
+                        }
+                );
+            }
+        </script>
+    </body>
+</html>

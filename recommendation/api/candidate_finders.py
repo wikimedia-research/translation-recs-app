@@ -2,13 +2,15 @@ import requests
 import random
 from datetime import datetime
 from dateutil import relativedelta
-from lib.utils import Article, thread_function, chunk_list
+
+from recommendation.api.utils import Article
 
 
-class CandidateFinder():
+class CandidateFinder:
     """
     CandidateFinder interface
     """
+
     def get_candidates(self, s, seed, n):
         """
         get list candidate source language articles
@@ -17,18 +19,19 @@ class CandidateFinder():
         return []
 
 
-class PageviewCandidateFinder():
+class PageviewCandidateFinder:
     """
     Utility Class for getting a list of the  most 
     popular articles in a source  Wikipedia.
     """
+
     def query_pageviews(self, s):
         """
         Query pageview API and parse results
         """
         dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
         query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
-        data =  requests.get(query).json()
+        data = requests.get(query).json()
         article_pv_tuples = []
 
         try:
@@ -38,7 +41,6 @@ class PageviewCandidateFinder():
             print("Could not get most popular articles for %s from pageview API. Try using a seed article." % s)
 
         return article_pv_tuples
-
 
     def get_candidates(self, s, seed, n):
         """
@@ -55,12 +57,13 @@ class PageviewCandidateFinder():
         return articles[:n]
 
 
-class MorelikeCandidateFinder():
+class MorelikeCandidateFinder:
     """
     Utility class for getting articles that are similar to
     a given seed article in a source Wikipedia via "morelike"
     search
     """
+
     def get_morelike_candidates(self, s, query, n):
         """
         Perform a "morelike" search via the Mediawiki search API. 
@@ -84,7 +87,6 @@ class MorelikeCandidateFinder():
         else:
             print('Failed Morelike Search. Reverting to standard search')
             return wiki_search(s, query, n)
-
 
     def get_candidates(self, s, seed, n):
         """
@@ -114,7 +116,7 @@ def wiki_search(s, seed, n, morelike=False):
         'list': 'search',
         'format': 'json',
         'srsearch': seed,
-        'srnamespace' : 0,
+        'srnamespace': 0,
         'srwhat': 'text',
         'srprop': 'wordcount',
         'srlimit': n
@@ -123,14 +125,14 @@ def wiki_search(s, seed, n, morelike=False):
         response = requests.get(mw_api, params=params).json()
     except:
         print('Could not search for articles related to seed in %s. Choose another language.' % s)
-        return [] 
+        return []
 
     if 'query' not in response or 'search' not in response['query']:
         print('Could not search for articles related to seed in %s. Choose another language.' % s)
         return []
 
     response = response['query']['search']
-    results =  [r['title'].replace(' ', '_') for r in response]
+    results = [r['title'].replace(' ', '_') for r in response]
     if len(results) == 0:
         print('No articles similar to %s in %s. Try another seed.' % (seed, s))
         return []
