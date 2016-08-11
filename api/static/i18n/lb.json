@@ -13,6 +13,7 @@
 	"menu-source-code": "Quellcode",
 	"selector-source": "Quell",
 	"selector-target": "Zil",
+	"status-invalid-language": "Net valabel Quell oder Zil-Sprooch",
 	"article-flag": "Dësen Artikel markéieren …",
 	"article-flag-not-interesting": "Net interessant",
 	"article-flag-not-notable": "Net relevant fir Wikipedia op $1",
@@ -29,6 +30,7 @@
 	"create-warning": "Warnung!",
 	"create-action": "Uleeën",
 	"create-error-empty": "Den Titel däerf net eidel sinn",
+	"create-error-invalid-character": "Net valabelt Zeechen am Titel ( '|' )",
 	"create-error-exists": "Säit gëtt et schonn op $1",
 	"create-error-invalid-page": "Säit ass net valabel op $1"
 }

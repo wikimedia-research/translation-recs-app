@@ -21,6 +21,7 @@
 	"article-pageviews": "$1 تازه {{PLURAL:$1|کتنه|کتنې}}",
 	"article-flag": "دا ليکنه رپی داره کول...",
 	"article-flag-not-interesting": "پزړه پوری نه دی",
+	"article-flag-not-notable": "د $1 ويکيپېډيا لپاره نامتو نه دی",
 	"modal-close": "تړل",
 	"modal-new-window": "همدا ليکنه په يوې نوې کړکۍ کې پرانيستل",
 	"modal-previous": "تېره ليکنه",
