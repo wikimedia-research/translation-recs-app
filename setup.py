@@ -16,7 +16,12 @@ setup_parameters = dict(
                       'futures',
                       'numpy',
                       'python-dateutil'],
-    package_data={'': ['static/*', 'templates/*']},
+    package_data={'recommendation.web': ['static/*',
+                                         'static/i18n/*',
+                                         'static/images/*',
+                                         'static/suggest-searches/*',
+                                         'templates/*'],
+                  'recommendation.api': ['swagger.yml']},
     zip_safe=False,
     setup_requires=['pytest-runner'],
     tests_require=['pytest']
