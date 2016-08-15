@@ -1,0 +1,33 @@
+{
+	"@metadata": {
+		"authors": [
+			"Sarchia"
+		]
+	},
+	"title-wikipedia": "ویکیپیدیا",
+	"title-gapfinder": "گاپفایندەر",
+	"title-beta": "بێتا",
+	"menu-how-to": "چۆنیەتی",
+	"menu-about": "سه‌باره‌ت",
+	"menu-feedback": "فیدباک",
+	"menu-source-code": "کۆدی سەرچاوە",
+	"selector-source": "سەرچاوە",
+	"selector-target": "مەبەست",
+	"search-placeholder": "بۆ وتارێک بگەڕێ تا دروستی بکەیت",
+	"status-must-be-different": "زمانی سەرچاوە و مەبەست پێویستە جودا بن",
+	"article-flag": "نیشانکردنی ئەم وتارە...",
+	"article-flag-not-interesting": "دڵخواز نییە",
+	"modal-close": "داخستن",
+	"modal-new-window": "کردنەوەی ئەم وتارە لە پەنجەرەیەکی نوێ",
+	"modal-previous": "وتاری پێشوو",
+	"modal-next": "وتاری دواتر",
+	"modal-translate": "وەرگێڕان",
+	"modal-loading": "باركردن‌...",
+	"modal-preview-fail": "ئینتەرنێت نییە",
+	"create-title": "وتاری نوێ",
+	"create-title-input-placeholder": "سەرناوی وەرگێڕان",
+	"create-warning": "ھۆشداری!",
+	"create-action": "دروستکردن",
+	"create-error-empty": "پێویستە سەرناو بەتاڵ نەبێت",
+	"create-error-exists": "پەڕە پێشتر ھەبووە لە $1"
+}
