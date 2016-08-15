@@ -19,7 +19,7 @@ class CandidateFinder:
         return []
 
 
-class PageviewCandidateFinder:
+class PageviewCandidateFinder(CandidateFinder):
     """
     Utility Class for getting a list of the  most 
     popular articles in a source  Wikipedia.
@@ -31,7 +31,12 @@ class PageviewCandidateFinder:
         """
         dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
         query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
-        data = requests.get(query).json()
+        try:
+            response = requests.get(query)
+            response.raise_for_status()
+        except requests.exceptions.RequestException:
+            return []
+        data = response.json()
         article_pv_tuples = []
 
         try:
@@ -57,7 +62,7 @@ class PageviewCandidateFinder:
         return articles[:n]
 
 
-class MorelikeCandidateFinder:
+class MorelikeCandidateFinder(CandidateFinder):
     """
     Utility class for getting articles that are similar to
     a given seed article in a source Wikipedia via "morelike"
