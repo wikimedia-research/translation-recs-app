@@ -21,7 +21,7 @@ class CandidateFinder:
 
 class PageviewCandidateFinder(CandidateFinder):
     """
-    Utility Class for getting a list of the  most 
+    Utility Class for getting a list of the most
     popular articles in a source  Wikipedia.
     """
 
@@ -71,7 +71,7 @@ class MorelikeCandidateFinder(CandidateFinder):
 
     def get_morelike_candidates(self, s, query, n):
         """
-        Perform a "morelike" search via the Mediawiki search API. 
+        Perform a "morelike" search via the Mediawiki search API.
         First map the query to an article via standard search,
         and then get a list of related articles via morelike search
         """
