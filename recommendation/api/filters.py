@@ -25,7 +25,7 @@ class Filter:
 
 class MissingFilter(Filter):
     """
-    Class for filtering out which articles from 
+    Class for filtering out which articles from
     source language s already exist in target language t
     using Wikidata sitelinks
     """

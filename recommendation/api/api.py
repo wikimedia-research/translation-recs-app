@@ -77,7 +77,7 @@ def validate_language_pairs(args):
 
 def parse_args(request):
     """
-    Parse api query parameters 
+    Parse api query parameters
     """
     n = request.args.get('n')
     try:

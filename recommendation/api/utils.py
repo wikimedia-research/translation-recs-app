@@ -19,5 +19,4 @@ def chunk_list(l, chunk_size):
 
 def thread_function(helper_func, args_list, n_threads=10):
     with concurrent.futures.ThreadPoolExecutor(n_threads) as executor:
-        f = lambda args: helper_func(*args)
-        return list(executor.map(f, args_list))
+        return list(executor.map(helper_func, args_list))

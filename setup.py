@@ -24,7 +24,8 @@ setup_parameters = dict(
                   'recommendation.api': ['swagger.yml']},
     zip_safe=False,
     setup_requires=['pytest-runner'],
-    tests_require=['pytest']
+    tests_require=['pytest',
+                   'responses']
 )
 if getattr(sys, 'real_prefix', None) is None:
     setup_parameters.update(dict(
