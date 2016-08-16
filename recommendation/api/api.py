@@ -7,10 +7,12 @@ from recommendation.api.filters import apply_filters_chunkwise
 from recommendation.api.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
 from recommendation.api.pageviews import PageviewGetter
 from recommendation.utils import event_logger
+from recommendation.utils import configuration
+import recommendation
 
 api = Blueprint('api', __name__)
 
-language_pairs = requests.get('https://cxserver.wikimedia.org/v1/languagepairs').json()
+language_pairs = None
 
 finder_map = {
     'morelike': MorelikeCandidateFinder(),
@@ -30,9 +32,8 @@ def get_recommendations():
     t1 = time.time()
     args = parse_args(request)
 
-    language_error = validate_language_pairs(args)
-    if language_error:
-        return json_response({'error': language_error})
+    if not is_valid_language_pair(args['s'], args['t']):
+        return json_response({'error': 'Invalid or duplicate source and/or target language'})
 
     recs = recommend(
         args['s'],
@@ -60,19 +61,26 @@ def get_recommendations():
     return json_response({'articles': recs})
 
 
-def validate_language_pairs(args):
-    """
-    Make sure s=!t and that both s and t
-    are valid language codes
-    """
-    s = args['s']
-    t = args['t']
+def is_valid_language_pair(source, target):
+    if source == target:
+        return False
 
-    # make sure language codes are valid
-    if s not in language_pairs['source'] or t not in language_pairs['target']:
-        return 'Invalid source or target language'
-    if s == t:
-        return 'Source is equal to target language'
+    global language_pairs
+    if language_pairs is None:
+        config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
+                                                 recommendation.config_name)
+        language_pairs_endpoint = config.get('endpoints', 'language_pairs')
+        try:
+            result = requests.get(language_pairs_endpoint)
+            result.raise_for_status()
+            pairs = result.json()
+        except requests.exceptions.RequestsException:
+            return
+        language_pairs = pairs
+
+    if source not in language_pairs['source'] or target not in language_pairs['target']:
+        return False
+    return True
 
 
 def parse_args(request):

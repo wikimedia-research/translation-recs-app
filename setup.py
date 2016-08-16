@@ -30,7 +30,8 @@ setup_parameters = dict(
 if getattr(sys, 'real_prefix', None) is None:
     setup_parameters.update(dict(
         data_files=[('/etc/recommendation', ['recommendation/data/recommendation.wsgi',
-                                             'recommendation/data/recommendation.ini'])]
+                                             'recommendation/data/recommendation.ini',
+                                             'recommendation/data/uwsgi.ini'])]
     ))
 else:
     setup_parameters['package_data'].update({'recommendation': ['data/*']})
