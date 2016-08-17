@@ -3,7 +3,7 @@ from pkg_resources import resource_filename
 
 
 def get_configuration(path, package, name):
-    config = configparser.ConfigParser()
+    config = configparser.ConfigParser(interpolation=configparser.ExtendedInterpolation())
     try:
         config.read_file(open(path))
     except IOError:
