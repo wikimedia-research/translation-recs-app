@@ -4,6 +4,8 @@ from datetime import datetime
 from dateutil import relativedelta
 
 from recommendation.api.utils import Article
+from recommendation.utils import configuration
+import recommendation
 
 
 class CandidateFinder:
@@ -29,14 +31,23 @@ class PageviewCandidateFinder(CandidateFinder):
         """
         Query pageview API and parse results
         """
-        dt = (datetime.utcnow() - relativedelta.relativedelta(days=2)).strftime('%Y/%m/%d')
-        query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/%s.wikipedia/all-access/%s" % (s, dt)
+        config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
+                                                 recommendation.config_name)
+        days = config.getint('popular_pageviews', 'days')
+        date_format = config.get('popular_pageviews', 'date_format')
+        query = config.get('popular_pageviews', 'query')
+        date = (datetime.utcnow() - relativedelta.relativedelta(days=days)).strftime(date_format)
+        query = query.format(source=s, date=date)
         try:
             response = requests.get(query)
             response.raise_for_status()
-        except requests.exceptions.RequestException:
+        except requests.RequestException:
             return []
-        data = response.json()
+        try:
+            data = response.json()
+        except ValueError:
+            return []
+
         article_pv_tuples = []
 
         try:
@@ -113,23 +124,16 @@ def wiki_search(s, seed, n, morelike=False):
     """
     A client to the Mediawiki search API
     """
-    if morelike:
-        seed = 'morelike:' + seed
-    mw_api = 'https://%s.wikipedia.org/w/api.php' % s
-    params = {
-        'action': 'query',
-        'list': 'search',
-        'format': 'json',
-        'srsearch': seed,
-        'srnamespace': 0,
-        'srwhat': 'text',
-        'srprop': 'wordcount',
-        'srlimit': n
-    }
+    endpoint, params = build_wiki_search(s, seed, n, morelike)
     try:
-        response = requests.get(mw_api, params=params).json()
-    except:
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()
+    except requests.RequestException:
         print('Could not search for articles related to seed in %s. Choose another language.' % s)
+        return []
+    try:
+        response = response.json()
+    except ValueError:
         return []
 
     if 'query' not in response or 'search' not in response['query']:
@@ -143,3 +147,15 @@ def wiki_search(s, seed, n, morelike=False):
         return []
 
     return results
+
+
+def build_wiki_search(source, seed, count, morelike):
+    config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
+                                             recommendation.config_name)
+    endpoint = config.get('endpoints', 'wikipedia').format(source=source)
+    params = dict(config['wiki_search_params'])
+    params['srlimit'] = count
+    if morelike:
+        seed = 'morelike:' + seed
+    params['srsearch'] = seed
+    return endpoint, params
