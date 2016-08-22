@@ -1,39 +1,40 @@
+import flask
 import pytest
-import responses
 import json
 
 from recommendation.api import api
 
-LANGUAGE_PAIRS = {
-    'source': ['aa', 'bb'],
-    'target': ['cc', 'dd']
-}
+GOOD_RESPONSE = {'articles': [
+    {'title': 'A', 'pageviews': 10, 'wikidata_id': 123},
+    {'title': 'B', 'pageviews': 11, 'wikidata_id': 122},
+    {'title': 'C', 'pageviews': 12, 'wikidata_id': 121},
+    {'title': 'D', 'pageviews': 13, 'wikidata_id': 120},
+    {'title': 'E', 'pageviews': 14, 'wikidata_id': 119},
+    {'title': 'F', 'pageviews': 15, 'wikidata_id': 118},
+    {'title': 'G', 'pageviews': 16, 'wikidata_id': 117},
+    {'title': 'H', 'pageviews': 17, 'wikidata_id': 116},
+]}
 
 
-def setup_function(function):
-    api.language_pairs = None
-    responses.add(responses.GET, 'http://localhost', body=json.dumps(LANGUAGE_PAIRS), status=200,
-                  content_type='application/json')
+@pytest.fixture
+def recommend_response(monkeypatch):
+    monkeypatch.setattr(api, 'recommend', lambda *args, **kwargs: GOOD_RESPONSE['articles'])
 
 
-@pytest.mark.parametrize('source', LANGUAGE_PAIRS['source'])
-@pytest.mark.parametrize('target', LANGUAGE_PAIRS['target'])
-def test_language_pairs_valid(source, target):
-    assert True is api.is_valid_language_pair(source, target)
+@pytest.fixture
+def client():
+    app_instance = flask.Flask(__name__)
+    app_instance.register_blueprint(api.api)
+    return app_instance.test_client()
 
 
-@pytest.mark.parametrize('source,target', [
-    ('xx', LANGUAGE_PAIRS['target'][0]),
-    (LANGUAGE_PAIRS['source'][0], 'xx'),
-    ('xx', 'xx')
+@pytest.mark.parametrize('target,name,value,expected_status,expected_data', [
+    (api, 'is_valid_language_pair', False, 200, {'error': 'Invalid or duplicate source and/or target language'}),
+    (api, 'is_valid_language_pair', True, 200, GOOD_RESPONSE)
 ])
-def test_language_pairs_invalid(source, target):
-    assert False is api.is_valid_language_pair(source, target)
-
-
-def test_language_pairs_valid_only_fetches_once():
-    assert 0 == len(responses.calls)
-    assert True is api.is_valid_language_pair(LANGUAGE_PAIRS['source'][0], LANGUAGE_PAIRS['target'][0])
-    assert 1 == len(responses.calls)
-    assert True is api.is_valid_language_pair(LANGUAGE_PAIRS['source'][0], LANGUAGE_PAIRS['target'][0])
-    assert 1 == len(responses.calls)
+@pytest.mark.usefixtures('recommend_response')
+def test_api(client, target, name, value, expected_status, expected_data, monkeypatch):
+    monkeypatch.setattr(target, name, lambda *args, **kwargs: value)
+    result = client.get('/?s=en&t=de')
+    assert expected_status == result.status_code
+    assert expected_data == json.loads(result.data.decode('utf-8'))

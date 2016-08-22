@@ -74,7 +74,7 @@ def is_valid_language_pair(source, target):
             result = requests.get(language_pairs_endpoint)
             result.raise_for_status()
             pairs = result.json()
-        except requests.exceptions.RequestsException:
+        except requests.exceptions.RequestException:
             return
         language_pairs = pairs
 
