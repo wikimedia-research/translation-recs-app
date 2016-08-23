@@ -1,5 +1,4 @@
 import json
-import requests
 import time
 from flask import Blueprint, request, Response
 
@@ -7,12 +6,10 @@ from recommendation.api.filters import apply_filters_chunkwise
 from recommendation.api.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
 from recommendation.api.pageviews import PageviewGetter
 from recommendation.utils import event_logger
-from recommendation.utils import configuration
-import recommendation
+from recommendation.utils import language_pairs
 
 api = Blueprint('api', __name__)
 
-language_pairs = None
 
 finder_map = {
     'morelike': MorelikeCandidateFinder(),
@@ -32,7 +29,7 @@ def get_recommendations():
     t1 = time.time()
     args = parse_args(request)
 
-    if not is_valid_language_pair(args['s'], args['t']):
+    if not language_pairs.is_valid_language_pair(args['s'], args['t']):
         return json_response({'error': 'Invalid or duplicate source and/or target language'})
 
     recs = recommend(
@@ -59,28 +56,6 @@ def get_recommendations():
     print('Total:', t2 - t1)
 
     return json_response({'articles': recs})
-
-
-def is_valid_language_pair(source, target):
-    if source == target:
-        return False
-
-    global language_pairs
-    if language_pairs is None:
-        config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
-                                                 recommendation.config_name)
-        language_pairs_endpoint = config.get('endpoints', 'language_pairs')
-        try:
-            result = requests.get(language_pairs_endpoint)
-            result.raise_for_status()
-            pairs = result.json()
-        except requests.exceptions.RequestException:
-            return
-        language_pairs = pairs
-
-    if source not in language_pairs['source'] or target not in language_pairs['target']:
-        return False
-    return True
 
 
 def parse_args(request):

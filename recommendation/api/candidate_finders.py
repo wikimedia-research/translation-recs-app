@@ -5,7 +5,6 @@ from dateutil import relativedelta
 
 from recommendation.api.utils import Article
 from recommendation.utils import configuration
-import recommendation
 
 
 class CandidateFinder:
@@ -31,11 +30,9 @@ class PageviewCandidateFinder(CandidateFinder):
         """
         Query pageview API and parse results
         """
-        config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
-                                                 recommendation.config_name)
-        days = config.getint('popular_pageviews', 'days')
-        date_format = config.get('popular_pageviews', 'date_format')
-        query = config.get('popular_pageviews', 'query')
+        days = configuration.get_config_int('popular_pageviews', 'days')
+        date_format = configuration.get_config_value('popular_pageviews', 'date_format')
+        query = configuration.get_config_value('popular_pageviews', 'query')
         date = (datetime.utcnow() - relativedelta.relativedelta(days=days)).strftime(date_format)
         query = query.format(source=s, date=date)
         try:
@@ -150,10 +147,8 @@ def wiki_search(s, seed, n, morelike=False):
 
 
 def build_wiki_search(source, seed, count, morelike):
-    config = configuration.get_configuration(recommendation.config_path, recommendation.__name__,
-                                             recommendation.config_name)
-    endpoint = config.get('endpoints', 'wikipedia').format(source=source)
-    params = dict(config['wiki_search_params'])
+    endpoint = configuration.get_config_value('endpoints', 'wikipedia').format(source=source)
+    params = configuration.get_config_dict('wiki_search_params')
     params['srlimit'] = count
     if morelike:
         seed = 'morelike:' + seed
