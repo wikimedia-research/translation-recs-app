@@ -1,0 +1,6 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: *
+Copyright: 2016, Wikimedia Foundation
+License:
+ Apache License, Version 2.0

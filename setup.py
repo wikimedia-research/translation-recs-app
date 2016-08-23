@@ -1,5 +1,20 @@
 from setuptools import setup, find_packages
+from setuptools.command.test import test as TestCommand
 import sys
+
+
+class PyTest(TestCommand):
+    user_options = [('pytest-args=', 'a', 'Arguments to pass to pytest')]
+
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.pytest_args = []
+
+    def run_tests(self):
+        import pytest
+        errno = pytest.main(args=self.pytest_args)
+        sys.exit(errno)
+
 
 setup_parameters = dict(
     name='recommendation',
@@ -16,16 +31,16 @@ setup_parameters = dict(
                       'PyYAML',
                       'requests',
                       'numpy'],
-    package_data={'recommendation.web': ['static/*',
+    package_data={'recommendation.web': ['static/*.*',
                                          'static/i18n/*',
                                          'static/images/*',
                                          'static/suggest-searches/*',
                                          'templates/*'],
                   'recommendation.api': ['swagger.yml']},
     zip_safe=False,
-    setup_requires=['pytest-runner'],
     tests_require=['pytest',
-                   'responses']
+                   'responses'],
+    cmdclass={'test': PyTest}
 )
 if getattr(sys, 'real_prefix', None) is None:
     setup_parameters.update(dict(
