@@ -5,35 +5,22 @@
   Given an source and target wiki, the API provides source articles missing in the target.
 
 * **URL**
-
-  http://recommend.wmflabs.org/api
-
-
-  
-*  **URL Params**
-
-
-   **Required:**
- 
-  - `s=[string]` source wiki project language code (e.g. en)
-  - `t=[string]` target wiki project language code (e.g. fr)
-
-   **Optional:**
- 
-  - `n=[int]`  # of recommendations to fetch (default 10)
-  - `article=[string]` seed article for personalized recommendations. Can be a list of seeds seperated by |
-  - `pageviews=[true|false]` whether to include pageview counts in the response (default true)
-  - `search=[wiki|google|morelike]` which search algorithm to use (default morelike)
-
-
-
+  * http://recommend.wmflabs.org/api  
+* **URL Params**
+  * **Required:** 
+    * `s=[string]` source wiki project language code (e.g. `en`)
+    * `t=[string]` target wiki project language code (e.g. `fr`)
+  * **Optional:**
+    * `n=[int]` number of recommendations to fetch (default `10`)
+    * `article=[string]` seed article for personalized recommendations. Can be a list of 
+      seeds separated by `|`
+    * `pageviews=[true|false]` whether to include pageview counts in the response (default `true`)
+    * `search=[wiki|google|morelike]` which search algorithm to use (default `morelike`)
 * **Sample Call:**
 
   http://recommend.wmflabs.org/api?s=en&t=fr&n=3&article=Apple
 
-  
   ```
-
   {
     "articles": [
         {
@@ -55,12 +42,15 @@
   }
   ```
 
+* **Running the API**
 
-*  **Running the API**
-
-  To start the api, execute
+  There is a `wsgi` file provided at `recommendation/data/recommendation.wsgi`. This can be run
+  using a tool like `uwsgi` as follows:
   ```
-  python api/api.py 
+  # Inside a virtualenv and in the root directory of the repo
+  pip install -e .
+  pip install uwsgi
+  uwsgi --http :5000 --wsgi-file recommendation/data/recommendation.wsgi --venv my-venv
   ```
 
   Then navigate here to see the UI:
@@ -73,6 +63,4 @@
   http://localhost:5000/api?s=en&t=fr&n=3&article=Apple
   ```
 
-  You should get the same response as above
-
-  
+  You should get a similar response to the **Sample Call** above
