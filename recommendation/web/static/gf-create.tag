@@ -107,7 +107,7 @@
         };
 
         self.logCreateAction = function() {
-            logAction(self.title, 'create_from_scratch');
+            logAction(self.title, 'create_from_scratch', self.targetTitle);
             return true;
         };
 
