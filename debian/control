@@ -1,5 +1,5 @@
-Source: python3-recommendation
-Maintainer: Nathaniel Schaaf <nschaaf@wikimedia.org>
+Source: {package_name}
+Maintainer: {maintainer} <{maintainer_email}>
 Section: python
 Priority: optional
 Build-Depends:
@@ -10,8 +10,8 @@ Build-Depends:
 Standards-Version: 3.9.4
 X-Python3-Version: >= 3.4
 
-Package: python3-recommendation
+Package: {package_name}
 Architecture: all
-Depends: ${misc:Depends}, ${python3:Depends}
-Description: description goes here
- long description goes here
+Depends: ${{misc:Depends}}, ${{python3:Depends}}
+Description: {description}
+{long_description}
