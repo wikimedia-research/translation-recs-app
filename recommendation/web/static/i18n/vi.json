@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Minh Nguyen"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "thử nghiệm",
+	"menu-how-to": "Hướng dẫn",
+	"menu-about": "Giới thiệu",
+	"menu-feedback": "Phản hồi",
+	"menu-source-code": "Mã nguồn",
+	"menu-privacy-statement": "Quy định quyền riêng tư",
+	"selector-source": "Gốc",
+	"selector-target": "Mục tiêu",
+	"search-placeholder": "Tìm bài để tạo ra",
+	"status-preparing": "Đang chuẩn bị gợi ý bài viết…",
+	"status-must-be-different": "Các ngôn ngữ gốc và mục tiêu phải khác nhau",
+	"status-invalid-language": "Ngôn ngữ gốc hoặc mục tiêu không hợp lệ",
+	"article-pageviews": "$1 lượt xem gần đây",
+	"article-flag": "Đáng cờ bài này…",
+	"article-flag-not-interesting": "Chán",
+	"article-flag-not-notable": "Không đủ nổi bật cho Wikipedia $1",
+	"modal-close": "Đóng",
+	"modal-new-window": "Mở bài này trong cửa sổ mới",
+	"modal-previous": "Bài trước",
+	"modal-next": "Bài sau",
+	"modal-translate": "Biên dịch",
+	"modal-create-from-scratch": "Viết mới",
+	"modal-loading": "Đang tải…",
+	"modal-preview-fail": "Không có Internet",
+	"create-title": "Bài mới",
+	"create-title-input-placeholder": "Tên bản dịch",
+	"create-warning": "Chú ý!",
+	"create-action": "Tạo",
+	"create-error-empty": "Tên bài không được để trống",
+	"create-error-invalid-character": "Ký tự không hợp lệ trong tên bài (“|”)",
+	"create-error-exists": "Trang đã tồn tại ở $1",
+	"create-error-invalid-page": "Trang không hợp lệ tại $1"
+}
