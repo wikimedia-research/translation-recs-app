@@ -7,3 +7,6 @@ app = Flask(__name__)
 app.register_blueprint(api.api, url_prefix='/api')
 app.register_blueprint(gapfinder.gapfinder)
 application = app
+
+if __name__ == '__main__':
+    application.run(debug=True)
