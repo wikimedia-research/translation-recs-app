@@ -48,15 +48,10 @@
                             title="{$.i18n('modal-next')}">
                         <h4 class="m-y-0">></h4>
                     </button>
-                    <div class="btn-group">
-                        <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction} href={translateLink}>{$.i18n('modal-translate')}</a>
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="btn dropdown-item" data-dismiss="modal" onclick={showCreate}>{$.i18n('modal-create-from-scratch')}</button>
-                        </div>
-                    </div>
+                    <button class="btn btn-secondary" data-dismiss="modal"
+                            onclick={showCreate}>{$.i18n('modal-create-from-scratch')}</button>
+                    <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction}
+                       href={translateLink}>{$.i18n('modal-translate')}</a>
                 </div>
             </div>
         </div>

@@ -39,15 +39,19 @@ var logUIRequest = function (
 
 var logAction = function (
     pageTitle,
-    action
+    action,
+    targetTitle
 ) {
     var schema = 'TranslationRecommendationUserAction';
-    var revision = 15419947;
+    var revision = 15858947;
     var event = {
         'requestToken': getExistingRequestToken(),
         'pageTitle': pageTitle,
         'action': action
     };
+    if ( targetTitle !== undefined ) {
+        event['targetTitle'] = targetTitle;
+    }
     logEvent(schema, revision, event);
 };
 
