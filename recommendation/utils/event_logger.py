@@ -3,7 +3,7 @@ import urllib.parse
 import json
 import time
 
-URL = 'https://meta.wikimedia.org/beacon/event'
+from recommendation.utils import configuration
 
 
 def log_api_request(source, target, seed=None, search=None):
@@ -20,7 +20,8 @@ def log_api_request(source, target, seed=None, search=None):
                    wiki='metawiki',
                    event=event)
 
-    url = URL + '?' + urllib.parse.quote_plus(json.dumps(payload))
+    url = configuration.get_config_value('endpoints', 'event_logger')
+    url += '?' + urllib.parse.quote_plus(json.dumps(payload))
 
     try:
         requests.get(url)
