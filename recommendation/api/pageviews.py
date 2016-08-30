@@ -1,8 +1,24 @@
 import requests
-from datetime import datetime
+import datetime
 from dateutil import relativedelta
 
 from recommendation.api.utils import thread_function
+from recommendation.utils import configuration
+
+
+def get_pageview_query_url(source, title):
+    start_days = configuration.get_config_int('single_article_pageviews', 'start_days')
+    end_days = configuration.get_config_int('single_article_pageviews', 'end_days')
+    query = configuration.get_config_value('single_article_pageviews', 'query')
+    start = get_relative_timestamp(start_days)
+    end = get_relative_timestamp(end_days)
+    query = query.format(source=source, title=title, start=start, end=end)
+    return query
+
+
+def get_relative_timestamp(relative_days):
+    date_format = configuration.get_config_value('single_article_pageviews', 'date_format')
+    return (datetime.datetime.utcnow() + relativedelta.relativedelta(days=relative_days)).strftime(date_format)
 
 
 class PageviewGetter:
@@ -15,11 +31,12 @@ class PageviewGetter:
         """
         Get pageview counts for a single article from pageview api
         """
-        start = (datetime.utcnow() - relativedelta.relativedelta(days=1)).strftime('%Y%m%d00')
-        stop = (datetime.utcnow() - relativedelta.relativedelta(days=15)).strftime('%Y%m%d00')
-        query = "https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/%s.wikipedia/all-access/user/%s/daily/%s/%s"
-        query = query % (s, article.title, stop, start)
-        response = requests.get(query).json()
+        query = get_pageview_query_url(s, article.title)
+
+        try:
+            response = requests.get(query).json()
+        except (requests.RequestException, ValueError):
+            response = {}
 
         if 'items' not in response:
             pageviews = 0
