@@ -2,7 +2,7 @@
 
 **Article Creation API**
 ----
-  Given an source and target wiki, the API provides source articles missing in the target.
+  Given a source and target wiki, the API provides source articles missing in the target.
 
 * **URL**
   * http://recommend.wmflabs.org/api  
