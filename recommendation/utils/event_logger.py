@@ -6,7 +6,7 @@ import time
 from recommendation.utils import configuration
 
 
-def log_api_request(source, target, seed=None, search=None):
+def log_api_request(source, target, seed=None, search=None, **kwargs):
     event = dict(timestamp=int(time.time()),
                  sourceLanguage=source,
                  targetLanguage=target)
