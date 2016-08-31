@@ -1,7 +1,6 @@
 import requests
 import random
-from datetime import datetime
-from dateutil import relativedelta
+import datetime
 
 from recommendation.api.utils import Article
 from recommendation.utils import configuration
@@ -33,7 +32,7 @@ class PageviewCandidateFinder(CandidateFinder):
         days = configuration.get_config_int('popular_pageviews', 'days')
         date_format = configuration.get_config_value('popular_pageviews', 'date_format')
         query = configuration.get_config_value('popular_pageviews', 'query')
-        date = (datetime.utcnow() - relativedelta.relativedelta(days=days)).strftime(date_format)
+        date = (datetime.datetime.utcnow() - datetime.timedelta(days=days)).strftime(date_format)
         query = query.format(source=s, date=date)
         try:
             response = requests.get(query)

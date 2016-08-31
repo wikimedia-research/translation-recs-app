@@ -1,6 +1,5 @@
 import requests
 import datetime
-from dateutil import relativedelta
 
 from recommendation.api.utils import thread_function
 from recommendation.utils import configuration
@@ -18,7 +17,7 @@ def get_pageview_query_url(source, title):
 
 def get_relative_timestamp(relative_days):
     date_format = configuration.get_config_value('single_article_pageviews', 'date_format')
-    return (datetime.datetime.utcnow() + relativedelta.relativedelta(days=relative_days)).strftime(date_format)
+    return (datetime.datetime.utcnow() + datetime.timedelta(days=relative_days)).strftime(date_format)
 
 
 class PageviewGetter:
