@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"தமிழ்க்குரிசில்"
+		]
+	},
+	"menu-about": "கருவியை பற்றி",
+	"menu-feedback": "பின்னூட்டம்",
+	"menu-source-code": "மூல நிரல்",
+	"menu-privacy-statement": "தனியுரிமைக் கொள்கை",
+	"selector-source": "மூலம்",
+	"selector-target": "இலக்கு",
+	"search-placeholder": "உருவாக்க வேண்டிய கட்டுரைகளை தேடுக",
+	"modal-close": "மூடு",
+	"modal-new-window": "இந்த கட்டுரையை மற்றொரு சாளரத்தில் திற",
+	"modal-previous": "முந்தைய கட்டுரை",
+	"modal-next": "அடுத்த கட்டுரை",
+	"modal-translate": "மொழிபெயர்",
+	"create-title": "புதுக் கட்டுரை",
+	"create-title-input-placeholder": "கட்டுரைக்கான தலைப்பு",
+	"create-warning": "எச்சரிக்கை!",
+	"create-action": "உருவாக்கு",
+	"create-error-empty": "வெற்றுத் தலைப்பை ஏற்க முடியாது",
+	"create-error-invalid-character": "தலைப்பில் செல்லுபடியாகாத குறியீடு உள்ளது",
+	"create-error-exists": "$1 என்ற தலைப்பில் ஏற்கனவே கட்டுரை உள்ளது",
+	"create-error-invalid-page": "$1 என்ற இணைப்பில் உள்ள கட்டுரை செல்லாதது"
+}

@@ -1,21 +1,42 @@
 {
 	"@metadata": {
 		"authors": [
-			"Bluegram"
+			"Bluegram",
+			"Pon44695"
 		]
 	},
+	"title-wikipedia": "วิกิพีเดีย",
+	"title-gapfinder": "GapFinder",
 	"title-beta": "Beta",
+	"menu-how-to": "อย่างไร",
 	"menu-about": "เกี่ยวกับ",
 	"menu-feedback": "คำติชม",
+	"menu-source-code": "รหัสต้นฉบับ",
+	"menu-privacy-statement": "คำแถลงความเป็นส่วนตัว",
 	"selector-source": "แหล่งที่มา",
 	"selector-target": "เป้าหมาย",
+	"search-placeholder": "ค้นหาบทความเพื่อสร้าง",
+	"status-preparing": "กำลังจัดเตรียมบทความแนะนำ",
+	"status-must-be-different": "แหล่งข้อมูลและภาษาเป้าหมายจะต้องแตกต่างกัน",
+	"status-invalid-language": "แหล่งข้อมูลหรือภาษาเป้าหมายไม่ถูกต้อง",
+	"article-pageviews": "$1 ในปัจจุบัน {{PLURAL:$1|ผู้ชม|ผู้ชม}}",
+	"article-flag": "ติดธงบทความนี้...",
 	"article-flag-not-interesting": "ไม่สนใจ",
+	"article-flag-not-notable": "ไม่โดดเด่นพอสำหรับวิกิพีเดีย$1",
 	"modal-close": "ปิด",
+	"modal-new-window": "เปิดบทความนี้ในหน้าต่างใหม่",
+	"modal-previous": "บทความก่อนหน้า",
 	"modal-next": "หัวข้อต่อไป",
 	"modal-translate": "แปล",
+	"modal-create-from-scratch": "สร้างตั้งแต่ต้น",
 	"modal-loading": "กำลังโหลด...",
 	"modal-preview-fail": "ไม่มีการเชื่อมต่ออินเตอร์เน็ต",
 	"create-title": "หัวข้อใหม่",
+	"create-title-input-placeholder": "ชื่อเรื่องการแปล",
 	"create-warning": "คำเตือน!",
-	"create-action": "สร้าง"
+	"create-action": "สร้าง",
+	"create-error-empty": "ชื่อเรื่องจะต้องไม่เว้นว่าง",
+	"create-error-invalid-character": "ตัวอักษรในชื่อเรื่องไม่ถูกต้อง ( '|' )",
+	"create-error-exists": "หน้ามีอยู่แล้วที่ $1",
+	"create-error-invalid-page": "หน้าไม่ถูกต้องที่ $1"
 }

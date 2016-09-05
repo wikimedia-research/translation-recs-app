@@ -1,7 +1,8 @@
 {
 	"@metadata": {
 		"authors": [
-			"WikiPhoenix"
+			"WikiPhoenix",
+			"Jopparn"
 		]
 	},
 	"title-wikipedia": "Wikipedia",
@@ -18,9 +19,10 @@
 	"status-preparing": "Förbereder artikelrekommendationer...",
 	"status-must-be-different": "Käll- och målspråken måste vara olika",
 	"status-invalid-language": "Ogiltigt käll- eller målspråk",
-	"article-pageviews": "$1 {{PLURAL:$1|nyligt besök|nyliga besök}}",
+	"article-pageviews": "$1 {{PLURAL:$1|nylig visning|nyliga visningar}}",
 	"article-flag": "Flagga denna artikel...",
 	"article-flag-not-interesting": "Inte intressant",
+	"article-flag-not-notable": "Inte relevant för $1 Wikipedia",
 	"modal-close": "Stäng",
 	"modal-new-window": "Öppna denna artikel i ett nytt fönster",
 	"modal-previous": "Föregående artikel",

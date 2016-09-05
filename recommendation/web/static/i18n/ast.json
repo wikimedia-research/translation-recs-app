@@ -1,0 +1,41 @@
+{
+	"@metadata": {
+		"authors": [
+			"Xuacu"
+		]
+	},
+	"title-wikipedia": "Wikipedia",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "beta",
+	"menu-how-to": "Manual",
+	"menu-about": "Tocante a",
+	"menu-feedback": "Comentarios",
+	"menu-source-code": "Códigu fonte",
+	"menu-privacy-statement": "Declaración de privacidá",
+	"selector-source": "Fonte",
+	"selector-target": "Destín",
+	"search-placeholder": "Busca artículos a crear",
+	"status-preparing": "Preparando encamientos d'artículos...",
+	"status-must-be-different": "Los idiomes d'orixe y destín tienen de ser distintos",
+	"status-invalid-language": "L'idioma orixe o destín nun ye válidu",
+	"article-pageviews": "$1 {{PLURAL:$1|visita|visites}} recién",
+	"article-flag": "Marcar esti artículu...",
+	"article-flag-not-interesting": "Nun ye interesante",
+	"article-flag-not-notable": "Nun ye relevante pa la Wikipedia en $1",
+	"modal-close": "Zarrar",
+	"modal-new-window": "Abrir esti artículu nuna ventana nueva",
+	"modal-previous": "Artículu anterior",
+	"modal-next": "Artículu siguiente",
+	"modal-translate": "Traducir",
+	"modal-create-from-scratch": "Crear de cero",
+	"modal-loading": "Cargando...",
+	"modal-preview-fail": "Nun hai Internet",
+	"create-title": "Artículu nuevu",
+	"create-title-input-placeholder": "Títulu de la traducción",
+	"create-warning": "Alvertencia",
+	"create-action": "Crear",
+	"create-error-empty": "El títulu nun tien de tar vacíu",
+	"create-error-invalid-character": "Calter non válidu nel títulu ( '|' )",
+	"create-error-exists": "Yá esiste la páxina en $1",
+	"create-error-invalid-page": "La páxina nun ye válida en $1"
+}

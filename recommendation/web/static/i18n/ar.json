@@ -1,0 +1,27 @@
+{
+	"@metadata": {
+		"authors": [
+			"DRIHEM",
+			"محمد أحمد عبد الفتاح"
+		]
+	},
+	"title-wikipedia": "ويكيبيديا",
+	"title-gapfinder": "GapFinder",
+	"title-beta": "تجريبي",
+	"menu-how-to": "كيف",
+	"menu-about": "معلومات حول",
+	"menu-feedback": "ردود الفعل",
+	"menu-source-code": "شفرة المصدر",
+	"menu-privacy-statement": "بيان الخصوصية",
+	"selector-source": "المصدر",
+	"selector-target": "الهدف",
+	"search-placeholder": "اِبحث عن المقالات لإنشائها",
+	"status-preparing": "تحضير توصيات المقال...",
+	"status-must-be-different": "يجب أن تكون لغة المصدر و الهدف مختلفين",
+	"status-invalid-language": "لغة مصدر أو هدف غير صالحة",
+	"article-pageviews": "{{PLURAL:$1|المشاهدة|المشاهدات}} الحالية $1",
+	"article-flag": "ضع علامة على هذا المقال...",
+	"article-flag-not-interesting": "غير مهم",
+	"modal-close": "أغلق",
+	"create-title-input-placeholder": "عنوان الترجمة"
+}
