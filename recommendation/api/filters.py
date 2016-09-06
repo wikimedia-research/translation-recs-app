@@ -1,8 +1,11 @@
 import itertools
+import logging
 import requests
 
 from recommendation.api.utils import thread_function, chunk_list
 from recommendation.utils import configuration
+
+log = logging.getLogger(__name__)
 
 
 class Filter:
@@ -47,7 +50,7 @@ class MissingFilter(Filter):
             response.raise_for_status()
             return response.json()
         except (requests.RequestException, ValueError):
-            print('Bad Wikidata API response')
+            log.info('Bad Wikidata API response')
             return {}
 
     def parse_wikidata_sitelinks_data(self, s, t, data):
@@ -62,7 +65,7 @@ class MissingFilter(Filter):
         twiki = '%swiki' % t
 
         if 'entities' not in data:
-            print('None of the titles have a Wikidata Item')
+            log.info('None of the titles have a Wikidata Item')
             return title_id_dict
 
         for k, v in data['entities'].items():
@@ -72,7 +75,7 @@ class MissingFilter(Filter):
                     title_id_dict[title] = k
 
         if len(title_id_dict) == 0:
-            print("None of the source articles missing in the target")
+            log.info('None of the source articles missing in the target')
 
         return title_id_dict
 
@@ -114,14 +117,14 @@ class DisambiguationFilter(Filter):
             response.raise_for_status()
             return response.json()
         except (requests.RequestException, ValueError):
-            print('Bad Disambiguation API response')
+            log.info('Bad Disambiguation API response')
             return {}
 
     def parse_disambiguation_page_data(self, data):
         disambiguation_pages = set()
 
         if 'query' not in data or 'pages' not in data['query']:
-            print('Error finding disambiguation pages')
+            log.info('Error finding disambiguation pages')
             return set()
 
         for k, v in data['query']['pages'].items():
@@ -172,7 +175,7 @@ def apply_filters_chunkwise(s, t, candidates, n_recs, step=100):
 
     # filter candidates in chunks, stop once we reach n_recs
     for start, stop in indices:
-        print('Filtering Next Chunk')
+        log.info('Filtering Next Chunk')
         subset = candidates[start:stop]
         subset = MissingFilter().filter(s, t, subset)
         subset = DisambiguationFilter().filter(s, t, subset)

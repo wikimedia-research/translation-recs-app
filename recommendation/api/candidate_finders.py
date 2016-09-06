@@ -1,9 +1,12 @@
 import requests
 import random
 import datetime
+import logging
 
 from recommendation.api.utils import Article
 from recommendation.utils import configuration
+
+log = logging.getLogger(__name__)
 
 
 class CandidateFinder:
@@ -50,7 +53,7 @@ class PageviewCandidateFinder(CandidateFinder):
             for d in data['items'][0]['articles']:
                 article_pv_tuples.append((d['article'], d['views']))
         except:
-            print("Could not get most popular articles for %s from pageview API. Try using a seed article." % s)
+            log.info('Could not get most popular articles for %s from pageview API. Try using a seed article.', s)
 
         return article_pv_tuples
 
@@ -85,19 +88,19 @@ class MorelikeCandidateFinder(CandidateFinder):
         seed_list = wiki_search(s, query, 1)
 
         if len(seed_list) == 0:
-            print('Seed does not map to an article')
+            log.info('Seed does not map to an article')
             return []
 
         seed = seed_list[0]
         if seed != query:
-            print('Query: %s  Article: %s' % (query, seed))
+            log.info('Query: %s  Article: %s', query, seed)
         results = wiki_search(s, seed, n, morelike=True)
         if results:
             results.insert(0, seed)
-            print('Succesfull Morelike Search')
+            log.info('Successful Morelike Search')
             return results
         else:
-            print('Failed Morelike Search. Reverting to standard search')
+            log.info('Failed Morelike Search. Reverting to standard search')
             return wiki_search(s, query, n)
 
     def get_candidates(self, s, seed, n):
@@ -125,7 +128,7 @@ def wiki_search(s, seed, n, morelike=False):
         response = requests.get(endpoint, params=params)
         response.raise_for_status()
     except requests.RequestException:
-        print('Could not search for articles related to seed in %s. Choose another language.' % s)
+        log.info('Could not search for articles related to seed in %s. Choose another language.', s)
         return []
     try:
         response = response.json()
@@ -133,13 +136,13 @@ def wiki_search(s, seed, n, morelike=False):
         return []
 
     if 'query' not in response or 'search' not in response['query']:
-        print('Could not search for articles related to seed in %s. Choose another language.' % s)
+        log.info('Could not search for articles related to seed in %s. Choose another language.', s)
         return []
 
     response = response['query']['search']
     results = [r['title'].replace(' ', '_') for r in response]
     if len(results) == 0:
-        print('No articles similar to %s in %s. Try another seed.' % (seed, s))
+        log.info('No articles similar to %s in %s. Try another seed.', seed, s)
         return []
 
     return results

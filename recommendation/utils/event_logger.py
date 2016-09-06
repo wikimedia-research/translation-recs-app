@@ -1,9 +1,12 @@
 import requests
 import urllib.parse
+import logging
 import json
 import time
 
 from recommendation.utils import configuration
+
+log = logging.getLogger(__name__)
 
 
 def log_api_request(source, target, seed=None, search=None):
@@ -22,6 +25,8 @@ def log_api_request(source, target, seed=None, search=None):
 
     url = configuration.get_config_value('endpoints', 'event_logger')
     url += '?' + urllib.parse.quote_plus(json.dumps(payload))
+
+    log.info('Logging event: %s', json.dumps(payload))
 
     try:
         requests.get(url)

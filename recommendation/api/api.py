@@ -1,5 +1,6 @@
 import json
 import time
+import logging
 from flask import Blueprint, request, Response
 
 from recommendation.api.filters import apply_filters_chunkwise
@@ -9,7 +10,7 @@ from recommendation.utils import event_logger
 from recommendation.utils import language_pairs
 
 api = Blueprint('api', __name__)
-
+log = logging.getLogger(__name__)
 
 finder_map = {
     'morelike': MorelikeCandidateFinder(),
@@ -53,7 +54,7 @@ def get_recommendations():
     )
 
     t2 = time.time()
-    print('Total:', t2 - t1)
+    log.info('Total: %d', t2 - t1)
 
     return json_response({'articles': recs})
 

@@ -2,6 +2,7 @@ import pytest
 import responses
 
 from recommendation.utils import configuration
+from recommendation.utils import logger
 import recommendation
 
 
@@ -14,6 +15,7 @@ def change_config_and_setup_responses(request):
     """
     configuration._config = configuration.get_configuration('', recommendation.__name__,
                                                             'api/test/test_recommendation.ini')
+    logger.initialize_logging()
     responses._default_mock.__enter__()
 
     def fin():
