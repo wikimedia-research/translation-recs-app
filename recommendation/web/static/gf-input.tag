@@ -3,13 +3,13 @@
         <div class="container-fluid m-t-1">
             <div class="row m-b-1">
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-r-0">
-                    <a type="button" class="btn btn-block btn-secondary source-selector" name="from">
+                    <a class="btn btn-block btn-secondary source-selector" name="from">
                         <span class="selector-display">{$.i18n('selector-source')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
                 <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-l-0">
-                    <a type="button" class="btn btn-block btn-secondary target-selector" name="to">
+                    <a class="btn btn-block btn-secondary target-selector" name="to">
                         <span class="selector-display">{$.i18n('selector-target')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
@@ -202,9 +202,11 @@
                     self.uls.push(this);
                     this.position = getPosition;
                 },
+                onVisible: function() {
+                    this.i18n();
+                },
                 languages: languages,
                 searchAPI: true, // this is set to true to simply trigger our hacky searchAPI
-                compact: true,
                 menuWidth: 'medium'
             });
         };
@@ -239,6 +241,8 @@
                 }, 50);
             });
 
+            // Use en as a fallback for i18n; populateDefaults() will load other languages if preferred
+            updateLanguage('en');
             self.populateDefaults(self.sourceLanguages, self.targetLanguages);
 
             if (self.source && self.target) {
@@ -279,7 +283,7 @@
                 return language in sourceLanguages;
             });
 
-            if (!self.source) {
+            if (!self.source && browserLanguages.length > 0) {
                 var index = Math.floor(Math.random() * browserLanguages.length);
                 self.setSource(browserLanguages[index]);
                 self.origin = 'browser_settings';
@@ -290,7 +294,7 @@
                 // TODO: remove hack described above
                 browserLanguages.splice(index, 1);
             }
-            if (!self.target) {
+            if (!self.target && browserLanguages.length > 0) {
                 if (browserLanguages.length) {
                     self.setTarget(browserLanguages[Math.floor(Math.random() * browserLanguages.length)]);
                     self.origin = 'browser_settings';
