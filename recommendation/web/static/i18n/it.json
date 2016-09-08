@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"Einreiher",
-			"Beta16"
+			"Beta16",
+			"Nemo bis"
 		]
 	},
 	"title-wikipedia": "Wikipedia",
@@ -12,7 +13,7 @@
 	"menu-about": "Informazioni su",
 	"menu-feedback": "Feedback",
 	"menu-source-code": "Codice sorgente",
-	"menu-privacy-statement": "Dichiarazione sulla privacy",
+	"menu-privacy-statement": "Informativa sulla privacy",
 	"selector-source": "Sorgente",
 	"selector-target": "Destinazione",
 	"search-placeholder": "Cerca voci da creare",

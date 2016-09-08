@@ -2,7 +2,8 @@
 	"@metadata": {
 		"authors": [
 			"DRIHEM",
-			"محمد أحمد عبد الفتاح"
+			"محمد أحمد عبد الفتاح",
+			"Meno25"
 		]
 	},
 	"title-wikipedia": "ويكيبيديا",
@@ -22,6 +23,21 @@
 	"article-pageviews": "{{PLURAL:$1|المشاهدة|المشاهدات}} الحالية $1",
 	"article-flag": "ضع علامة على هذا المقال...",
 	"article-flag-not-interesting": "غير مهم",
+	"article-flag-not-notable": "غير بارز لـ $1 ويكيبيديا",
 	"modal-close": "أغلق",
-	"create-title-input-placeholder": "عنوان الترجمة"
+	"modal-new-window": "افتح هذه المقالة ضمن نافذة جديدة",
+	"modal-previous": "المقالة السابقة",
+	"modal-next": "المقالة اللاحقة",
+	"modal-translate": "باشر في الترجمة",
+	"modal-create-from-scratch": "أنشئ من الصفر",
+	"modal-loading": "جاري التحميل...",
+	"modal-preview-fail": "لا يوجد إنترنت",
+	"create-title": "مقالة جديدة",
+	"create-title-input-placeholder": "عنوان الترجمة",
+	"create-warning": "تحذير!",
+	"create-action": "أنشئ",
+	"create-error-empty": "لا يمكن ترك العنوان فارغاً",
+	"create-error-invalid-character": "حرف غير صالح في العنوان ( '|' )",
+	"create-error-exists": "هذه الصفحة موجودة بالفعل في $1",
+	"create-error-invalid-page": "الصفحة غير صالحة في $1"
 }
