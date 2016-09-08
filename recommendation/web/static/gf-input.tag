@@ -72,7 +72,9 @@
             self.fetching = true;
             self.update();
 
-            var url = '/api?s=' + self.source + '&t=' + self.target;
+            var mappedSource = self.mapLanguageToDomainCode(self.source);
+            var mappedTarget = self.mapLanguageToDomainCode(self.target);
+            var url = '/api/?s=' + mappedSource + '&t=' + mappedTarget;
 
             var seed;
             if (this.seedArticle.value) {
@@ -80,7 +82,7 @@
                 seed = this.seedArticle.value;
             }
 
-            logUIRequest(self.source, self.target, seed, self.origin);
+            logUIRequest(mappedSource, mappedTarget, seed, self.origin);
 
             $.ajax({
                 url: url
@@ -102,11 +104,15 @@
                 } else {
                     riot.mount('gf-articles', {
                         articles: articles,
-                        source: self.source,
-                        target: self.target
+                        source: mappedSource,
+                        target: mappedTarget
                     });
                 }
             });
+        };
+
+        self.mapLanguageToDomainCode = function (language) {
+            return translationAppGlobals.languageToDomainMapping[language] || language;
         };
 
         self.isInputValid = function () {
@@ -140,7 +146,9 @@
             self.setSource(code);
             self.origin = 'language_select';
             $('input[name=seedArticle]').val('');
-            self.fetchArticles();
+            if (self.target) {
+                self.fetchArticles();
+            }
         };
 
         self.getSourceSelectorPosition = function () {

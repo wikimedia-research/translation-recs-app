@@ -17,6 +17,7 @@ def home():
     return render_template(
         'index.html',
         language_pairs=json.dumps(pairs),
+        language_to_domain_mapping=json.dumps(language_pairs.get_language_to_domain_mapping()),
         s=s,
         t=t,
         seed=seed,

@@ -55,6 +55,7 @@
             // globals from server
             window.translationAppGlobals = {
                 languagePairs: JSON.parse('{{ language_pairs | safe }}'),
+                languageToDomainMapping: JSON.parse('{{ language_to_domain_mapping | safe }}'),
                 s: '{{ s if s else '' }}',
                 t: '{{ t if t else '' }}',
                 seed: '{{ seed if seed else '' }}',
