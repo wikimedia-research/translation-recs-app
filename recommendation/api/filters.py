@@ -2,6 +2,7 @@ import itertools
 import requests
 
 from recommendation.api.utils import thread_function, chunk_list
+from recommendation.utils import configuration
 
 
 class Filter:
@@ -36,20 +37,16 @@ class MissingFilter(Filter):
         article in titles.
         """
 
-        api = 'https://www.wikidata.org/w/api.php'
+        api = configuration.get_config_value('endpoints', 'wikidata')
+        params = configuration.get_config_dict('wikidata_params')
+        params['sites'] = params['sites'].format(source=s)
+        params['titles'] = '|'.join(titles)
 
-        params = {
-            'action': 'wbgetentities',
-            'sites': '%swiki' % s,
-            'titles': '|'.join(titles),
-            'props': 'sitelinks/urls',
-            'format': 'json',
-        }
-        response = requests.get(api, params=params)
-
-        if response:
+        try:
+            response = requests.get(api, params=params)
+            response.raise_for_status()
             return response.json()
-        else:
+        except (requests.RequestException, ValueError):
             print('Bad Wikidata API response')
             return {}
 
@@ -108,26 +105,19 @@ class DisambiguationFilter(Filter):
     """
 
     def query_disambiguation_pages(self, s, titles):
+        api = configuration.get_config_value('endpoints', 'wikipedia').format(source=s)
+        params = configuration.get_config_dict('disambiguation_params')
+        params['titles'] = '|'.join(titles)
 
-        api = 'https://%s.wikipedia.org/w/api.php' % s
-
-        params = {
-            'action': 'query',
-            'prop': 'pageprops',
-            'pprop': 'disambiguation',
-            'titles': '|'.join(titles),
-            'format': 'json',
-        }
-        response = requests.get(api, params=params)
-
-        if response:
+        try:
+            response = requests.get(api, params=params)
+            response.raise_for_status()
             return response.json()
-        else:
+        except (requests.RequestException, ValueError):
             print('Bad Disambiguation API response')
             return {}
 
     def parse_disambiguation_page_data(self, data):
-
         disambiguation_pages = set()
 
         if 'query' not in data or 'pages' not in data['query']:
