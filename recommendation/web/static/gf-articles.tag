@@ -47,7 +47,7 @@
                 article.id = id;
                 article.linkTitle = encodeURIComponent(article.title);
                 article.title = page.title;
-                article.thumbnail = page.thumbnail ? page.thumbnail.source : 'static/images/lines.svg';
+                article.thumbnail = page.thumbnail ? page.thumbnail.source : 'static/gapfinder/images/lines.svg';
                 article.hovering = false;
                 self.update();
 

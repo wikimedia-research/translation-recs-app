@@ -4,6 +4,21 @@ from recommendation.utils import configuration
 
 _language_pairs = None
 
+# Copied from https://phabricator.wikimedia.org/diffusion/ECTX/browse/master/extension.json
+_language_to_domain_mapping = {
+    "be-tarask": "be-x-old",
+    "bho": "bh",
+    "crh-latn": "crh",
+    "gsw": "als",
+    "lzh": "zh-classical",
+    "nan": "zh-min-nan",
+    "nb": "no",
+    "rup": "roa-rup",
+    "sgs": "bat-smg",
+    "vro": "fiu-vro",
+    "yue": "zh-yue"
+}
+
 
 def is_valid_language_pair(source, target):
     if source == target:
@@ -17,7 +32,10 @@ def is_valid_language_pair(source, target):
         #  that failure, but is not essential
         return True
 
-    if source not in _language_pairs['source'] or target not in _language_pairs['target']:
+    source_valid = source in _language_pairs['source'] or source in _language_to_domain_mapping.values()
+    target_valid = target in _language_pairs['target'] or target in _language_to_domain_mapping.values()
+
+    if not source_valid or not target_valid:
         return False
     return True
 
@@ -38,3 +56,7 @@ def initialize_language_pairs():
 def get_language_pairs():
     initialize_language_pairs()
     return _language_pairs
+
+
+def get_language_to_domain_mapping():
+    return _language_to_domain_mapping
