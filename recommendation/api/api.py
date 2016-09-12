@@ -19,6 +19,7 @@ from recommendation.utils import language_pairs
 api = Blueprint('api', __name__)
 log = logging.getLogger(__name__)
 
+
 @api.route('/')
 def get_recommendations():
     t1 = time.time()
