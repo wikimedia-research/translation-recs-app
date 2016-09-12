@@ -10,6 +10,76 @@ info:
     name: '#wikimedia-research'
     url: http://freenode.net
 
+definitions:
+  Articles:
+    type: object
+    required:
+      - articles
+    properties:
+      articles:
+        type: array
+        items:
+          $ref: '#/definitions/Article'
+  Article:
+    type: object
+    properties:
+      pageviews:
+        type: integer
+      title:
+        type: string
+      wikidata_id:
+        type: string
+
+parameters:
+  source:
+    name: s
+    in: query
+    description: Source wiki project language code
+    required: true
+    type: string
+  target:
+    name: t
+    in: query
+    description: Target wiki project language code
+    required: true
+    type: string
+  count:
+    name: n
+    in: query
+    description: Number of recommendations to fetch
+    required: false
+    type: integer
+    format: int32
+    maximum: 24
+    minimum: 0
+    default: 12
+  seed:
+    name: article
+    in: query
+    description: |
+      Seed article for personalized recommendations that
+      can also be a list separated by "|"'
+    required: false
+    type: string
+    pattern: '^([^|]+(\|[^|]+))*$'
+    default: ''
+  include_pageviews:
+    name: pageviews
+    in: query
+    description: Whether to include pageview counts
+    required: false
+    type: boolean
+    default: true
+  search:
+    name: search
+    in: query
+    description: Which search algorithm to use
+    required: false
+    type: string
+    enum:
+      - morelike
+    default: morelike
+
 paths:
   /api:
     get:
@@ -17,68 +87,14 @@ paths:
         Gets `Article` objects of source articles that
         are missing in the target
       parameters:
-        -
-          name: s
-          in: query
-          description: Source wiki project language code
-          required: true
-          type: string
-        -
-          name: t
-          in: query
-          description: Target wiki project language code
-          required: true
-          type: string
-        -
-          name: n
-          in: query
-          description: Number of recommendations to fetch
-          required: false
-          type: integer
-          format: int32
-          maximum: 24
-          default: 12
-        -
-          name: article
-          in: query
-          description: Seed article for personalized recommendations
-          required: false
-          type: string
-          format: '"|" separated list'
-        -
-          name: pageviews
-          in: query
-          description: Whether to include pageview counts
-          required: false
-          type: boolean
-          default: true
-        -
-          name: search
-          in: query
-          description: Which search algorithm to use
-          required: false
-          type: string
-          enum:
-            - morelike
-          default: morelike
+        - $ref: '#/parameters/source'
+        - $ref: '#/parameters/target'
+        - $ref: '#/parameters/count'
+        - $ref: '#/parameters/seed'
+        - $ref: '#/parameters/include_pageviews'
+        - $ref: '#/parameters/search'
       responses:
-        200:
+        '200':
           description: Successful response
           schema:
-            title: Articles
-            type: object
-            required:
-              - articles
-            properties:
-              articles:
-                type: array
-                items:
-                  title: Article
-                  type: object
-                  properties:
-                    pageviews:
-                      type: integer
-                    title:
-                      type: string
-                    wikidata_id:
-                      type: string
+            $ref: '#/definitions/Articles'

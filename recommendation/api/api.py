@@ -1,121 +1,62 @@
-import json
 import time
-from flask import Blueprint, request, Response
+from flask import Blueprint, request, jsonify
+from pkg_resources import resource_filename
+import yaml
+from bravado_core import spec
+from bravado_core import validate
+from bravado_core import marshal
+from bravado_core import param
 
-from recommendation.api.filters import apply_filters_chunkwise
-from recommendation.api.candidate_finders import PageviewCandidateFinder, MorelikeCandidateFinder
-from recommendation.api.pageviews import PageviewGetter
+import recommendation.api
+from recommendation.api import filters
+from recommendation.api import candidate_finders
+from recommendation.api import pageviews
 from recommendation.utils import event_logger
 from recommendation.utils import language_pairs
 
 api = Blueprint('api', __name__)
 
 
-finder_map = {
-    'morelike': MorelikeCandidateFinder(),
-    'mostpopular': PageviewCandidateFinder(),
-}
-
-
-def json_response(dat):
-    resp = Response(response=json.dumps(dat),
-                    status=200,
-                    mimetype='application/json')
-    return resp
-
-
 @api.route('/')
 def get_recommendations():
     t1 = time.time()
-    args = parse_args(request)
+    try:
+        args = parse_and_validate_args(request.args)
+    except ValueError as e:
+        return jsonify(error=str(e))
 
-    if not language_pairs.is_valid_language_pair(args['s'], args['t']):
-        return json_response({'error': 'Invalid or duplicate source and/or target language'})
-
-    recs = recommend(
-        args['s'],
-        args['t'],
-        args['finder'],
-        seed=args['article'],
-        n_recs=args['n'],
-        pageviews=args['pageviews']
-    )
+    event_logger.log_api_request(**args)
+    recs = recommend(**args)
 
     if len(recs) == 0:
-        msg = 'Sorry, failed to get recommendations'
-        return json_response({'error': msg})
-
-    event_logger.log_api_request(
-        source=args['s'],
-        target=args['t'],
-        seed=args['article'],
-        search=args['search']
-    )
+        return jsonify(error='Sorry, failed to get recommendations')
 
     t2 = time.time()
     print('Total:', t2 - t1)
 
-    return json_response({'articles': recs})
+    return jsonify(articles=recs)
 
 
-def parse_args(request):
-    """
-    Parse api query parameters
-    """
-    n = request.args.get('n')
-    try:
-        n = min(int(n), 24)
-    except:
-        n = 12
+def parse_and_validate_args(args):
+    spec_dict = yaml.load(open(resource_filename(recommendation.api.__name__, 'swagger.yml')).read())
+    parsed_spec = spec.Spec.from_dict(spec_dict)
 
-    # Get search algorithm
-    if not request.args.get('article'):
-        search = 'mostpopular'
-    else:
-        search = request.args.get('search')
-        if search not in ('morelike',):
-            search = 'morelike'
-    finder = finder_map[search]
+    clean_args = {}
+    for parameter in spec_dict['parameters']:
+        parameter_spec = spec_dict['parameters'][parameter]
+        parameter_type = parameter_spec['type']
+        parameter_name = parameter_spec['name']
+        try:
+            value = param.cast_request_param(parameter_type, parameter, args.get(parameter_name))
+            validate.validate_schema_object(parsed_spec, parameter_spec, value)
+            clean_args[parameter] = marshal.marshal_schema_object(parsed_spec, parameter_spec, value)
+        except Exception as e:
+            raise ValueError(e)
 
-    # determine if client wants pageviews
-    pageviews = request.args.get('pageviews')
-    if pageviews == 'false':
-        pageviews = False
-    else:
-        pageviews = True
+    if not language_pairs.is_valid_language_pair(clean_args['source'], clean_args['target']):
+        raise ValueError('Invalid or duplicate source and/or target language')
 
-    args = {
-        's': request.args.get('s'),
-        't': request.args.get('t'),
-        'article': request.args.get('article', ''),
-        'n': n,
-        'search': search,
-        'finder': finder,
-        'pageviews': pageviews,
-    }
-
-    return args
-
-
-def recommend(s, t, finder, seed=None, n_recs=10, pageviews=True, max_candidates=500):
-    """
-    1. Use finder to select a set of candidate articles
-    2. Filter out candidates that are not missing, are disambiguation pages, etc
-    3. get pageview info for each passing candidate if desired
-    """
-
-    recs = []
-    for seed in seed.split('|'):
-        recs += finder.get_candidates(s, seed, max_candidates)
-    recs = sorted(recs, key=lambda x: x.rank)
-
-    recs = apply_filters_chunkwise(s, t, recs, n_recs)
-
-    if pageviews:
-        recs = PageviewGetter().get(s, recs)
-
-    recs = sorted(recs, key=lambda x: x.rank)
-    return [{'title': r.title, 'pageviews': r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]
+    return clean_args
 
 
 @api.after_request
@@ -124,3 +65,31 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
+
+finder_map = {
+    'morelike': candidate_finders.MorelikeCandidateFinder(),
+    'mostpopular': candidate_finders.PageviewCandidateFinder(),
+}
+
+
+def recommend(source, target, search, seed, count, include_pageviews, max_candidates=500):
+    """
+    1. Use finder to select a set of candidate articles
+    2. Filter out candidates that are not missing, are disambiguation pages, etc
+    3. get pageview info for each passing candidate if desired
+    """
+
+    finder = finder_map[search]
+
+    recs = []
+    for seed in seed.split('|'):
+        recs += finder.get_candidates(source, seed, max_candidates)
+    recs = sorted(recs, key=lambda x: x.rank)
+
+    recs = filters.apply_filters_chunkwise(source, target, recs, count)
+
+    if include_pageviews:
+        recs = pageviews.PageviewGetter().get(source, recs)
+
+    recs = sorted(recs, key=lambda x: x.rank)
+    return [{'title': r.title, 'pageviews': r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]

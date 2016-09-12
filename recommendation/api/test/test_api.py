@@ -1,9 +1,9 @@
 import flask
 import pytest
 import json
+import urllib.parse
 
 from recommendation.api import api
-from recommendation.utils import language_pairs
 
 GOOD_RESPONSE = {'articles': [
     {'title': 'A', 'pageviews': 10, 'wikidata_id': 123},
@@ -15,6 +15,10 @@ GOOD_RESPONSE = {'articles': [
     {'title': 'G', 'pageviews': 16, 'wikidata_id': 117},
     {'title': 'H', 'pageviews': 17, 'wikidata_id': 116},
 ]}
+
+
+def get_query_string(input_dict):
+    return '/?' + urllib.parse.urlencode(input_dict)
 
 
 @pytest.fixture
@@ -29,15 +33,57 @@ def client():
     return app_instance.test_client()
 
 
-@pytest.mark.parametrize('target,name,value,expected_status,expected_data', [
-    (language_pairs, 'is_valid_language_pair', False, 200,
-     {'error': 'Invalid or duplicate source and/or target language'}),
-    (language_pairs, 'is_valid_language_pair', True, 200,
-     GOOD_RESPONSE)
+@pytest.mark.parametrize('url', [
+    get_query_string(dict(s='xx', t='yy')),
+    get_query_string(dict(s='xx', t='yy', n=13)),
+    get_query_string(dict(s='xx', t='yy', article='separated|list|of|titles')),
+    get_query_string(dict(s='xx', t='yy', pageviews='false')),
+    get_query_string(dict(s='xx', t='yy', search='morelike')),
 ])
 @pytest.mark.usefixtures('recommend_response')
-def test_api(client, target, name, value, expected_status, expected_data, monkeypatch):
-    monkeypatch.setattr(target, name, lambda *args, **kwargs: value)
-    result = client.get('/?s=en&t=de')
-    assert expected_status == result.status_code
-    assert expected_data == json.loads(result.data.decode('utf-8'))
+def test_good_arg_parsing(client, url):
+    result = client.get(url)
+    assert 200 == result.status_code
+    assert GOOD_RESPONSE == json.loads(result.data.decode('utf-8'))
+
+
+@pytest.mark.parametrize('url', [
+    get_query_string(dict(s='xx')),
+    get_query_string(dict(t='xx')),
+    '/',
+    get_query_string(dict(s='xx', t='xx')),
+    get_query_string(dict(s='xx', t='yy', n=-1)),
+    get_query_string(dict(s='xx', t='yy', n=25)),
+    get_query_string(dict(s='xx', t='yy', n='not a number')),
+    get_query_string(dict(s='xx', t='yy', article='||||||||||||')),
+    get_query_string(dict(s='xx', t='yy', pageviews='not a boolean')),
+    get_query_string(dict(s='xx', t='yy', search='not a valid search')),
+])
+@pytest.mark.usefixtures('recommend_response')
+def test_bad_args(client, url):
+    result = client.get(url)
+    assert 'error' in json.loads(result.data.decode('utf-8'))
+
+
+@pytest.mark.parametrize('params', [
+    dict(s='xx', t='yy'),
+])
+def test_default_params(params):
+    args = api.parse_and_validate_args(params)
+    assert 12 == args['count']
+    assert '' is args['seed']
+    assert True is args['include_pageviews']
+    assert 'morelike' == args['search']
+
+
+def test_recommend(monkeypatch):
+    class MockFinder:
+        @classmethod
+        def get_candidates(cls, s, seed, n):
+            return {}
+
+    monkeypatch.setattr(api, 'finder_map', {'customsearch': MockFinder})
+    args = api.parse_and_validate_args(dict(s='xx', t='yy'))
+    args['search'] = 'customsearch'
+    result = api.recommend(**args)
+    assert [] == result
