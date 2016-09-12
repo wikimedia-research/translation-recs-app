@@ -4,6 +4,8 @@ import json
 import urllib.parse
 
 from recommendation.api import api
+from recommendation.api import utils
+from recommendation.api import filters
 
 GOOD_RESPONSE = {'articles': [
     {'title': 'A', 'pageviews': 10, 'wikidata_id': 123},
@@ -80,10 +82,28 @@ def test_recommend(monkeypatch):
     class MockFinder:
         @classmethod
         def get_candidates(cls, s, seed, n):
-            return {}
+            return []
 
     monkeypatch.setattr(api, 'finder_map', {'customsearch': MockFinder})
     args = api.parse_and_validate_args(dict(s='xx', t='yy'))
     args['search'] = 'customsearch'
     result = api.recommend(**args)
     assert [] == result
+
+
+def test_generated_recommend_response_is_marshalled(client, monkeypatch):
+    class MockFinder:
+        @classmethod
+        def get_candidates(cls, s, seed, n):
+            articles = []
+            for item in GOOD_RESPONSE['articles']:
+                article = utils.Article(item['title'])
+                article.pageviews = item['pageviews']
+                article.wikidata_id = item['wikidata_id']
+                article.rank = article.pageviews
+                articles.append(article)
+            return articles
+    monkeypatch.setattr(api, 'finder_map', {'morelike': MockFinder})
+    monkeypatch.setattr(filters, 'apply_filters_chunkwise', lambda source, target, recs, count: recs)
+    result = client.get(get_query_string(dict(s='xx', t='yy', pageviews=False)))
+    assert GOOD_RESPONSE == json.loads(result.data.decode('utf-8'))
