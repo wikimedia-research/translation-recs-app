@@ -1,4 +1,6 @@
+import logging
 import time
+
 from flask import Blueprint, request, jsonify
 from pkg_resources import resource_filename
 import yaml
@@ -15,7 +17,7 @@ from recommendation.utils import event_logger
 from recommendation.utils import language_pairs
 
 api = Blueprint('api', __name__)
-
+log = logging.getLogger(__name__)
 
 @api.route('/')
 def get_recommendations():
@@ -32,7 +34,7 @@ def get_recommendations():
         return jsonify(error='Sorry, failed to get recommendations')
 
     t2 = time.time()
-    print('Total:', t2 - t1)
+    log.info('Total: %d', t2 - t1)
 
     return jsonify(articles=recs)
 
