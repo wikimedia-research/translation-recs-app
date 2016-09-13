@@ -82,11 +82,15 @@ def recommend(source, target, search, seed, count, include_pageviews, max_candid
     3. get pageview info for each passing candidate if desired
     """
 
-    finder = finder_map[search]
-
     recs = []
-    for seed in seed.split('|'):
-        recs += finder.get_candidates(source, seed, max_candidates)
+
+    if seed:
+        finder = finder_map[search]
+        for seed in seed.split('|'):
+            recs.extend(finder.get_candidates(source, seed, max_candidates))
+    else:
+        recs.extend(finder_map['mostpopular'].get_candidates(source, seed, max_candidates))
+
     recs = sorted(recs, key=lambda x: x.rank)
 
     recs = filters.apply_filters_chunkwise(source, target, recs, count)

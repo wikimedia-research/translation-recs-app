@@ -61,7 +61,7 @@ parameters:
       can also be a list separated by "|"'
     required: false
     type: string
-    pattern: '^([^|]+(\|[^|]+))*$'
+    pattern: '^([^|]+(\|[^|]+)*)?$'
     default: ''
   include_pageviews:
     name: pageviews
@@ -73,7 +73,7 @@ parameters:
   search:
     name: search
     in: query
-    description: Which search algorithm to use
+    description: Which search algorithm to use if a seed is specified
     required: false
     type: string
     enum:
