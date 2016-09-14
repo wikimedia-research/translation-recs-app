@@ -35,7 +35,7 @@ def get_recommendations():
         return jsonify(error='Sorry, failed to get recommendations')
 
     t2 = time.time()
-    log.info('Total: %d', t2 - t1)
+    log.info('Request processed in %f seconds', t2 - t1)
 
     return jsonify(articles=recs)
 
@@ -93,10 +93,10 @@ def recommend(source, target, search, seed, count, include_pageviews, max_candid
 
     recs = sorted(recs, key=lambda x: x.rank)
 
-    recs = filters.apply_filters_chunkwise(source, target, recs, count)
+    recs = filters.apply_filters(source, target, recs, count)
 
-    if include_pageviews:
-        recs = pageviews.PageviewGetter().get(source, recs)
+    if recs and include_pageviews:
+        recs = pageviews.set_pageview_data(source, recs)
 
     recs = sorted(recs, key=lambda x: x.rank)
     return [{'title': r.title, 'pageviews': r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]

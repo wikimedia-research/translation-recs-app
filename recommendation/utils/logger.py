@@ -6,6 +6,6 @@ import recommendation
 
 def initialize_logging():
     logging.basicConfig(format=configuration.get_config_value('logging', 'format'),
-                        level=logging.getLevelName(configuration.get_config_value('logging', 'level')))
+                        level=logging.WARNING)
     log = logging.getLogger(recommendation.__name__)
     log.setLevel(logging.getLevelName(configuration.get_config_value('logging', 'level')))
