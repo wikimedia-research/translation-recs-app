@@ -1,26 +1,26 @@
 <gf-articles>
-    <div class="row">
-        <div class="col-xs-12">
-            <div each={articles} class="suggestion list-group-item m-b-1">
-                <div class="suggestion-image" onclick={preview}
-                        style="background-image: url('{thumbnail}');">
+    <div class="gf-all-suggestions-container">
+        <div each={articles} class="gf-suggestion-container">
+            <div class="gf-suggestion-image"
+                 onclick={preview} style="background-image: url('{thumbnail}');"></div>
+            <div class="gf-suggestion-body-container" onclick={preview}>
+                <div class="gf-suggestion-title-container">
+                    <span class="gf-suggestion-title-popover">{title}</span>
+                    <span class="gf-suggestion-title">{title}</span>
                 </div>
-                <div class="suggestion-body" onclick={preview}>
-                    <p class="suggestion-title"
-                       data-toggle="popover" data-placement="top" data-trigger="hover" data-content={title}>{title}</p>
-                    <p class="suggestion-text">{description}</p>
-                </div>
-                <div class="suggestion-footer">
-                    <span class="suggestion-views text-muted">{$.i18n('article-pageviews', pageviews)}</span>
-                    <span class="dropdown-toggle suggestion-flag" data-toggle="dropdown" title={$.i18n('article-flag')}>&#x2691;</span>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            {$.i18n('article-flag-not-interesting')}
-                        </button>
-                        <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            {$.i18n('article-flag-not-notable', target)}
-                        </button>
-                    </div>
+                <span class="gf-suggestion-text">{description}</span>
+            </div>
+            <div class="gf-suggestion-footer-container dropup">
+                <span class="gf-suggestion-views text-muted">{$.i18n('article-pageviews', pageviews)}</span>
+                <span class="gf-suggestion-flag gf-icon gf-icon-flag gf-clickable dropdown-toggle" data-toggle="dropdown"
+                      title={$.i18n('article-flag')}></span>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                        {$.i18n('article-flag-not-interesting')}
+                    </button>
+                    <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                        {$.i18n('article-flag-not-notable', target)}
+                    </button>
                 </div>
             </div>
         </div>
@@ -117,27 +117,19 @@
             });
         }
 
-        hoverIn (e) {
-            e.item.hovering = true;
-        }
-
-        hoverOut (e) {
-            e.item.hovering = false;
-        }
-
         // kick off the loading of the articles
         var promises = self.articles.map(self.detail).concat(self.articles.map(self.get_description));
         $.when.apply(this, promises).then(self.refresh);
 
         self.on('update', function () {
-            // add tooltips for truncated article names
-            $.each($('.suggestion-title'), function (index, item) {
+            // set tooltip text to be smaller for truncated titles
+            // otherwise, the font will remain the same size as the title
+            // and not be visibly different when hovered over
+            $.each($('.gf-suggestion-title'), function (index, item) {
                 if ($(item.scrollWidth)[0] > $(item.offsetWidth)[0]) {
-                    $(item).popover({
-                        template: '<div class="popover" role="tooltip"><div class="popover-arrow"></div><div class="popover-content"></div></div>'
-                    });
-                } else {
-                    $(item).popover('dispose');
+                    var popover = $(item).parent().children('.gf-suggestion-title-popover');
+                    $(popover).css('font-size', '1rem');
+                    $(popover).css('line-height', '1rem');
                 }
             });
         });

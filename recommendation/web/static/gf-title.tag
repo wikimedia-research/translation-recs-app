@@ -1,39 +1,31 @@
 <gf-title>
-    <div class="container-fluid m-t-1">
-        <div class="row">
-            <div class="dropdown">
-                <div class="col-xs-12">
-                    <span class="icon icon-title icon-lightbulb"></span>
-                    <span class="title-display" data-i18n="title-wikipedia">Wikipedia</span>
-                    <span class="title-display-strong" data-i18n="title-gapfinder">GapFinder</span>
-                    <span class="title-display-version" data-i18n="title-beta">beta</span>
-                    <span class="icon icon-title icon-menu dropdown-toggle"
-                          data-toggle="dropdown"></span>
-                    <div class="dropdown-menu dropdown-menu-right m-r-1">
-                        <button class="dropdown-item" type="button"
-                                data-toggle="modal" data-target="#howToModal" data-i18n="menu-how-to">How to</button>
-                        <button class="dropdown-item" type="button"
-                                data-toggle="modal" data-target="#aboutModal" data-i18n="menu-about">About</button>
-                        <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
-                           target="_blank" data-i18n="menu-feedback">Feedback</a>
-                        <a class="dropdown-item" href="https://github.com/wikimedia-research/translation-recs-app"
-                           target="_blank" data-i18n="menu-source-code">Source code</a>
-                        <a class="dropdown-item" href="https://wikimediafoundation.org/wiki/Recommendations_Tool_Privacy_Statement"
-                           target="_blank" data-i18n="menu-privacy-statement">Privacy statement</a>
-                    </div>
-                </div>
-            </div>
+    <div class="gf-title-container dropdown">
+        <span class="gf-icon gf-icon-lightbulb"></span>
+        <span class="gf-title-display-secondary" data-i18n="title-wikipedia">Wikipedia</span>
+        <span class="gf-title-display-main" data-i18n="title-gapfinder">GapFinder</span>
+        <span class="gf-title-display-version" data-i18n="title-beta">beta</span>
+        <span class="gf-icon gf-icon-menu gf-flex-float-right gf-clickable dropdown-toggle" data-toggle="dropdown"></span>
+        <div class="dropdown-menu dropdown-menu-right">
+            <button class="dropdown-item" type="button"
+                    data-toggle="modal" data-target="#howToModal" data-i18n="menu-how-to">How to</button>
+            <button class="dropdown-item" type="button"
+                    data-toggle="modal" data-target="#aboutModal" data-i18n="menu-about">About</button>
+            <a class="dropdown-item" href="https://meta.wikimedia.org/wiki/Research_talk:Increasing_article_coverage/Tool"
+               target="_blank" data-i18n="menu-feedback">Feedback</a>
+            <a class="dropdown-item" href="https://github.com/wikimedia-research/translation-recs-app"
+               target="_blank" data-i18n="menu-source-code">Source code</a>
+            <a class="dropdown-item" href="https://wikimediafoundation.org/wiki/Recommendations_Tool_Privacy_Statement"
+               target="_blank" data-i18n="menu-privacy-statement">Privacy statement</a>
         </div>
     </div>
-
     <div id="howToModal" class="modal fade" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <h4 class="modal-title">&#x274c;</h4>
-                    </button>
-                    <h4 class="modal-title" data-i18n="menu-how-to">How to</h4>
+                    <div class="gf-modal-header-container">
+                        <span class="gf-modal-title" data-i18n="menu-how-to">How to</span>
+                        <span class="gf-icon gf-icon-close gf-clickable" data-dismiss="modal" title="{$.i18n('modal-close')}"></span>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <p>GapFinder helps you discover articles that exist in one language but are missing in another.
@@ -52,10 +44,10 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <h4 class="modal-title">&#x274c;</h4>
-                    </button>
-                    <h4 class="modal-title" data-i18n="menu-about">About</h4>
+                    <div class="gf-modal-header-container">
+                        <span class="gf-modal-title" data-i18n="menu-about">About</span>
+                        <span class="gf-icon gf-icon-close gf-clickable" data-dismiss="modal" title="{$.i18n('modal-close')}"></span>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <p>We are a team of researchers, developers, and designers in the Wikimedia Foundation and Stanford University interested in identifying gaps of knowledge across the more than 160 active language editions of Wikipedia.

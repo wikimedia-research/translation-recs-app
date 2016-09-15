@@ -3,20 +3,14 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <h4 class="modal-title col-xs-8">{title}</h4>
-                            <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal"
-                                    title="{$.i18n('modal-close')}">
-                                <h4 class="m-y-0">&#x274c;</h4>
-                            </button>
-                            <a role="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" target="_blank" href={articleLink}
-                               title="{$.i18n('modal-new-window')}">
-                                <h4 class="m-y-0">&#x2197;</h4>
-                            </a>
-                        </div>
+                    <div class="gf-modal-header-container">
+                        <span class="gf-modal-title">{title}</span>
+                        <a role="button" class="gf-icon gf-icon-new-window gf-clickable"
+                           target="_blank" href={articleLink} title="{$.i18n('modal-new-window')}">
+                        </a>
+                        <span class="gf-icon gf-icon-close gf-clickable"
+                              data-dismiss="modal" title="{$.i18n('modal-close')}"></span>
                     </div>
-
                 </div>
                 <div class="modal-body">
                     <div class="embed-responsive embed-responsive-4by3">
@@ -24,34 +18,32 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick={left}
-                            class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
-                            disabled: showIndex === 0}
-                            title="{$.i18n('modal-previous')}">
-                        <h4 class="m-y-0"><</h4>
-                    </button>
-                    <button type="button" class="btn btn-secondary dropdown-toggle borderless pull-xs-left" data-toggle="dropdown"
-                            title="{$.i18n('article-flag')}">
-                        <h4 class="m-y-0">&#x2691;</h4>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-left">
-                        <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
-                            {$.i18n('article-flag-not-interesting')}
-                        </button>
-                        <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
-                            {$.i18n('article-flag-not-notable', opts.to)}
-                        </button>
+                    <div class="gf-modal-footer-container">
+                        <div class="gf-modal-footer-left dropup">
+                            <span class="{gf-icon: true, gf-icon-previous: true, gf-clickable: true, gf-clickable-disabled: showIndex === 0}"
+                                  title="{$.i18n('modal-previous')}"
+                                  onclick={left}></span>
+                            <span class="gf-icon gf-icon-flag gf-clickable dropdown-toggle" data-toggle="dropdown"
+                                  title="{$.i18n('article-flag')}"></span>
+                            <div class="dropdown-menu dropdown-menu-left">
+                                <button type="button" class="dropdown-item" onclick={addToPersonalBlacklist}>
+                                    {$.i18n('article-flag-not-interesting')}
+                                </button>
+                                <button type="button" class="dropdown-item" onclick={addToGlobalBlacklist}>
+                                    {$.i18n('article-flag-not-notable', opts.to)}
+                                </button>
+                            </div>
+                            <span class="{gf-icon: true, gf-icon-next: true, gf-clickable: true, gf-clickable-disabled: showIndex > (articles.length - 2)}"
+                                  title="{$.i18n('modal-next')}"
+                                  onclick={right}></span>
+                        </div>
+                        <div class="gf-modal-footer-right">
+                            <button class="btn btn-secondary" data-dismiss="modal"
+                                    onclick={showCreate}>{$.i18n('modal-create-from-scratch')}</button>
+                            <a role="button" class="btn btn-primary m-l-1" target="_blank"
+                               onclick={logCXAction} href={translateLink}>{$.i18n('modal-translate')}</a>
+                        </div>
                     </div>
-                    <button type="button" onclick={right}
-                            class={btn: true, btn-secondary: true, borderless: true, pull-xs-left: true,
-                            disabled: showIndex > (articles.length - 2)}
-                            title="{$.i18n('modal-next')}">
-                        <h4 class="m-y-0">></h4>
-                    </button>
-                    <button class="btn btn-secondary" data-dismiss="modal"
-                            onclick={showCreate}>{$.i18n('modal-create-from-scratch')}</button>
-                    <a role="button" class="btn btn-primary" target="_blank" onclick={logCXAction}
-                       href={translateLink}>{$.i18n('modal-translate')}</a>
                 </div>
             </div>
         </div>
