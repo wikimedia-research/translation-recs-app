@@ -1,10 +1,10 @@
-import requests
 import random
 import datetime
 import logging
 
 from recommendation.api.utils import Article
 from recommendation.utils import configuration
+from recommendation.api import data_fetcher
 
 log = logging.getLogger(__name__)
 
@@ -38,12 +38,7 @@ class PageviewCandidateFinder(CandidateFinder):
         date = (datetime.datetime.utcnow() - datetime.timedelta(days=days)).strftime(date_format)
         query = query.format(source=s, date=date)
         try:
-            response = requests.get(query)
-            response.raise_for_status()
-        except requests.RequestException:
-            return []
-        try:
-            data = response.json()
+            data = data_fetcher.get(query)
         except ValueError:
             return []
 
@@ -125,14 +120,9 @@ def wiki_search(s, seed, n, morelike=False):
     """
     endpoint, params = build_wiki_search(s, seed, n, morelike)
     try:
-        response = requests.get(endpoint, params=params)
-        response.raise_for_status()
-    except requests.RequestException:
-        log.info('Could not search for articles related to seed in %s. Choose another language.', s)
-        return []
-    try:
-        response = response.json()
+        response = data_fetcher.get(endpoint, params=params)
     except ValueError:
+        log.info('Could not search for articles related to seed in %s. Choose another language.', s)
         return []
 
     if 'query' not in response or 'search' not in response['query']:
