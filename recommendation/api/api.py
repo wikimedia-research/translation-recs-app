@@ -1,18 +1,11 @@
 import logging
 import time
-
 from flask import Blueprint, request, jsonify
-from pkg_resources import resource_filename
-import yaml
-from bravado_core import spec
-from bravado_core import validate
-from bravado_core import marshal
-from bravado_core import param
 
-import recommendation.api
 from recommendation.api import filters
 from recommendation.api import candidate_finders
 from recommendation.api import pageviews
+from recommendation.api import specification
 from recommendation.utils import event_logger
 from recommendation.utils import language_pairs
 
@@ -37,24 +30,11 @@ def get_recommendations():
     t2 = time.time()
     log.info('Request processed in %f seconds', t2 - t1)
 
-    return jsonify(articles=recs)
+    return jsonify(specification.marshal_response(recs))
 
 
 def parse_and_validate_args(args):
-    spec_dict = yaml.load(open(resource_filename(recommendation.api.__name__, 'swagger.yml')).read())
-    parsed_spec = spec.Spec.from_dict(spec_dict)
-
-    clean_args = {}
-    for parameter in spec_dict['parameters']:
-        parameter_spec = spec_dict['parameters'][parameter]
-        parameter_type = parameter_spec['type']
-        parameter_name = parameter_spec['name']
-        try:
-            value = param.cast_request_param(parameter_type, parameter, args.get(parameter_name))
-            validate.validate_schema_object(parsed_spec, parameter_spec, value)
-            clean_args[parameter] = marshal.marshal_schema_object(parsed_spec, parameter_spec, value)
-        except Exception as e:
-            raise ValueError(e)
+    clean_args = specification.parse_and_validate_parameters(args)
 
     if not language_pairs.is_valid_language_pair(clean_args['source'], clean_args['target']):
         raise ValueError('Invalid or duplicate source and/or target language')
@@ -68,6 +48,7 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
     return response
+
 
 finder_map = {
     'morelike': candidate_finders.MorelikeCandidateFinder(),

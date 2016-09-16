@@ -1,11 +1,12 @@
 {
 	"@metadata": {
 		"authors": [
-			"தமிழ்க்குரிசில்"
+			"தமிழ்க்குரிசில்",
+			"Rakeshonwiki"
 		]
 	},
 	"menu-about": "கருவியை பற்றி",
-	"menu-feedback": "பின்னூட்டம்",
+	"menu-feedback": "கருத்து",
 	"menu-source-code": "மூல நிரல்",
 	"menu-privacy-statement": "தனியுரிமைக் கொள்கை",
 	"selector-source": "மூலம்",
@@ -17,7 +18,7 @@
 	"modal-next": "அடுத்த கட்டுரை",
 	"modal-translate": "மொழிபெயர்",
 	"create-title": "புதுக் கட்டுரை",
-	"create-title-input-placeholder": "கட்டுரைக்கான தலைப்பு",
+	"create-title-input-placeholder": "மொழிபெயர்ப்பிற்க்கான தலைப்பு",
 	"create-warning": "எச்சரிக்கை!",
 	"create-action": "உருவாக்கு",
 	"create-error-empty": "வெற்றுத் தலைப்பை ஏற்க முடியாது",
