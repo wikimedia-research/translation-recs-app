@@ -28,7 +28,7 @@ def get_recommendations():
         return jsonify(error='Sorry, failed to get recommendations')
 
     t2 = time.time()
-    log.info('Total: %d', t2 - t1)
+    log.info('Request processed in %f seconds', t2 - t1)
 
     return jsonify(specification.marshal_response(recs))
 
@@ -63,17 +63,21 @@ def recommend(source, target, search, seed, count, include_pageviews, max_candid
     3. get pageview info for each passing candidate if desired
     """
 
-    finder = finder_map[search]
-
     recs = []
-    for seed in seed.split('|'):
-        recs += finder.get_candidates(source, seed, max_candidates)
+
+    if seed:
+        finder = finder_map[search]
+        for seed in seed.split('|'):
+            recs.extend(finder.get_candidates(source, seed, max_candidates))
+    else:
+        recs.extend(finder_map['mostpopular'].get_candidates(source, seed, max_candidates))
+
     recs = sorted(recs, key=lambda x: x.rank)
 
-    recs = filters.apply_filters_chunkwise(source, target, recs, count)
+    recs = filters.apply_filters(source, target, recs, count)
 
-    if include_pageviews:
-        recs = pageviews.PageviewGetter().get(source, recs)
+    if recs and include_pageviews:
+        recs = pageviews.set_pageview_data(source, recs)
 
     recs = sorted(recs, key=lambda x: x.rank)
     return [{'title': r.title, 'pageviews': r.pageviews, 'wikidata_id': r.wikidata_id} for r in recs]

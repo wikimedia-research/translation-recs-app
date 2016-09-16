@@ -39,6 +39,8 @@ def client():
     get_query_string(dict(s='xx', t='yy')),
     get_query_string(dict(s='xx', t='yy', n=13)),
     get_query_string(dict(s='xx', t='yy', article='separated|list|of|titles')),
+    get_query_string(dict(s='xx', t='yy', article='Some Article')),
+    get_query_string(dict(s='xx', t='yy', article='')),
     get_query_string(dict(s='xx', t='yy', pageviews='false')),
     get_query_string(dict(s='xx', t='yy', search='morelike')),
 ])
@@ -85,6 +87,19 @@ def test_recommend(monkeypatch):
             return []
 
     monkeypatch.setattr(api, 'finder_map', {'customsearch': MockFinder})
+    args = api.parse_and_validate_args(dict(s='xx', t='yy', article='Something'))
+    args['search'] = 'customsearch'
+    result = api.recommend(**args)
+    assert [] == result
+
+
+def test_recommend_uses_mostpopular_if_no_seed_is_specified(monkeypatch):
+    class MockFinder:
+        @classmethod
+        def get_candidates(cls, s, seed, n):
+            return []
+
+    monkeypatch.setattr(api, 'finder_map', {'mostpopular': MockFinder})
     args = api.parse_and_validate_args(dict(s='xx', t='yy'))
     args['search'] = 'customsearch'
     result = api.recommend(**args)
@@ -103,7 +118,7 @@ def test_generated_recommend_response_is_marshalled(client, monkeypatch):
                 article.rank = article.pageviews
                 articles.append(article)
             return articles
-    monkeypatch.setattr(api, 'finder_map', {'morelike': MockFinder})
-    monkeypatch.setattr(filters, 'apply_filters_chunkwise', lambda source, target, recs, count: recs)
+    monkeypatch.setattr(api, 'finder_map', {'mostpopular': MockFinder})
+    monkeypatch.setattr(filters, 'apply_filters', lambda source, target, recs, count: recs)
     result = client.get(get_query_string(dict(s='xx', t='yy', pageviews=False)))
     assert GOOD_RESPONSE == json.loads(result.data.decode('utf-8'))

@@ -2,13 +2,13 @@
     <form onsubmit={submitRequest}>
         <div class="container-fluid m-t-1">
             <div class="row m-b-1">
-                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-r-0">
+                <div class="col-xs-6 col-sm-5 col-md-4 col-lg-3 p-r-0">
                     <a class="btn btn-block btn-secondary source-selector" name="from">
                         <span class="selector-display">{$.i18n('selector-source')}</span>
                         <span class="icon icon-selector icon-expand"></span>
                     </a>
                 </div>
-                <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 p-l-0">
+                <div class="col-xs-6 col-sm-5 col-md-4 col-lg-3 p-l-0">
                     <a class="btn btn-block btn-secondary target-selector" name="to">
                         <span class="selector-display">{$.i18n('selector-target')}</span>
                         <span class="icon icon-selector icon-expand"></span>
@@ -172,9 +172,16 @@
 
         self.getTargetSelectorPosition = function () {
             var offset = self.targetSelector.offset();
+            var top = offset.top + self.targetSelector[0].offsetHeight;
+            var minMediumColWidth = 360;
+            var left = offset.left + self.targetSelector[0].offsetWidth - minMediumColWidth;
+            if (self.getMenuWidth() === 'narrow') {
+                var minNarrowColWidth = 180;
+                left = offset.left + self.targetSelector[0].offsetWidth - minNarrowColWidth;
+            }
             return {
-                top: offset.top + self.targetSelector[0].offsetHeight,
-                left: offset.left + self.targetSelector[0].offsetWidth - 360
+                top: top,
+                left: left
             };
         };
 
@@ -203,6 +210,14 @@
             });
         };
 
+        self.getMenuWidth = function () {
+            var smallestWidthForMedium = 390;
+            if ($(window).width() < smallestWidthForMedium) {
+                return 'narrow';
+            }
+            return 'medium';
+        };
+
         self.activateULS = function (selector, onSelect, getPosition, languages) {
             selector.uls({
                 onSelect: onSelect,
@@ -214,8 +229,7 @@
                     this.i18n();
                 },
                 languages: languages,
-                searchAPI: true, // this is set to true to simply trigger our hacky searchAPI
-                menuWidth: 'medium'
+                searchAPI: true // this is set to true to simply trigger our hacky searchAPI
             });
         };
 
@@ -232,6 +246,9 @@
             // Otherwise, CORS stops the request
             $.fn.languagefilter.Constructor.prototype.searchAPI = self.searchAPI;
 
+            // Have a dynamic menu width based on screen size
+            $.fn.uls.Constructor.prototype.getMenuWidth = self.getMenuWidth;
+
             // build the selectors using the language lists
             self.sourceSelector = $('a[name=from]');
             self.targetSelector = $('a[name=to]');
@@ -239,13 +256,25 @@
             self.activateULS(self.targetSelector, self.onSelectTarget, self.getTargetSelectorPosition, self.targetLanguages);
 
             // hide the selectors if the window resizes with a timeout
+            // This also has logic to destroy and re-initialize the language dropdown
+            //  everytime to accommodate changing from the 'medium' to 'narrow' menuWidth
             var resizeTimer;
             $(window).resize(function () {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
                     $.each(self.uls, function (index, item) {
+                        item.show(); // ensure uls is initialized before it's destroyed
                         item.hide();
+                        item.$menu.remove();
                     });
+                    $.removeData(self.sourceSelector.get(0));
+                    $.removeData(self.targetSelector.get(0));
+                    self.sourceSelector.off('uls');
+                    self.targetSelector.off('uls');
+                    self.sourceSelector.unbind('.uls');
+                    self.targetSelector.unbind('.uls');
+                    self.activateULS(self.sourceSelector, self.onSelectSource, self.getSourceSelectorPosition, self.sourceLanguages);
+                    self.activateULS(self.targetSelector, self.onSelectTarget, self.getTargetSelectorPosition, self.targetLanguages);
                 }, 50);
             });
 

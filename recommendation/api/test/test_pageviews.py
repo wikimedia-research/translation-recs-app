@@ -4,6 +4,7 @@ import datetime
 import re
 
 from recommendation.api import pageviews
+from recommendation.api import data_fetcher
 from recommendation.api import utils
 from recommendation.utils import configuration
 
@@ -34,17 +35,16 @@ def add_response(body='', json=None, status=200):
 
 
 def run_getter():
-    getter = pageviews.PageviewGetter()
-    article = utils.Article(TITLE)
-    result = getter.helper(SOURCE, article)
-    assert result is article
+    articles = [utils.Article(TITLE)]
+    result = pageviews.set_pageview_data(SOURCE, articles)
+    assert result == articles
     return result
 
 
 def test_pageviews():
     add_response(json=GOOD_RESPONSE)
-    article = run_getter()
-    assert sum([item['views'] for item in GOOD_RESPONSE['items']]) == article.pageviews
+    articles = run_getter()
+    assert sum([item['views'] for item in GOOD_RESPONSE['items']]) == articles[0].pageviews
 
 
 @pytest.mark.parametrize('add,body,json,status', [
@@ -55,8 +55,8 @@ def test_pageviews():
 def test_getter_failures(add, body, json, status):
     if add:
         add_response(body=body, json=json, status=status)
-    article = run_getter()
-    assert 0 == article.pageviews
+    articles = run_getter()
+    assert 0 == articles[0].pageviews
 
 
 def test_getter_queries_correct_url():
@@ -64,7 +64,7 @@ def test_getter_queries_correct_url():
     run_getter()
     assert 1 == len(responses.calls)
     assert configuration.get_config_value('endpoints', 'pageviews') in responses.calls[0].request.url
-    assert pageviews.get_pageview_query_url(SOURCE, TITLE) == responses.calls[0].request.url
+    assert data_fetcher.get_pageview_query_url(SOURCE, TITLE) == responses.calls[0].request.url
 
 
 def test_date_range(monkeypatch):
