@@ -1,44 +1,35 @@
 <gf-input>
     <form onsubmit={submitRequest}>
-        <div class="container-fluid m-t-1">
-            <div class="row m-b-1">
-                <div class="col-xs-6 col-sm-5 col-md-4 col-lg-3 p-r-0">
-                    <a class="btn btn-block btn-secondary source-selector" name="from">
-                        <span class="selector-display">{$.i18n('selector-source')}</span>
-                        <span class="icon icon-selector icon-expand"></span>
-                    </a>
+        <div class="gf-selector-container">
+            <a class="btn btn-secondary gf-selector-source" name="from">
+                <div class="gf-selector-button-container">
+                    <span class="gf-selector-text">{$.i18n('selector-source')}</span>
+                    <span class="gf-icon gf-icon-expand"></span>
                 </div>
-                <div class="col-xs-6 col-sm-5 col-md-4 col-lg-3 p-l-0">
-                    <a class="btn btn-block btn-secondary target-selector" name="to">
-                        <span class="selector-display">{$.i18n('selector-target')}</span>
-                        <span class="icon icon-selector icon-expand"></span>
-                    </a>
+            </a>
+            <a class="btn btn-secondary gf-selector-target" name="to">
+                <div class="gf-selector-button-container">
+                    <span class="gf-selector-text">{$.i18n('selector-target')}</span>
+                    <span class="gf-icon gf-icon-expand"></span>
                 </div>
-            </div>
+            </a>
         </div>
-        <div class="container-fluid seed-container" id="seed-container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <input type="text" autocomplete=off class="form-control seed-input"
-                           placeholder={ $.i18n('search-placeholder') } name="seedArticle">
-                </div>
-            </div>
+        <div class="gf-seed-container" id="seed-container">
+            <span class="gf-icon gf-icon-search gf-seed-icon"></span>
+            <input type="text" autocomplete=off class="gf-seed-input"
+                   placeholder={ $.i18n('search-placeholder') } name="seedArticle">
         </div>
     </form>
-    <div class="container-fluid m-t-1">
-        <div class="row">
-            <div class="col-xs-12 col-sm-8 col-md-6 col-lg-4">
-                <div class="text-xs-center alert alert-info" data-i18n="status-preparing" if={fetching}>
-                    {$.i18n('status-preparing')}
-                </div>
-                <div class="text-xs-center alert alert-danger" data-i18n="{error_msg}" if={error}>
-                    {$.i18n(error_msg)}
-                </div>
-            </div>
+    <div class="gf-input-status-container" if={fetching || error}>
+        <div class="gf-input-status alert alert-info" data-i18n="status-preparing" if={fetching}>
+            {$.i18n('status-preparing')}
         </div>
-        <div class={invisible: fetching || error}>
-            <gf-articles></gf-articles>
+        <div class="gf-input-status alert alert-danger" data-i18n="{error_msg}" if={error}>
+            {$.i18n(error_msg)}
         </div>
+    </div>
+    <div class={invisible: fetching || error}>
+        <gf-articles></gf-articles>
     </div>
 
     <script>
@@ -53,6 +44,7 @@
         self.targetSelector = null;
         self.uls = [];
         self.origin = 'unknown';
+        self.currentMenuWidth = '';
 
         self.submitRequest = function () {
             self.origin = 'form_submit';
@@ -139,7 +131,7 @@
         self.setSource = function (code) {
             self.source = code;
             updateLanguage(self.source);
-            self.sourceSelector.find('.selector-display').text($.uls.data.getAutonym(self.source));
+            self.sourceSelector.find('.gf-selector-text').text($.uls.data.getAutonym(self.source));
         };
 
         self.onSelectSource = function (code) {
@@ -161,7 +153,7 @@
 
         self.setTarget = function (code) {
             self.target = code;
-            self.targetSelector.find('.selector-display').text($.uls.data.getAutonym(self.target));
+            self.targetSelector.find('.gf-selector-text').text($.uls.data.getAutonym(self.target));
         };
 
         self.onSelectTarget = function (code) {
@@ -214,8 +206,9 @@
             var smallestWidthForMedium = 390;
             if ($(window).width() < smallestWidthForMedium) {
                 return 'narrow';
+            } else {
+                return 'medium';
             }
-            return 'medium';
         };
 
         self.activateULS = function (selector, onSelect, getPosition, languages) {
@@ -231,6 +224,7 @@
                 languages: languages,
                 searchAPI: true // this is set to true to simply trigger our hacky searchAPI
             });
+            self.currentMenuWidth = self.getMenuWidth();
         };
 
         self.on('mount', function () {
@@ -249,6 +243,9 @@
             // Have a dynamic menu width based on screen size
             $.fn.uls.Constructor.prototype.getMenuWidth = self.getMenuWidth;
 
+            // Disable scroll into view added by ULS
+            $.fn.scrollIntoView = function () {};
+
             // build the selectors using the language lists
             self.sourceSelector = $('a[name=from]');
             self.targetSelector = $('a[name=to]');
@@ -256,25 +253,30 @@
             self.activateULS(self.targetSelector, self.onSelectTarget, self.getTargetSelectorPosition, self.targetLanguages);
 
             // hide the selectors if the window resizes with a timeout
-            // This also has logic to destroy and re-initialize the language dropdown
-            //  everytime to accommodate changing from the 'medium' to 'narrow' menuWidth
             var resizeTimer;
             $(window).resize(function () {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(function () {
                     $.each(self.uls, function (index, item) {
-                        item.show(); // ensure uls is initialized before it's destroyed
                         item.hide();
-                        item.$menu.remove();
                     });
-                    $.removeData(self.sourceSelector.get(0));
-                    $.removeData(self.targetSelector.get(0));
-                    self.sourceSelector.off('uls');
-                    self.targetSelector.off('uls');
-                    self.sourceSelector.unbind('.uls');
-                    self.targetSelector.unbind('.uls');
-                    self.activateULS(self.sourceSelector, self.onSelectSource, self.getSourceSelectorPosition, self.sourceLanguages);
-                    self.activateULS(self.targetSelector, self.onSelectTarget, self.getTargetSelectorPosition, self.targetLanguages);
+                    if (self.currentMenuWidth !== self.getMenuWidth()) {
+                        // destroy and re-initialize the language dropdown
+                        // to accommodate changing from the 'medium' to 'narrow' menuWidth
+                        $.each(self.uls, function (index, item) {
+                            item.show(); // ensure uls is initialized before it's destroyed
+                            item.hide();
+                            item.$menu.remove();
+                        });
+                        $.removeData(self.sourceSelector.get(0));
+                        $.removeData(self.targetSelector.get(0));
+                        self.sourceSelector.off('uls');
+                        self.targetSelector.off('uls');
+                        self.sourceSelector.unbind('.uls');
+                        self.targetSelector.unbind('.uls');
+                        self.activateULS(self.sourceSelector, self.onSelectSource, self.getSourceSelectorPosition, self.sourceLanguages);
+                        self.activateULS(self.targetSelector, self.onSelectTarget, self.getTargetSelectorPosition, self.targetLanguages);
+                    }
                 }, 50);
             });
 

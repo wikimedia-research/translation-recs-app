@@ -3,26 +3,27 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <h4 class="modal-title col-xs-8">{$.i18n('create-title')}</h4>
-                            <button type="button" class="btn btn-secondary borderless pull-xs-right col-xs-1" data-dismiss="modal">
-                                <h4 class="m-y-0">&#x274c;</h4>
-                            </button>
-                        </div>
+                    <div class="gf-modal-header-container">
+                        <span class="gf-modal-title">{$.i18n('create-title')}</span>
+                        <span class="gf-icon gf-icon-close gf-clickable" data-dismiss="modal" title="{$.i18n('modal-close')}"></span>
                     </div>
-
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <input id="targetTitle" type="text" class="form-control" placeholder="{$.i18n('create-title-input-placeholder')}" oninput={validateTitle}>
+                        <input id="targetTitle" type="text" class="form-control"
+                               placeholder="{$.i18n('create-title-input-placeholder')}" oninput={validateTitle}>
                     </div>
                     <div class={alert: true, invisible: errorMessage === '', alert-danger: true} role="alert">
                         <strong>{$.i18n('create-warning')}</strong> {errorMessage} <a class="alert-link" target="_blank" href={errorLink}>{errorLink}</a>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a role="button" class={btn: true, btn-primary: true, disabled: !isValid} target="_blank" onclick={logCreateAction} href={isValid ? createRoot + encodeURIComponent(targetTitle) : '#'}>{$.i18n('create-action')}</a>
+                    <div class="gf-modal-footer-container">
+                        <a role="button" class={btn: true, btn-primary: true, gf-flex-float-right: true, disabled: !isValid}
+                           target="_blank" onclick={logCreateAction} href={isValid ? createRoot + encodeURIComponent(targetTitle) : '#'}>
+                            {$.i18n('create-action')}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
