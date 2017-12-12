@@ -7,7 +7,7 @@
                 </button>
                 This experimental tool is hosted on
                 <a href="https://wikitech.wikimedia.org/wiki/Help:FAQ" class="alert-link" target="_blank">
-                    Wikimedia Labs</a>.
+                    Wikimedia Cloud VPS</a>.
                 <a href="https://phabricator.wikimedia.org/T124503" class="alert-link" target="_blank">
                     Information collected</a>
                 when you visit this site, and through your use of the
